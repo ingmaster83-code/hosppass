@@ -128,14 +128,13 @@
   </div>
 </footer>
 
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=78e249ab403b2955e4ca71e71f658549&libraries=services"></script>
 <script>
 function doSearch(){
   const q=(document.getElementById('heroSearch')||document.getElementById('hsi')).value.trim();
   if(!q)return;
-  // 시도명 감지 → 지역 index로
   const sidos={서울:'서울',경기:'경기',부산:'부산',인천:'인천',대구:'대구',광주:'광주',대전:'대전',울산:'울산',세종:'세종',강원:'강원',충북:'충북',충남:'충남',전북:'전북',전남:'전남',경북:'경북',경남:'경남',제주:'제주'};
   for(const[k,v]of Object.entries(sidos)){if(q.includes(k)){location.href=`지역/${v}/index.html`;return;}}
-  // 진료과목 감지
   const depts=['내과','소아과','정형외과','산부인과','치과','한의원','안과','이비인후과','피부과','정신건강의학과','신경과','비뇨기과','재활의학과','성형외과','흉부외과'];
   for(const d of depts){if(q.includes(d)){location.href=`진료과목/${d}.html`;return;}}
   alert(`"${q}" 검색: 지역명 또는 진료과목을 포함해 검색해 주세요.\n예) 강남구 소아과, 부산 내과`);
@@ -144,14 +143,33 @@ document.getElementById('heroSearch').addEventListener('keydown',e=>{if(e.key===
 document.getElementById('hsi').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 
 function loadNearby(){
-  if(!navigator.geolocation){document.getElementById('nearbyResult').innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">위치 서비스가 지원되지 않습니다.</p>';return;}
-  document.getElementById('nearbyResult').innerHTML='<div class="loading"><div class="spinner"></div> 위치 확인 중...</div>';
+  const el=document.getElementById('nearbyResult');
+  if(!navigator.geolocation){el.innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">위치 서비스가 지원되지 않습니다.</p>';return;}
+  el.innerHTML='<div class="loading"><div class="spinner"></div> 주변 병원 검색 중...</div>';
   navigator.geolocation.getCurrentPosition(pos=>{
-    // 좌표 기반으로 가장 가까운 지역 페이지로 안내
-    document.getElementById('nearbyResult').innerHTML=`<p style="text-align:center;padding:20px;color:var(--text-secondary)">위치 확인 완료 (위도 ${pos.coords.latitude.toFixed(4)}, 경도 ${pos.coords.longitude.toFixed(4)})<br>지역을 선택해 가까운 병원을 찾아보세요.</p>`;
-  },()=>{
-    document.getElementById('nearbyResult').innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">위치 접근이 거부되었습니다.</p>';
-  });
+    if(typeof kakao==='undefined'){el.innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">지도를 불러올 수 없습니다.</p>';return;}
+    const ps=new kakao.maps.services.Places();
+    const now=new Date(),h=now.getHours(),day=now.getDay();
+    function openBadge(){
+      const likely=(day===0)?false:(day===6)?(h>=9&&h<13):(h>=9&&h<18);
+      return `<span style="font-size:.73rem;padding:2px 8px;border-radius:20px;background:${likely?'#ECFDF5':'#F3F4F6'};color:${likely?'#065F46':'#6B7280'};white-space:nowrap;">${likely?'● 운영중 추정':'○ 확인 필요'}</span>`;
+    }
+    ps.categorySearch('HP8',(data,status)=>{
+      if(status!==kakao.maps.services.Status.OK||!data.length){
+        el.innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">주변 1km 내 병원이 없습니다.</p>';return;
+      }
+      el.innerHTML=data.slice(0,10).map(p=>`<div class="facility-card">
+        <div class="facility-card-body">
+          <div class="facility-name">${p.place_name}</div>
+          <div class="facility-meta"><span>🏥 병원</span><span>📍 ${p.road_address_name||p.address_name}</span>${p.distance?`<span>🚶 ${p.distance}m</span>`:''}</div>
+        </div>
+        <div class="facility-card-right" style="flex-direction:column;align-items:flex-end;gap:6px;">
+          ${openBadge()}
+          ${p.phone?`<a href="tel:${p.phone}" class="btn-call">📞 ${p.phone}</a>`:''}
+        </div>
+      </div>`).join('');
+    },{location:new kakao.maps.LatLng(pos.coords.latitude,pos.coords.longitude),radius:1000,sort:kakao.maps.services.SortBy.DISTANCE});
+  },()=>{el.innerHTML='<p style="text-align:center;padding:20px;color:var(--text-light)">위치 접근이 거부되었습니다.</p>';});
 }
 </script>
 </body></html>
