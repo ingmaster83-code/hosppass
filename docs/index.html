@@ -255,6 +255,7 @@
   </div>
 </footer>
 
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=78e249ab403b2955e4ca71e71f658549&libraries=services"></script>
 <script>
   function doSearch() {
     const q = document.getElementById('heroSearchInput').value.trim()
@@ -280,18 +281,53 @@
 
     navigator.geolocation.getCurrentPosition(pos => {
       const { latitude: lat, longitude: lng } = pos.coords;
-      // 카카오맵 카테고리 검색으로 주변 병원/약국 로드 (map.js에서 처리)
-      if (window.loadNearbyFacilities) {
-        window.loadNearbyFacilities(lat, lng);
-      } else {
-        document.getElementById('nearbyResult').innerHTML =
-          '<p style="text-align:center;color:var(--text-light);padding:20px">지도 로딩 중입니다. 잠시 후 다시 시도해주세요.</p>';
-      }
+      loadNearbyFacilities(lat, lng);
     }, () => {
       document.getElementById('nearbyResult').innerHTML =
         '<p style="text-align:center;color:var(--text-light);padding:20px">위치 접근이 거부되었습니다.</p>';
     });
   }
+
+  function loadNearbyFacilities(lat, lng) {
+    if (typeof kakao === 'undefined') {
+      document.getElementById('nearbyResult').innerHTML =
+        '<p style="text-align:center;color:var(--text-light);padding:20px">지도를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>';
+      return;
+    }
+    const ps = new kakao.maps.services.Places();
+    const el = document.getElementById('nearbyResult');
+    let results = [];
+    let done = 0;
+    const cats = ['HP8', 'PM9']; // 병원, 약국
+
+    cats.forEach(cat => {
+      ps.categorySearch(cat, (data, status) => {
+        if (status === kakao.maps.services.Status.OK) results = results.concat(data);
+        done++;
+        if (done === cats.length) renderNearby(results, lat, lng);
+      }, { location: new kakao.maps.LatLng(lat, lng), radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE });
+    });
+
+    function renderNearby(items, lat, lng) {
+      if (!items.length) {
+        el.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:20px">주변 1km 내 의료기관이 없습니다.</p>';
+        return;
+      }
+      el.innerHTML = items.slice(0, 10).map(p => {
+        const dist = p.distance ? `${p.distance}m` : '';
+        return `<div class="facility-card">
+          <div class="facility-card-body">
+            <div class="facility-name">${p.place_name}</div>
+            <div class="facility-meta"><span>📍 ${p.road_address_name || p.address_name}</span>${dist ? `<span>🚶 ${dist}</span>` : ''}</div>
+          </div>
+          <div class="facility-card-right">
+            ${p.phone ? `<a href="tel:${p.phone}" class="btn-call">📞 ${p.phone}</a>` : ''}
+          </div>
+        </div>`;
+      }).join('');
+    }
+  }
+  window.loadNearbyFacilities = loadNearbyFacilities;
 </script>
 
 </body>
