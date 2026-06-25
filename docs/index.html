@@ -1,0 +1,298 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>병원 약국 찾기 — 야간진료 응급실 정보 | hosppass</title>
+  <meta name="description" content="전국 병원, 약국, 응급실 정보를 한눈에 확인하세요. 야간진료, 휴일진료, 응급실 실시간 병상 정보 제공.">
+  <meta name="keywords" content="병원 찾기, 약국 찾기, 야간진료, 응급실, 휴일진료, 야간약국">
+  <meta property="og:title" content="병원 약국 찾기 | hosppass">
+  <meta property="og:description" content="전국 병원, 약국, 응급실 정보를 한눈에 확인하세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hosp.wooahouse.com">
+  <link rel="canonical" href="https://hosp.wooahouse.com/">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
+</head>
+<body>
+
+<!-- ── 헤더 ──────────────────────────────── -->
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="logo">hosp<span>pass</span></a>
+    <div class="header-search">
+      <input type="search" placeholder="병원, 약국, 진료과목 검색" id="headerSearchInput" autocomplete="off">
+      <button class="btn-search" aria-label="검색">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+      </button>
+    </div>
+    <nav class="header-nav">
+      <a href="hospital.html">병원</a>
+      <a href="pharmacy.html">약국</a>
+      <a href="emergency.html">응급실</a>
+      <a href="night.html">야간진료</a>
+      <a href="yoyang.html">요양병원</a>
+    </nav>
+  </div>
+</header>
+
+<!-- ── 히어로 ─────────────────────────────── -->
+<section class="hero">
+  <h1>전국 병원 · 약국 · 응급실 정보</h1>
+  <p>지금 열린 곳, 가까운 곳, 필요한 진료과목을 빠르게 찾아보세요</p>
+  <div class="hero-search">
+    <input type="search" placeholder="지역, 병원명, 진료과목으로 검색..." id="heroSearchInput" autocomplete="off">
+    <button onclick="doSearch()">검색</button>
+  </div>
+</section>
+
+<!-- ── 광고 상단 ──────────────────────────── -->
+<div class="container" style="padding-top:20px">
+  <div class="ad-banner ad-top"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+</div>
+
+<!-- ── 빠른 메뉴 ──────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">빠른 찾기</h2>
+    <div class="quick-grid">
+      <a href="hospital.html" class="quick-card">
+        <span class="icon">🏥</span>
+        <span>병원 찾기</span>
+      </a>
+      <a href="pharmacy.html" class="quick-card">
+        <span class="icon">💊</span>
+        <span>약국 찾기</span>
+      </a>
+      <a href="emergency.html" class="quick-card">
+        <span class="icon">🚨</span>
+        <span>응급실</span>
+      </a>
+      <a href="night.html" class="quick-card">
+        <span class="icon">🌙</span>
+        <span>야간진료</span>
+      </a>
+      <a href="night.html#holiday" class="quick-card">
+        <span class="icon">📅</span>
+        <span>휴일진료</span>
+      </a>
+      <a href="yoyang.html" class="quick-card">
+        <span class="icon">🏨</span>
+        <span>요양병원</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 내 주변 의료기관 (JS 실시간) ─────────── -->
+<section class="section" style="background:var(--primary-light); padding:32px 0;">
+  <div class="container">
+    <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+      <h2 class="section-title" style="margin:0">내 주변 의료기관</h2>
+      <button class="tab-btn" id="btnLocation" onclick="loadNearby()">
+        📍 위치 허용하기
+      </button>
+    </div>
+    <div id="nearbyResult">
+      <div style="text-align:center; padding:32px; color:var(--text-light); font-size:.9rem;">
+        위치를 허용하면 가까운 병원·약국을 바로 확인할 수 있어요
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── 광고 중간 ──────────────────────────── -->
+<div class="container">
+  <div class="ad-banner ad-mid"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+</div>
+
+<!-- ── 진료과목별 찾기 ────────────────────── -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">진료과목별 병원 찾기</h2>
+    <div style="display:flex; flex-wrap:wrap; gap:8px;">
+      <a href="진료과목/내과.html"       class="tab-btn">내과</a>
+      <a href="진료과목/소아과.html"     class="tab-btn">소아과</a>
+      <a href="진료과목/정형외과.html"   class="tab-btn">정형외과</a>
+      <a href="진료과목/산부인과.html"   class="tab-btn">산부인과</a>
+      <a href="진료과목/치과.html"       class="tab-btn">치과</a>
+      <a href="진료과목/한의원.html"     class="tab-btn">한의원</a>
+      <a href="진료과목/안과.html"       class="tab-btn">안과</a>
+      <a href="진료과목/이비인후과.html" class="tab-btn">이비인후과</a>
+      <a href="진료과목/피부과.html"     class="tab-btn">피부과</a>
+      <a href="진료과목/정신건강의학과.html" class="tab-btn">정신건강의학과</a>
+      <a href="진료과목/신경과.html"     class="tab-btn">신경과</a>
+      <a href="진료과목/비뇨기과.html"   class="tab-btn">비뇨기과</a>
+      <a href="진료과목/재활의학과.html" class="tab-btn">재활의학과</a>
+      <a href="진료과목/성형외과.html"   class="tab-btn">성형외과</a>
+      <a href="진료과목/흉부외과.html"   class="tab-btn">흉부외과</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 지역별 찾기 ─────────────────────────── -->
+<section class="section" style="background:#F9FAFB;">
+  <div class="container">
+    <h2 class="section-title">지역별 병원 찾기</h2>
+    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(100px,1fr)); gap:8px;">
+      <a href="지역/서울/index.html"   class="tab-btn" style="text-align:center">서울</a>
+      <a href="지역/경기/index.html"   class="tab-btn" style="text-align:center">경기</a>
+      <a href="지역/부산/index.html"   class="tab-btn" style="text-align:center">부산</a>
+      <a href="지역/인천/index.html"   class="tab-btn" style="text-align:center">인천</a>
+      <a href="지역/대구/index.html"   class="tab-btn" style="text-align:center">대구</a>
+      <a href="지역/광주/index.html"   class="tab-btn" style="text-align:center">광주</a>
+      <a href="지역/대전/index.html"   class="tab-btn" style="text-align:center">대전</a>
+      <a href="지역/울산/index.html"   class="tab-btn" style="text-align:center">울산</a>
+      <a href="지역/세종/index.html"   class="tab-btn" style="text-align:center">세종</a>
+      <a href="지역/강원/index.html"   class="tab-btn" style="text-align:center">강원</a>
+      <a href="지역/충북/index.html"   class="tab-btn" style="text-align:center">충북</a>
+      <a href="지역/충남/index.html"   class="tab-btn" style="text-align:center">충남</a>
+      <a href="지역/전북/index.html"   class="tab-btn" style="text-align:center">전북</a>
+      <a href="지역/전남/index.html"   class="tab-btn" style="text-align:center">전남</a>
+      <a href="지역/경북/index.html"   class="tab-btn" style="text-align:center">경북</a>
+      <a href="지역/경남/index.html"   class="tab-btn" style="text-align:center">경남</a>
+      <a href="지역/제주/index.html"   class="tab-btn" style="text-align:center">제주</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 요양병원 ────────────────────────────── -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">요양병원 찾기</h2>
+    <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:20px;">투석 가능 여부, 간호등급, 병상 수까지 비교해보세요</p>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;">
+      <a href="요양병원/투석.html" class="yoyang-card">
+        <span style="font-size:1.8rem">💉</span>
+        <div>
+          <div class="yc-title">투석 가능 요양병원</div>
+          <div class="yc-desc">혈액투석 받으며 입원 가능</div>
+        </div>
+      </a>
+      <a href="요양병원/치매.html" class="yoyang-card">
+        <span style="font-size:1.8rem">🧠</span>
+        <div>
+          <div class="yc-title">치매 전문 요양병원</div>
+          <div class="yc-desc">치매 전담 병동 운영 기관</div>
+        </div>
+      </a>
+      <a href="요양병원/재활.html" class="yoyang-card">
+        <span style="font-size:1.8rem">🏃</span>
+        <div>
+          <div class="yc-title">재활 집중 요양병원</div>
+          <div class="yc-desc">뇌졸중·골절 수술 후 재활</div>
+        </div>
+      </a>
+      <a href="요양병원/호스피스.html" class="yoyang-card">
+        <span style="font-size:1.8rem">🌸</span>
+        <div>
+          <div class="yc-title">호스피스 완화의료</div>
+          <div class="yc-desc">말기질환 완화 전문 병원</div>
+        </div>
+      </a>
+      <a href="요양병원/간호등급.html" class="yoyang-card">
+        <span style="font-size:1.8rem">🏅</span>
+        <div>
+          <div class="yc-title">간호등급 1등급</div>
+          <div class="yc-desc">최우수 간호인력 보유 기관</div>
+        </div>
+      </a>
+      <a href="yoyang.html" class="yoyang-card">
+        <span style="font-size:1.8rem">🗺️</span>
+        <div>
+          <div class="yc-title">지역별 전체 목록</div>
+          <div class="yc-desc">시도·시군구별 요양병원</div>
+        </div>
+      </a>
+    </div>
+    <style>
+      .yoyang-card{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text-primary);transition:box-shadow .15s,border-color .15s;}
+      .yoyang-card:hover{box-shadow:var(--shadow-md);border-color:var(--primary-light);}
+      .yc-title{font-weight:700;font-size:.9rem;line-height:1.3;}
+      .yc-desc{font-size:.78rem;color:var(--text-secondary);margin-top:3px;line-height:1.4;}
+    </style>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <a href="지역/서울/index.html#yoyang"   class="tab-btn">서울</a>
+      <a href="지역/경기/index.html#yoyang"   class="tab-btn">경기</a>
+      <a href="지역/부산/index.html#yoyang"   class="tab-btn">부산</a>
+      <a href="지역/인천/index.html#yoyang"   class="tab-btn">인천</a>
+      <a href="지역/대구/index.html#yoyang"   class="tab-btn">대구</a>
+      <a href="지역/광주/index.html#yoyang"   class="tab-btn">광주</a>
+      <a href="지역/대전/index.html#yoyang"   class="tab-btn">대전</a>
+      <a href="지역/울산/index.html#yoyang"   class="tab-btn">울산</a>
+      <a href="지역/강원/index.html#yoyang"   class="tab-btn">강원</a>
+      <a href="지역/충북/index.html#yoyang"   class="tab-btn">충북</a>
+      <a href="지역/충남/index.html#yoyang"   class="tab-btn">충남</a>
+      <a href="지역/전북/index.html#yoyang"   class="tab-btn">전북</a>
+      <a href="지역/전남/index.html#yoyang"   class="tab-btn">전남</a>
+      <a href="지역/경북/index.html#yoyang"   class="tab-btn">경북</a>
+      <a href="지역/경남/index.html#yoyang"   class="tab-btn">경남</a>
+      <a href="지역/제주/index.html#yoyang"   class="tab-btn">제주</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── 푸터 ──────────────────────────────────── -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">hosppass</div>
+    <div class="footer-links">
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="https://bojopass.kr" target="_blank" rel="noopener">정부지원 의료비 혜택 → bojopass</a>
+    </div>
+    <p class="footer-copy">
+      본 서비스는 건강보험심사평가원·국립중앙의료원 공공데이터를 활용합니다.<br>
+      의료기관 정보는 실제와 다를 수 있으므로 방문 전 반드시 전화로 확인하세요.<br>
+      &copy; 2026 hosp.wooahouse.com
+    </p>
+  </div>
+</footer>
+
+<script>
+  function doSearch() {
+    const q = document.getElementById('heroSearchInput').value.trim()
+               || document.getElementById('headerSearchInput').value.trim();
+    if (q) location.href = 'hospital.html?q=' + encodeURIComponent(q);
+  }
+
+  document.getElementById('heroSearchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+  document.getElementById('headerSearchInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') doSearch();
+  });
+
+  function loadNearby() {
+    if (!navigator.geolocation) {
+      document.getElementById('nearbyResult').innerHTML =
+        '<p style="text-align:center;color:var(--text-light);padding:20px">위치 서비스가 지원되지 않습니다.</p>';
+      return;
+    }
+    document.getElementById('nearbyResult').innerHTML =
+      '<div class="loading"><div class="spinner"></div> 위치 확인 중...</div>';
+
+    navigator.geolocation.getCurrentPosition(pos => {
+      const { latitude: lat, longitude: lng } = pos.coords;
+      // 카카오맵 카테고리 검색으로 주변 병원/약국 로드 (map.js에서 처리)
+      if (window.loadNearbyFacilities) {
+        window.loadNearbyFacilities(lat, lng);
+      } else {
+        document.getElementById('nearbyResult').innerHTML =
+          '<p style="text-align:center;color:var(--text-light);padding:20px">지도 로딩 중입니다. 잠시 후 다시 시도해주세요.</p>';
+      }
+    }, () => {
+      document.getElementById('nearbyResult').innerHTML =
+        '<p style="text-align:center;color:var(--text-light);padding:20px">위치 접근이 거부되었습니다.</p>';
+    });
+  }
+</script>
+
+</body>
+</html>

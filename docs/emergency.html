@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>응급실 찾기 — 전국 응급실 실시간 병상 현황 | hosppass</title>
+  <meta name="description" content="전국 응급실 실시간 병상 현황을 확인하세요. 가까운 응급실 위치, 전화번호, 현재 병상 여유를 빠르게 확인할 수 있습니다.">
+  <meta name="keywords" content="응급실 찾기, 응급실 병상, 응급실 현황, 가까운 응급실, 24시간 응급실, 응급실 전화번호, 응급의료기관">
+  <meta property="og:title" content="응급실 실시간 병상 현황 | hosppass">
+  <meta property="og:description" content="전국 응급실 실시간 병상 현황을 확인하세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hosp.wooahouse.com/emergency.html">
+  <link rel="canonical" href="https://hosp.wooahouse.com/emergency.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">hosp<span>pass</span></a>
+    <div class="header-search">
+      <input type="search" placeholder="지역명으로 응급실 검색" id="hsi" autocomplete="off">
+      <button class="btn-search" aria-label="검색" onclick="doSearch()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+    <nav class="header-nav">
+      <a href="hospital.html">병원</a>
+      <a href="pharmacy.html">약국</a>
+      <a href="emergency.html" style="color:var(--primary)">응급실</a>
+      <a href="night.html">야간진료</a>
+      <a href="yoyang.html">요양병원</a>
+    </nav>
+  </div>
+</header>
+
+<section style="background:linear-gradient(135deg,#DC2626 0%,#9333EA 100%);color:#fff;padding:40px 16px;text-align:center;">
+  <div class="container">
+    <h1 style="font-size:1.9rem;font-weight:800;margin-bottom:8px;">🚨 응급실 실시간 현황</h1>
+    <p style="opacity:.9;">전국 응급의료기관 병상 현황 — 국립중앙의료원 실시간 데이터</p>
+    <p style="margin-top:8px;font-size:.82rem;opacity:.75;">응급 상황 시 119에 먼저 신고하세요</p>
+  </div>
+</section>
+
+<div class="container" style="padding-top:20px">
+  <div class="ad-banner ad-top"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+</div>
+
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+
+      <!-- 119 안내 배너 -->
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:var(--radius);padding:16px;margin-bottom:20px;display:flex;align-items:center;gap:12px;">
+        <span style="font-size:2rem;">🚑</span>
+        <div>
+          <div style="font-weight:700;color:#DC2626;">응급 상황이라면 즉시 119</div>
+          <div style="font-size:.85rem;color:#7F1D1D;margin-top:2px;">생명이 위험한 응급상황에는 119 신고가 최우선입니다. 구급대원이 가장 가까운 응급실로 안내합니다.</div>
+        </div>
+      </div>
+
+      <!-- 지역 필터 -->
+      <div class="tab-filter" id="sidoFilter">
+        <button class="tab-btn active" onclick="filterSido('')">전체</button>
+        <button class="tab-btn" onclick="filterSido('서울')">서울</button>
+        <button class="tab-btn" onclick="filterSido('경기')">경기</button>
+        <button class="tab-btn" onclick="filterSido('부산')">부산</button>
+        <button class="tab-btn" onclick="filterSido('인천')">인천</button>
+        <button class="tab-btn" onclick="filterSido('대구')">대구</button>
+        <button class="tab-btn" onclick="filterSido('광주')">광주</button>
+        <button class="tab-btn" onclick="filterSido('대전')">대전</button>
+        <button class="tab-btn" onclick="filterSido('울산')">울산</button>
+        <button class="tab-btn" onclick="filterSido('강원')">강원</button>
+        <button class="tab-btn" onclick="filterSido('경북')">경북</button>
+        <button class="tab-btn" onclick="filterSido('경남')">경남</button>
+        <button class="tab-btn" onclick="filterSido('충북')">충북</button>
+        <button class="tab-btn" onclick="filterSido('충남')">충남</button>
+        <button class="tab-btn" onclick="filterSido('전북')">전북</button>
+        <button class="tab-btn" onclick="filterSido('전남')">전남</button>
+        <button class="tab-btn" onclick="filterSido('제주')">제주</button>
+      </div>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin:12px 0;">
+        <span style="font-size:.88rem;color:var(--text-secondary);"><strong id="resultCount" style="color:var(--primary)">0</strong>개 응급실</span>
+        <button class="tab-btn" onclick="loadRealtime()" style="font-size:.8rem;">🔄 실시간 갱신</button>
+      </div>
+
+      <div class="facility-list" id="emergencyList"><div class="loading"><div class="spinner"></div> 응급실 정보 불러오는 중...</div></div>
+      <div class="pagination" id="pagination"></div>
+
+      <div class="container"><div class="ad-banner ad-mid"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        <div class="ad-banner ad-side"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="1419180025" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+        <div style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:20px;">
+          <h3 style="font-size:.9rem;font-weight:700;margin-bottom:12px;">응급 관련 연락처</h3>
+          <div style="display:flex;flex-direction:column;gap:8px;font-size:.88rem;">
+            <a href="tel:119" style="display:flex;align-items:center;gap:8px;color:var(--danger);font-weight:700;text-decoration:none;">🚑 119 — 응급·화재·구조</a>
+            <a href="tel:1339" style="display:flex;align-items:center;gap:8px;color:var(--text-primary);text-decoration:none;">💊 1339 — 응급의료정보센터</a>
+            <a href="tel:112" style="display:flex;align-items:center;gap:8px;color:var(--text-primary);text-decoration:none;">👮 112 — 경찰</a>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">hosppass</div>
+    <div class="footer-links">
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="https://bojopass.kr" target="_blank" rel="noopener">정부지원 의료비 혜택 → bojopass</a>
+    </div>
+    <p class="footer-copy">응급실 병상 현황은 국립중앙의료원 응급의료포털 실시간 데이터를 사용합니다.<br>실제 병상 상황과 차이가 있을 수 있으니 반드시 전화로 확인하세요.<br>&copy; 2026 hosp.wooahouse.com</p>
+  </div>
+</footer>
+
+<script>
+const API_KEY='9490b1d34e92aa9e25b32a4cff1438fc7b9c71e5d332413916a391e867f61e86';
+let allData=[],curSido='',curPage=1;
+const PAGE_SIZE=15;
+
+document.getElementById('hsi').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+function doSearch(){
+  const q=document.getElementById('hsi').value.trim();
+  if(!q)return;
+  curSido=q;filterSido(q);
+}
+
+async function loadRealtime(){
+  const el=document.getElementById('emergencyList');
+  el.innerHTML='<div class="loading"><div class="spinner"></div> 실시간 병상 현황 불러오는 중...</div>';
+  try{
+    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:50,Q0:curSido||''});
+    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEmrgcBasicInfoInqire?${params}`);
+    const txt=await res.text();
+    const xml=new DOMParser().parseFromString(txt,'text/xml');
+    const items=[...xml.querySelectorAll('item')];
+    if(items.length){
+      allData=items.map(it=>{
+        const g=t=>it.querySelector(t)?.textContent||'';
+        return{name:g('dutyName'),addr:g('dutyAddr'),tel:g('dutyTel1'),sido:g('dutyAddr').split(' ')[0],
+          hvec:parseInt(g('hvec')||0),hvoc:parseInt(g('hvoc')||0),hvidate:g('hvidate')};
+      });
+      renderPage(1);
+      return;
+    }
+  }catch(e){}
+  // 실시간 실패 시 static 데이터 로드
+  loadStatic();
+}
+
+async function loadStatic(){
+  try{
+    const res=await fetch('data/emergency.json');
+    const json=await res.json();
+    allData=(json.items||json).map(h=>({...h,sido:h.sido_nm}));
+    renderPage(1);
+  }catch(e){
+    document.getElementById('emergencyList').innerHTML='<p style="text-align:center;padding:32px;color:var(--text-light)">응급실 정보를 불러올 수 없습니다.</p>';
+  }
+}
+
+function filterSido(sido){
+  curSido=sido;curPage=1;
+  document.querySelectorAll('#sidoFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.textContent===(sido||'전체')));
+  renderPage(1);
+}
+
+function renderPage(page){
+  curPage=page;
+  const filtered=allData.filter(h=>!curSido||h.sido_nm===curSido||h.sido===curSido||(h.addr||'').startsWith(curSido));
+  document.getElementById('resultCount').textContent=filtered.length;
+  const items=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
+  const list=document.getElementById('emergencyList');
+  if(!items.length){list.innerHTML='<p style="text-align:center;padding:32px;color:var(--text-light)">해당 지역 응급실 정보가 없습니다.</p>';document.getElementById('pagination').innerHTML='';return;}
+  list.innerHTML=items.map(h=>{
+    const bedInfo=h.hvec!=null?`<span class="tag" style="background:${h.hvec>5?'#ECFDF5':h.hvec>0?'#FEF3C7':'#FEF2F2'};color:${h.hvec>5?'#065F46':h.hvec>0?'#92400E':'#991B1B'};">🛏️ 일반 ${h.hvec??'-'}병상</span>`:'';
+    const bedO=h.hvoc!=null?`<span class="tag" style="background:#EFF6FF;color:#1E40AF;">수술 ${h.hvoc??'-'}실</span>`:'';
+    return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name||h.dutyName||''}</div><div class="facility-meta"><span>📍 ${h.addr||h.dutyAddr||''}</span><span>🏥 ${h.cl_nm||'응급의료기관'}</span></div><div class="facility-tags">${bedInfo}${bedO}</div></div><div class="facility-card-right"><span class="status-badge status-open">운영중</span>${(h.tel||h.dutyTel1)?`<a href="tel:${h.tel||h.dutyTel1}" class="btn-call">📞 ${h.tel||h.dutyTel1}</a>`:''}</div></div>`;
+  }).join('');
+  const total=Math.ceil(filtered.length/PAGE_SIZE);
+  document.getElementById('pagination').innerHTML=buildPagination(page,total);
+}
+
+loadRealtime();
+</script>
+</body></html>

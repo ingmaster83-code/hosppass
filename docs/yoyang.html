@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>요양병원 찾기 — 투석·치매·재활·간호등급 비교 | hosppass</title>
+  <meta name="description" content="전국 요양병원을 투석 가능 여부, 간호등급, 치매 전문, 재활 전문으로 비교하세요. 지역별 요양병원 목록과 상세 정보를 제공합니다.">
+  <meta name="keywords" content="요양병원 찾기, 투석 가능 요양병원, 치매 요양병원, 재활 요양병원, 간호등급 1등급, 호스피스, 요양병원 비교, 요양병원 추천">
+  <meta property="og:title" content="요양병원 찾기 — 투석·치매·재활·간호등급 | hosppass">
+  <meta property="og:description" content="전국 요양병원을 투석 가능 여부, 간호등급, 치매·재활 전문으로 비교하세요.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://hosp.wooahouse.com/yoyang.html">
+  <link rel="canonical" href="https://hosp.wooahouse.com/yoyang.html">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
+</head>
+<body>
+<header class="site-header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">hosp<span>pass</span></a>
+    <div class="header-search">
+      <input type="search" placeholder="지역명으로 요양병원 검색" id="hsi" autocomplete="off">
+      <button class="btn-search" aria-label="검색" onclick="doSearch()">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+    </div>
+    <nav class="header-nav">
+      <a href="hospital.html">병원</a>
+      <a href="pharmacy.html">약국</a>
+      <a href="emergency.html">응급실</a>
+      <a href="night.html">야간진료</a>
+      <a href="yoyang.html" style="color:var(--primary)">요양병원</a>
+    </nav>
+  </div>
+</header>
+
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:40px 16px;text-align:center;">
+  <div class="container">
+    <h1 style="font-size:1.9rem;font-weight:800;margin-bottom:8px;">🏨 요양병원 찾기</h1>
+    <p style="opacity:.9;">투석 가능 여부, 간호등급, 치매·재활 전문까지 한눈에 비교</p>
+  </div>
+</section>
+
+<div class="container" style="padding-top:20px">
+  <div class="ad-banner ad-top"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div>
+</div>
+
+<!-- 유형별 찾기 -->
+<section class="section">
+  <div class="container">
+    <h2 class="section-title">유형별 요양병원 찾기</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
+      <a href="요양병원/투석.html" class="yc">
+        <span style="font-size:1.8rem">💉</span>
+        <div><div class="yct">투석 가능 요양병원</div><div class="ycd">혈액투석 받으며 입원 가능</div></div>
+      </a>
+      <a href="요양병원/치매.html" class="yc">
+        <span style="font-size:1.8rem">🧠</span>
+        <div><div class="yct">치매 전문 요양병원</div><div class="ycd">치매 전담 병동 운영</div></div>
+      </a>
+      <a href="요양병원/재활.html" class="yc">
+        <span style="font-size:1.8rem">🏃</span>
+        <div><div class="yct">재활 집중 요양병원</div><div class="ycd">뇌졸중·골절 수술 후 재활</div></div>
+      </a>
+      <a href="요양병원/호스피스.html" class="yc">
+        <span style="font-size:1.8rem">🌸</span>
+        <div><div class="yct">호스피스 완화의료</div><div class="ycd">말기질환 완화 전문</div></div>
+      </a>
+      <a href="요양병원/간호등급.html" class="yc">
+        <span style="font-size:1.8rem">🏅</span>
+        <div><div class="yct">간호등급 1등급</div><div class="ycd">최우수 간호인력 보유</div></div>
+      </a>
+      <a href="#region" class="yc">
+        <span style="font-size:1.8rem">🗺️</span>
+        <div><div class="yct">지역별 전체 목록</div><div class="ycd">시도·시군구별 요양병원</div></div>
+      </a>
+    </div>
+    <style>
+      .yc{display:flex;align-items:center;gap:12px;padding:16px;background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:var(--text-primary);transition:box-shadow .15s,border-color .15s;}
+      .yc:hover{box-shadow:var(--shadow-md);border-color:var(--primary-light);}
+      .yct{font-weight:700;font-size:.9rem;line-height:1.3;}
+      .ycd{font-size:.78rem;color:var(--text-secondary);margin-top:3px;line-height:1.4;}
+    </style>
+  </div>
+</section>
+
+<!-- 요양병원 선택 가이드 -->
+<section class="section" style="background:var(--primary-light);">
+  <div class="container">
+    <h2 class="section-title">요양병원 선택 가이드</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;">
+      <div style="background:var(--card-bg);border-radius:var(--radius);padding:20px;">
+        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:10px;">🏅 간호등급 확인</h3>
+        <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.7;">간호등급은 간호사 1인당 환자 수 기준입니다. <strong>1등급</strong>이 최우수이며 환자 케어의 질과 직결됩니다. 입원 전 반드시 확인하세요.</p>
+        <a href="요양병원/간호등급.html" style="display:inline-block;margin-top:10px;font-size:.83rem;color:var(--primary);font-weight:600;">등급 기준 자세히 보기 →</a>
+      </div>
+      <div style="background:var(--card-bg);border-radius:var(--radius);padding:20px;">
+        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:10px;">💉 투석 여부 확인</h3>
+        <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.7;">신부전 환자는 입원 중에도 혈액투석이 필요합니다. 인공신장기 보유 요양병원을 반드시 선택해야 합니다.</p>
+        <a href="요양병원/투석.html" style="display:inline-block;margin-top:10px;font-size:.83rem;color:var(--primary);font-weight:600;">투석 가능 요양병원 보기 →</a>
+      </div>
+      <div style="background:var(--card-bg);border-radius:var(--radius);padding:20px;">
+        <h3 style="font-size:.95rem;font-weight:700;margin-bottom:10px;">📋 비용 확인</h3>
+        <p style="font-size:.85rem;color:var(--text-secondary);line-height:1.7;">요양병원 입원비는 간호등급, 의료급여 여부, 치료 내용에 따라 다릅니다. 방문 상담 전에 전화로 비용을 확인하세요.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="container"><div class="ad-banner ad-mid"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div></div>
+
+<!-- 지역별 -->
+<section class="section" id="region" style="background:#F9FAFB;">
+  <div class="container">
+    <h2 class="section-title">지역별 요양병원 찾기</h2>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:8px;">
+      <a href="요양병원/서울/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('서울',event)">서울</a>
+      <a href="요양병원/경기/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('경기',event)">경기</a>
+      <a href="요양병원/부산/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('부산',event)">부산</a>
+      <a href="요양병원/인천/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('인천',event)">인천</a>
+      <a href="요양병원/대구/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('대구',event)">대구</a>
+      <a href="요양병원/광주/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('광주',event)">광주</a>
+      <a href="요양병원/대전/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('대전',event)">대전</a>
+      <a href="요양병원/울산/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('울산',event)">울산</a>
+      <a href="요양병원/강원/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('강원',event)">강원</a>
+      <a href="요양병원/충북/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('충북',event)">충북</a>
+      <a href="요양병원/충남/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('충남',event)">충남</a>
+      <a href="요양병원/전북/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('전북',event)">전북</a>
+      <a href="요양병원/전남/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('전남',event)">전남</a>
+      <a href="요양병원/경북/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('경북',event)">경북</a>
+      <a href="요양병원/경남/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('경남',event)">경남</a>
+      <a href="요양병원/제주/index.html" class="tab-btn" style="text-align:center" onclick="return goRegion('제주',event)">제주</a>
+    </div>
+    <p style="margin-top:12px;font-size:.82rem;color:var(--text-light);">※ 지역별 상세 페이지는 요양병원 데이터 수집 완료 후 순차 업데이트됩니다.</p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">hosppass</div>
+    <div class="footer-links">
+      <a href="privacy.html">개인정보처리방침</a>
+      <a href="https://bojopass.kr" target="_blank" rel="noopener">정부지원 의료비 혜택 → bojopass</a>
+    </div>
+    <p class="footer-copy">본 서비스는 건강보험심사평가원 공공데이터를 활용합니다.<br>요양병원 정보는 실제와 다를 수 있으므로 방문 전 반드시 전화로 확인하세요.<br>&copy; 2026 hosp.wooahouse.com</p>
+  </div>
+</footer>
+
+<script>
+document.getElementById('hsi').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+function doSearch(){
+  const q=document.getElementById('hsi').value.trim();
+  if(!q)return;
+  const sidos=['서울','경기','부산','인천','대구','광주','대전','울산','세종','강원','충북','충남','전북','전남','경북','경남','제주'];
+  for(const s of sidos){if(q.includes(s)){location.href=`요양병원/${s}/index.html`;return;}}
+}
+function goRegion(sido,e){
+  const path=`요양병원/${sido}/index.html`;
+  fetch(path,{method:'HEAD'}).then(r=>{if(!r.ok){e.preventDefault();alert(`${sido} 요양병원 페이지는 데이터 수집 완료 후 제공됩니다.`);}}).catch(()=>{e.preventDefault();alert(`${sido} 요양병원 페이지는 데이터 수집 완료 후 제공됩니다.`);});
+  return true;
+}
+</script>
+</body></html>
