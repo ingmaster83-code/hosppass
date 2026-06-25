@@ -291,46 +291,116 @@
   function loadNearbyFacilities(lat, lng) {
     if (typeof kakao === 'undefined') {
       document.getElementById('nearbyResult').innerHTML =
-        '<p style="text-align:center;color:var(--text-light);padding:20px">지도를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>';
+        '<p style="text-align:center;color:var(--text-light);padding:20px">지도를 불러올 수 없습니다.</p>';
       return;
     }
     const ps = new kakao.maps.services.Places();
     const el = document.getElementById('nearbyResult');
-    const catMap = { HP8: { label: '병원', icon: '🏥' }, PM9: { label: '약국', icon: '💊' } };
-    const collected = {};
-    let done = 0;
+    const pool = { hospital:[], pharmacy:[], nursing:[], vet:[] };
+    let done = 0, total = 3;
 
-    Object.keys(catMap).forEach(cat => {
-      ps.categorySearch(cat, (data, status) => {
-        collected[cat] = status === kakao.maps.services.Status.OK ? data : [];
-        done++;
-        if (done === Object.keys(catMap).length) renderNearby();
-      }, { location: new kakao.maps.LatLng(lat, lng), radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE });
-    });
+    const catInfo = {
+      hospital: { label:'병원',    icon:'🏥', color:'#0D9488' },
+      pharmacy: { label:'약국',    icon:'💊', color:'#7C3AED' },
+      nursing:  { label:'요양병원', icon:'🏨', color:'#0891B2' },
+      vet:      { label:'동물병원', icon:'🐾', color:'#D97706' },
+    };
 
-    function renderNearby() {
-      // 병원 5개 + 약국 5개 합쳐서 거리순 정렬
-      const hospitals = (collected.HP8 || []).slice(0, 5).map(p => ({ ...p, _cat: 'HP8' }));
-      const pharms   = (collected.PM9 || []).slice(0, 5).map(p => ({ ...p, _cat: 'PM9' }));
-      const items = [...hospitals, ...pharms].sort((a, b) => parseInt(a.distance) - parseInt(b.distance));
+    // 현재 시간 기준 운영 추정 (Kakao API는 실시간 영업정보 미제공)
+    function openEstimate(type) {
+      const now = new Date(), h = now.getHours(), day = now.getDay();
+      let likely;
+      if (type === 'pharmacy') likely = (h >= 9 && h < 22);
+      else if (day === 0)      likely = false;
+      else if (day === 6)      likely = (h >= 9 && h < 13);
+      else                     likely = (h >= 9 && h < 18);
+      return likely
+        ? `<span style="font-size:.73rem;padding:2px 8px;border-radius:20px;background:#ECFDF5;color:#065F46;white-space:nowrap;">● 운영중 추정</span>`
+        : `<span style="font-size:.73rem;padding:2px 8px;border-radius:20px;background:#F3F4F6;color:#6B7280;white-space:nowrap;">○ 확인 필요</span>`;
+    }
 
+    function tryRender() { if (++done >= total) renderNearby('all'); }
+
+    // 병원 (HP8) — 이름에 '요양' 포함이면 nursing으로 분류
+    ps.categorySearch('HP8', (data, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        data.forEach(p => {
+          const type = p.place_name.includes('요양') ? 'nursing' : 'hospital';
+          pool[type].push({ ...p, _type: type });
+        });
+      }
+      tryRender();
+    }, { location: new kakao.maps.LatLng(lat, lng), radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE });
+
+    // 약국 (PM9)
+    ps.categorySearch('PM9', (data, status) => {
+      if (status === kakao.maps.services.Status.OK)
+        pool.pharmacy = data.map(p => ({ ...p, _type: 'pharmacy' }));
+      tryRender();
+    }, { location: new kakao.maps.LatLng(lat, lng), radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE });
+
+    // 동물병원 키워드 검색
+    ps.keywordSearch('동물병원', (data, status) => {
+      if (status === kakao.maps.services.Status.OK)
+        pool.vet = data.map(p => ({ ...p, _type: 'vet' }));
+      tryRender();
+    }, { location: new kakao.maps.LatLng(lat, lng), radius: 2000, sort: kakao.maps.services.SortBy.DISTANCE });
+
+    // 필터 렌더
+    window._nearbyFilter = 'all';
+    window.filterNearby = function(f) {
+      window._nearbyFilter = f;
+      document.querySelectorAll('#nearbyFilterBtns .tab-btn').forEach(b =>
+        b.classList.toggle('active', b.dataset.f === f));
+      renderList(f);
+    };
+
+    function renderNearby(f) {
+      el.innerHTML = `
+        <div class="tab-filter" id="nearbyFilterBtns" style="margin-bottom:12px;flex-wrap:wrap;">
+          <button class="tab-btn active" data-f="all"      onclick="filterNearby('all')">전체</button>
+          <button class="tab-btn"        data-f="hospital" onclick="filterNearby('hospital')">🏥 병원</button>
+          <button class="tab-btn"        data-f="pharmacy" onclick="filterNearby('pharmacy')">💊 약국</button>
+          <button class="tab-btn"        data-f="nursing"  onclick="filterNearby('nursing')">🏨 요양병원</button>
+          <button class="tab-btn"        data-f="vet"      onclick="filterNearby('vet')">🐾 동물병원</button>
+        </div>
+        <p style="font-size:.75rem;color:var(--text-light);margin-bottom:8px;">운영 여부는 시간 기준 추정값입니다 — 방문 전 전화 확인 권장</p>
+        <div id="nearbyList"></div>`;
+      renderList(f);
+    }
+
+    function renderList(f) {
+      let items;
+      if (f === 'all') {
+        items = [
+          ...pool.hospital.slice(0,4),
+          ...pool.pharmacy.slice(0,3),
+          ...pool.nursing.slice(0,2),
+          ...pool.vet.slice(0,2),
+        ].sort((a,b) => parseInt(a.distance||0) - parseInt(b.distance||0));
+      } else {
+        items = (pool[f] || []).slice(0, 15);
+      }
+
+      const listEl = document.getElementById('nearbyList');
       if (!items.length) {
-        el.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:20px">주변 1km 내 의료기관이 없습니다.</p>';
+        listEl.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:16px">주변에 해당 의료기관이 없습니다.</p>';
         return;
       }
-      el.innerHTML = items.map(p => {
-        const { label, icon } = catMap[p._cat];
-        const dist = p.distance ? `${p.distance}m` : '';
+      listEl.innerHTML = items.map(p => {
+        const info = catInfo[p._type] || catInfo.hospital;
+        const dist = p.distance ? `${parseInt(p.distance)}m` : '';
         return `<div class="facility-card">
           <div class="facility-card-body">
             <div class="facility-name">${p.place_name}</div>
             <div class="facility-meta">
-              <span>${icon} ${label}</span>
+              <span style="color:${info.color};font-weight:600;">${info.icon} ${info.label}</span>
               <span>📍 ${p.road_address_name || p.address_name}</span>
               ${dist ? `<span>🚶 ${dist}</span>` : ''}
             </div>
           </div>
-          <div class="facility-card-right">
+          <div class="facility-card-right" style="flex-direction:column;align-items:flex-end;gap:6px;">
+            ${openEstimate(p._type)}
             ${p.phone ? `<a href="tel:${p.phone}" class="btn-call">📞 ${p.phone}</a>` : ''}
           </div>
         </div>`;
