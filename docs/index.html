@@ -325,7 +325,10 @@
     ps.categorySearch('HP8', (data, status) => {
       if (status === kakao.maps.services.Status.OK) {
         data.forEach(p => {
-          const type = p.place_name.includes('요양') ? 'nursing' : 'hospital';
+          const n = p.place_name;
+          const type = n.includes('요양') ? 'nursing'
+                     : n.includes('동물') ? 'vet'
+                     : 'hospital';
           pool[type].push({ ...p, _type: type });
         });
       }
