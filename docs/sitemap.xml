@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://hosppass.wooahouse.com/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://hosppass.wooahouse.com/emergency.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
@@ -8,7 +8,25 @@
   <url><loc>https://hosppass.wooahouse.com/privacy.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/yoyang.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/요양병원/간호등급.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/요양병원/재활.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/요양병원/치매.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/요양병원/투석.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/요양병원/호스피스.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/내과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/비뇨기과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/산부인과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/성형외과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/소아과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/신경과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/안과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/이비인후과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/재활의학과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/정신건강의학과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/정형외과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/치과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/피부과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/한의원.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/진료과목/흉부외과.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/요양병원/강원/강릉시.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/요양병원/강원/동해시.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/요양병원/강원/삼척시.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

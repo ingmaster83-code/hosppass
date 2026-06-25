@@ -110,7 +110,7 @@ def footer_html(root: str = "../") -> str:
     <p class="footer-copy">
       본 서비스는 건강보험심사평가원·국립중앙의료원 공공데이터를 활용합니다.<br>
       의료기관 정보는 실제와 다를 수 있으므로 방문 전 반드시 전화로 확인하세요.<br>
-      &copy; {datetime.now().year} hosppass.kr
+      &copy; {datetime.now().year} hosppass.wooahouse.com
     </p>
   </div>
 </footer>
@@ -322,10 +322,20 @@ const PAGE_SIZE=10;
 
 document.addEventListener('DOMContentLoaded',()=>{{buildItems();applyFilter();initMap();}});
 
+const DEPT_KW=['내과','소아과','정형외과','산부인과','치과','한의원','안과','이비인후과','피부과','신경과','비뇨기과','재활의학과','성형외과','흉부외과'];
+function hasDept(name,d){{
+  if(d==='정신건강의학과')return/정신과|신경정신과|정신건강/.test(name||'');
+  return(name||'').includes(d);
+}}
+function getDepts(name){{
+  const hits=DEPT_KW.filter(d=>(name||'').includes(d));
+  if(/정신과|신경정신과|정신건강/.test(name||''))hits.push('정신건강의학과');
+  return hits.slice(0,3);
+}}
 function buildItems(){{
   allItems=[
     ...PAGE_DATA.hospitals.map(h=>{{return{{...h,_type:'hosp'}}}}),
-    ...PAGE_DATA.pharmacies.map(p=>{{return{{...p,_type:'pharm',cl_nm:'약국',dgsbj:'약국'}}}})
+    ...PAGE_DATA.pharmacies.map(p=>{{return{{...p,_type:'pharm',cl_nm:'약국'}}}})
   ];
 }}
 function filterType(t){{curType=t;curPage=1;document.querySelectorAll('#typeFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===t));applyFilter();}}
@@ -335,7 +345,8 @@ function applyFilter(){{
     if(curType==='hosp'&&item._type!=='hosp')return false;
     if(curType==='pharm'&&item._type!=='pharm')return false;
     if(curType==='night'&&item.status!=='night')return false;
-    if(curDept!=='all'&&!(item.dgsbj||'').includes(curDept))return false;
+    if(curDept!=='all'&&item._type==='hosp'&&!hasDept(item.name,curDept))return false;
+    if(curDept!=='all'&&item._type==='pharm')return false;
     return true;
   }});
   document.getElementById('resultCount').textContent=filtered.length;
@@ -353,7 +364,7 @@ function renderPage(page){{
 function renderCard(item){{
   const smap={{open:['status-open','운영중'],night:['status-night','야간진료'],busy:['status-busy','혼잡'],full:['status-full','만석'],closed:['status-closed','운영종료']}};
   const [scls,stxt]=smap[item.status]||smap.closed;
-  const depts=(item.dgsbj||'').split(',').filter(Boolean).slice(0,4).map(d=>`<span class="tag tag-dept">${{d.trim()}}</span>`).join('');
+  const depts=item._type==='pharm'?'<span class="tag tag-dept">약국</span>':getDepts(item.name||'').map(d=>`<span class="tag tag-dept">${{d}}</span>`).join('');
   const grade=item.grade?`<span class="tag tag-grade">⭐ ${{item.grade}}</span>`:'';
   const is24=item.is24h?'<span class="tag tag-open">24시간</span>':'';
   const addr=item.emd_nm?`${{item.emd_nm}} · ${{(item.addr||'').replace(/^[가-힣]+시\\s*[가-힣]+구\\s*/,'')}}`:item.addr||'';
@@ -528,7 +539,7 @@ function renderPage(page){{
       </div>
     </div>`).join('');
   const total=Math.ceil(filtered2.length/PAGE_SIZE);
-  document.getElementById('pagination').innerHTML=total<=1?'':Array.from({{length:total}},(_,i)=>`<button class="page-btn${{i+1===page?' active':''}}" onclick="renderPage(${{i+1}})">${{i+1}}</button>`).join('');
+  document.getElementById('pagination').innerHTML=buildPagination(page,total);
 }}
 </script>
 {footer_html(root)}"""
@@ -560,8 +571,8 @@ def generate_nursing_pages(nursing: list):
         _generate_nursing_region_page(sido_nm, sggu_nm, hospitals)
         count += 1
 
-    # 투석 전문 페이지
-    dialysis = [h for h in nursing if h.get("dialysis")]
+    # 투석 전문 페이지 — 투석 데이터 없으면 전체 목록으로 fallback
+    dialysis = [h for h in nursing if h.get("dialysis")] or nursing
     _generate_dialysis_page(dialysis)
 
     # 간호등급 안내 페이지
@@ -728,7 +739,7 @@ function filterSido(sido){{
     const grade=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${{h.nursing_grade}}</span>`:'';
     const bed=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${{h.bed_cnt}}병상</span>`:'';
     const mc=h.dialysis_machine_cnt?`<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 인공신장기 ${{h.dialysis_machine_cnt}}대</span>`:'<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>';
-    return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}}</span><span>📞 ${{h.tel||''}}</span></div><div class="facility-tags">${{mc}}${{grade}}${{bed}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}</div></div>`;
+    return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}}</span></div><div class="facility-tags">${{mc}}${{grade}}${{bed}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}</div></div>`;
   }}).join('');
 }}
 </script>

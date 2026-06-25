@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
@@ -151,10 +151,20 @@ const PAGE_SIZE=10;
 
 document.addEventListener('DOMContentLoaded',()=>{buildItems();applyFilter();initMap();});
 
+const DEPT_KW=['내과','소아과','정형외과','산부인과','치과','한의원','안과','이비인후과','피부과','신경과','비뇨기과','재활의학과','성형외과','흉부외과'];
+function hasDept(name,d){
+  if(d==='정신건강의학과')return/정신과|신경정신과|정신건강/.test(name||'');
+  return(name||'').includes(d);
+}
+function getDepts(name){
+  const hits=DEPT_KW.filter(d=>(name||'').includes(d));
+  if(/정신과|신경정신과|정신건강/.test(name||''))hits.push('정신건강의학과');
+  return hits.slice(0,3);
+}
 function buildItems(){
   allItems=[
     ...PAGE_DATA.hospitals.map(h=>{return{...h,_type:'hosp'}}),
-    ...PAGE_DATA.pharmacies.map(p=>{return{...p,_type:'pharm',cl_nm:'약국',dgsbj:'약국'}})
+    ...PAGE_DATA.pharmacies.map(p=>{return{...p,_type:'pharm',cl_nm:'약국'}})
   ];
 }
 function filterType(t){curType=t;curPage=1;document.querySelectorAll('#typeFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===t));applyFilter();}
@@ -164,7 +174,8 @@ function applyFilter(){
     if(curType==='hosp'&&item._type!=='hosp')return false;
     if(curType==='pharm'&&item._type!=='pharm')return false;
     if(curType==='night'&&item.status!=='night')return false;
-    if(curDept!=='all'&&!(item.dgsbj||'').includes(curDept))return false;
+    if(curDept!=='all'&&item._type==='hosp'&&!hasDept(item.name,curDept))return false;
+    if(curDept!=='all'&&item._type==='pharm')return false;
     return true;
   });
   document.getElementById('resultCount').textContent=filtered.length;
@@ -182,7 +193,7 @@ function renderPage(page){
 function renderCard(item){
   const smap={open:['status-open','운영중'],night:['status-night','야간진료'],busy:['status-busy','혼잡'],full:['status-full','만석'],closed:['status-closed','운영종료']};
   const [scls,stxt]=smap[item.status]||smap.closed;
-  const depts=(item.dgsbj||'').split(',').filter(Boolean).slice(0,4).map(d=>`<span class="tag tag-dept">${d.trim()}</span>`).join('');
+  const depts=item._type==='pharm'?'<span class="tag tag-dept">약국</span>':getDepts(item.name||'').map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
   const grade=item.grade?`<span class="tag tag-grade">⭐ ${item.grade}</span>`:'';
   const is24=item.is24h?'<span class="tag tag-open">24시간</span>':'';
   const addr=item.emd_nm?`${item.emd_nm} · ${(item.addr||'').replace(/^[가-힣]+시\s*[가-힣]+구\s*/,'')}`:item.addr||'';
@@ -215,7 +226,7 @@ function initMap(){
     <p class="footer-copy">
       본 서비스는 건강보험심사평가원·국립중앙의료원 공공데이터를 활용합니다.<br>
       의료기관 정보는 실제와 다를 수 있으므로 방문 전 반드시 전화로 확인하세요.<br>
-      &copy; 2026 hosppass.kr
+      &copy; 2026 hosppass.wooahouse.com
     </p>
   </div>
 </footer>
