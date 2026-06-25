@@ -58,6 +58,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{esc(title)}</title>
   <meta name="description" content="{esc(desc)}">{kw_tag}
+  <meta name="naver-site-verification" content="d3f493285e1981adb0b98fa3772bd8ad2441ac9e" />
   <meta property="og:title" content="{esc(title)}">
   <meta property="og:description" content="{esc(desc)}">
   <meta property="og:type" content="website">
