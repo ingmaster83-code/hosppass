@@ -18,6 +18,7 @@ import html
 from pathlib import Path
 from datetime import datetime
 from collections import defaultdict
+from urllib.parse import quote
 
 ROOT     = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
@@ -819,10 +820,14 @@ def _generate_nursing_grade_page(hospitals: list):
 
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
+def _encode_url(path: str) -> str:
+    # 슬래시는 유지, 나머지 비ASCII 문자 퍼센트 인코딩
+    return "/".join(quote(seg, safe="") for seg in path.split("/"))
+
 def generate_sitemap(pages: list):
     print("[4/4] sitemap.xml 생성")
     urls = "\n".join(
-        f"  <url><loc>{SITE_URL}/{p}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
+        f"  <url><loc>{SITE_URL}/{_encode_url(p)}</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>"
         for p in pages
     )
     sitemap = f"""<?xml version="1.0" encoding="UTF-8"?>
