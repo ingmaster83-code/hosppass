@@ -35,21 +35,14 @@ img { display: block; max-width: 100%; }
 ul { list-style: none; }
 button { cursor: pointer; border: none; background: none; font: inherit; }
 
-/* ── 광고 플레이스홀더 ─────────────────────────── */
+/* ── 광고 ─────────────────────────── */
 .ad-banner {
-  background: #F9FAFB;
-  border: 1px dashed #D1D5DB;
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-light);
-  font-size: .75rem;
-  letter-spacing: .05em;
-  text-transform: uppercase;
+  display: block;
+  overflow: hidden;
 }
-.ad-top    { width: 100%; height: 90px; margin: 0 auto 24px; max-width: 728px; }
-.ad-mid    { width: 100%; height: 90px; margin: 32px auto; max-width: 728px; }
+.ad-banner ins.adsbygoogle:not([data-ad-status]) { display: none !important; }
+.ad-top    { width: 100%; margin: 0 auto 24px; max-width: 728px; }
+.ad-mid    { width: 100%; margin: 32px auto; max-width: 728px; }
 .ad-side   { width: 300px; min-height: 600px; flex-shrink: 0; }
 @media (max-width: 768px) {
   .ad-top, .ad-mid { height: 50px; }
