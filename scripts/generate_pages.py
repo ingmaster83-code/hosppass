@@ -1,4 +1,4 @@
-"""
+﻿"""
 hosppass.kr 페이지 자동 생성 스크립트
 
 생성 대상:
@@ -24,7 +24,7 @@ DATA_DIR = ROOT / "data"
 DOCS_DIR = ROOT / "docs"
 
 KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "__KAKAO_MAP_KEY__")
-SITE_URL      = "https://hosp.wooahouse.com"
+SITE_URL      = "https://hosppass.wooahouse.com"
 
 # ── 유틸 ───────────────────────────────────────────────────
 

@@ -1,4 +1,4 @@
-User-agent: *
+﻿User-agent: *
 Allow: /
 
-Sitemap: https://hosp.wooahouse.com/sitemap.xml
+Sitemap: https://hosppass.wooahouse.com/sitemap.xml
