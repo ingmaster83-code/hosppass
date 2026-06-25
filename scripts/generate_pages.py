@@ -171,9 +171,10 @@ def generate_region_pages(hospitals: list, pharmacies: list):
         h_list = hosp_by_region[(sido_nm, sggu_nm)]
         p_list = pharm_by_region[(sido_nm, sggu_nm)]
 
-        # 데이터 임베딩용 (상위 300개로 제한)
-        h_embed = h_list[:300]
-        p_embed = p_list[:100]
+        # 필요한 필드만 남겨서 크기 최소화 (제한 없이 전체 포함)
+        _keep = {"name","cl_nm","tel","url","x","y","addr","emd_nm","dr_cnt","sdr_cnt","hours","sido_nm","sggu_nm"}
+        h_embed = [{k:v for k,v in h.items() if k in _keep} for h in h_list]
+        p_embed = [{k:v for k,v in p.items() if k in _keep} for p in p_list]
 
         canonical = f"지역/{sido_nm}/{sggu_nm}.html"
         title = (f"{sggu_nm} 병원 — 야간진료·내과·소아과·정형외과 찾기 | hosppass")
