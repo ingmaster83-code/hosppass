@@ -127,6 +127,17 @@ const API_KEY='9490b1d34e92aa9e25b32a4cff1438fc7b9c71e5d332413916a391e867f61e86'
 let allData=[],curSido='',curPage=1;
 const PAGE_SIZE=15;
 
+function buildPagination(cur,total){
+  if(total<=1)return'';
+  const w=10,half=Math.floor(w/2);
+  let s=Math.max(1,cur-half),e=Math.min(total,s+w-1);
+  if(e-s<w-1)s=Math.max(1,e-w+1);
+  let h=s>1?`<button onclick="renderPage(${s-1})">◀</button>`:'';
+  for(let i=s;i<=e;i++)h+=`<button onclick="renderPage(${i})"${i===cur?' class="active"':''}>${i}</button>`;
+  if(e<total)h+=`<button onclick="renderPage(${e+1})">▶</button>`;
+  return h;
+}
+
 document.getElementById('hsi').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 function doSearch(){
   const q=document.getElementById('hsi').value.trim();
@@ -135,33 +146,37 @@ function doSearch(){
 }
 
 async function loadRealtime(){
-  const el=document.getElementById('emergencyList');
-  el.innerHTML='<div class="loading"><div class="spinner"></div> 실시간 병상 현황 불러오는 중...</div>';
+  // 정적 JSON 먼저 즉시 로드
+  await loadStatic();
+  // 백그라운드에서 실시간 병상 업데이트 시도
   try{
-    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:50,Q0:curSido||''});
-    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEmrgcBasicInfoInqire?${params}`);
+    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:100,Q0:''});
+    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEmrgcBasicInfoInqire?${params}`,{signal:AbortSignal.timeout(5000)});
     const txt=await res.text();
     const xml=new DOMParser().parseFromString(txt,'text/xml');
     const items=[...xml.querySelectorAll('item')];
     if(items.length){
-      allData=items.map(it=>{
+      // 실시간 병상 수만 기존 데이터에 덮어쓰기
+      const bedMap={};
+      items.forEach(it=>{
         const g=t=>it.querySelector(t)?.textContent||'';
-        return{name:g('dutyName'),addr:g('dutyAddr'),tel:g('dutyTel1'),sido:g('dutyAddr').split(' ')[0],
-          hvec:parseInt(g('hvec')||0),hvoc:parseInt(g('hvoc')||0),hvidate:g('hvidate')};
+        const name=g('dutyName');
+        if(name) bedMap[name]={hvec:parseInt(g('hvec')||'-1'),hvoc:parseInt(g('hvoc')||'-1')};
       });
-      renderPage(1);
-      return;
+      allData=allData.map(h=>{
+        const bed=bedMap[h.name];
+        return bed?{...h,...bed}:h;
+      });
+      renderPage(curPage);
     }
   }catch(e){}
-  // 실시간 실패 시 static 데이터 로드
-  loadStatic();
 }
 
 async function loadStatic(){
   try{
     const res=await fetch('data/emergency.json');
     const json=await res.json();
-    allData=(json.items||json).map(h=>({...h,sido:h.sido_nm}));
+    allData=(json.items||json).map(h=>({...h,sido:h.sido_nm,hvec:null,hvoc:null}));
     renderPage(1);
   }catch(e){
     document.getElementById('emergencyList').innerHTML='<p style="text-align:center;padding:32px;color:var(--text-light)">응급실 정보를 불러올 수 없습니다.</p>';
