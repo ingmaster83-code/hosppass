@@ -138,7 +138,8 @@ async function loadNightPharm(sido){
     const txt=await res.text();
     const parser=new DOMParser();
     const xml=parser.parseFromString(txt,'text/xml');
-    const items=[...xml.querySelectorAll('item')];
+    const all=[...xml.querySelectorAll('item')];
+    const items=all.filter(it=>(it.querySelector('dutyName')?.textContent||'').includes('약국'));
     if(!items.length){el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">현재 운영 중인 야간 약국 정보가 없습니다.</p>';return;}
     el.innerHTML=items.map(it=>{
       const g=t=>it.querySelector(t)?.textContent||'';
