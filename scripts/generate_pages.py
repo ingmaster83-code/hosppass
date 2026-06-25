@@ -23,7 +23,7 @@ ROOT     = Path(__file__).parent.parent
 DATA_DIR = ROOT / "data"
 DOCS_DIR = ROOT / "docs"
 
-KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "__KAKAO_MAP_KEY__")
+KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "78e249ab403b2955e4ca71e71f658549")
 SITE_URL      = "https://hosppass.wooahouse.com"
 
 # ── 유틸 ───────────────────────────────────────────────────
