@@ -435,8 +435,11 @@ def generate_specialty_pages(hospitals: list):
     print("[2/4] 진료과목별 페이지 생성")
     (DOCS_DIR / "진료과목").mkdir(exist_ok=True)
 
+    # 정신건강의학과 검색어 매핑 (병원명에 다르게 표기됨)
+    name_alias = {"정신건강의학과": ["정신과", "신경정신과", "정신건강"]}
     for dept_nm, _ in SPECIALTIES:
-        filtered = [h for h in hospitals if dept_nm in (h.get("dgsbj") or "")][:300]
+        aliases = name_alias.get(dept_nm, [dept_nm])
+        filtered = [h for h in hospitals if any(a in (h.get("name") or "") for a in aliases)][:300]
         if not filtered:
             continue
 
