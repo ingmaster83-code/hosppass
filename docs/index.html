@@ -296,29 +296,39 @@
     }
     const ps = new kakao.maps.services.Places();
     const el = document.getElementById('nearbyResult');
-    let results = [];
+    const catMap = { HP8: { label: '병원', icon: '🏥' }, PM9: { label: '약국', icon: '💊' } };
+    const collected = {};
     let done = 0;
-    const cats = ['HP8', 'PM9']; // 병원, 약국
 
-    cats.forEach(cat => {
+    Object.keys(catMap).forEach(cat => {
       ps.categorySearch(cat, (data, status) => {
-        if (status === kakao.maps.services.Status.OK) results = results.concat(data);
+        collected[cat] = status === kakao.maps.services.Status.OK ? data : [];
         done++;
-        if (done === cats.length) renderNearby(results, lat, lng);
+        if (done === Object.keys(catMap).length) renderNearby();
       }, { location: new kakao.maps.LatLng(lat, lng), radius: 1000, sort: kakao.maps.services.SortBy.DISTANCE });
     });
 
-    function renderNearby(items, lat, lng) {
+    function renderNearby() {
+      // 병원 5개 + 약국 5개 합쳐서 거리순 정렬
+      const hospitals = (collected.HP8 || []).slice(0, 5).map(p => ({ ...p, _cat: 'HP8' }));
+      const pharms   = (collected.PM9 || []).slice(0, 5).map(p => ({ ...p, _cat: 'PM9' }));
+      const items = [...hospitals, ...pharms].sort((a, b) => parseInt(a.distance) - parseInt(b.distance));
+
       if (!items.length) {
         el.innerHTML = '<p style="text-align:center;color:var(--text-light);padding:20px">주변 1km 내 의료기관이 없습니다.</p>';
         return;
       }
-      el.innerHTML = items.slice(0, 10).map(p => {
+      el.innerHTML = items.map(p => {
+        const { label, icon } = catMap[p._cat];
         const dist = p.distance ? `${p.distance}m` : '';
         return `<div class="facility-card">
           <div class="facility-card-body">
             <div class="facility-name">${p.place_name}</div>
-            <div class="facility-meta"><span>📍 ${p.road_address_name || p.address_name}</span>${dist ? `<span>🚶 ${dist}</span>` : ''}</div>
+            <div class="facility-meta">
+              <span>${icon} ${label}</span>
+              <span>📍 ${p.road_address_name || p.address_name}</span>
+              ${dist ? `<span>🚶 ${dist}</span>` : ''}
+            </div>
           </div>
           <div class="facility-card-right">
             ${p.phone ? `<a href="tel:${p.phone}" class="btn-call">📞 ${p.phone}</a>` : ''}
