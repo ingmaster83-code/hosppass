@@ -128,25 +128,44 @@ function doSearch(){
 document.getElementById('heroSearch').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 document.getElementById('hsi').addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
 
+function dutyDayIndex(date){
+  const dow=date.getDay(); // 0=일 1=월 ... 6=토
+  return dow===0?7:dow; // dutyTime1~6=월~토, dutyTime7=일
+}
+function isOpenNow(it,dutyIdx,curHM){
+  const s=it.querySelector(`dutyTime${dutyIdx}s`)?.textContent;
+  const c=it.querySelector(`dutyTime${dutyIdx}c`)?.textContent;
+  if(!s||!c)return false;
+  const sN=parseInt(s,10),cN=parseInt(c,10);
+  if(isNaN(sN)||isNaN(cN))return false;
+  if(cN<sN)return curHM>=sN||curHM<=cN; // 자정 넘어가는 경우
+  return curHM>=sN&&curHM<=cN;
+}
+
 async function loadNightPharm(sido){
   document.querySelectorAll('#sidoFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.textContent===(sido||'전체')));
   const el=document.getElementById('nightPharmResult');
   el.innerHTML='<div class="loading"><div class="spinner"></div> 불러오는 중...</div>';
   try{
-    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:20,dutyDivSName:'야간전용',Q0:sido||''});
-    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEgytBassInfoInqire?${params}`);
+    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:100,Q0:sido||'서울'});
+    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInsttInfoInqireService/getParmacyListInfoInqire?${params}`);
     const txt=await res.text();
     const parser=new DOMParser();
     const xml=parser.parseFromString(txt,'text/xml');
-    const all=[...xml.querySelectorAll('item')];
-    const items=all.filter(it=>(it.querySelector('dutyName')?.textContent||'').includes('약국'));
-    if(!items.length){el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">현재 운영 중인 야간 약국 정보가 없습니다.</p>';return;}
-    el.innerHTML=items.map(it=>{
+    const items=[...xml.querySelectorAll('item')];
+    if(!items.length){el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">해당 지역의 약국 정보가 없습니다.</p>';return;}
+    const now=new Date();
+    const dutyIdx=dutyDayIndex(now);
+    const curHM=now.getHours()*100+now.getMinutes();
+    const scored=items.map(it=>({it,open:isOpenNow(it,dutyIdx,curHM)}));
+    scored.sort((a,b)=>(b.open-a.open));
+    const list=scored.slice(0,20);
+    el.innerHTML=list.map(({it,open})=>{
       const g=t=>it.querySelector(t)?.textContent||'';
-      return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${g('dutyName')}</div><div class="facility-meta"><span>📍 ${g('dutyAddr')}</span></div><div class="facility-tags"><span class="tag tag-open">야간운영</span></div></div><div class="facility-card-right">${g('dutyTel1')?`<a href="tel:${g('dutyTel1')}" class="btn-call">📞 ${g('dutyTel1')}</a>`:''}</div></div>`;
+      return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${g('dutyName')}</div><div class="facility-meta"><span>📍 ${g('dutyAddr')}</span></div><div class="facility-tags"><span class="tag ${open?'tag-open':'tag-closed'}">${open?'● 영업중':'○ 영업시간 확인 필요'}</span></div></div><div class="facility-card-right">${g('dutyTel1')?`<a href="tel:${g('dutyTel1')}" class="btn-call">📞 ${g('dutyTel1')}</a>`:''}</div></div>`;
     }).join('');
   }catch(e){
-    el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">야간 약국 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>';
+    el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">약국 정보를 불러올 수 없습니다. 잠시 후 다시 시도해주세요.</p>';
   }
 }
 loadNightPharm('');
