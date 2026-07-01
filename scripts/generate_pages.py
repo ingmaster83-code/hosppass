@@ -26,7 +26,7 @@ DOCS_DIR = ROOT / "docs"
 
 KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "78e249ab403b2955e4ca71e71f658549")
 SITE_URL      = "https://hosppass.wooahouse.com"
-CSS_VERSION   = "3"
+CSS_VERSION   = "4"
 JS_VERSION    = "2"
 
 # ── 유틸 ───────────────────────────────────────────────────
