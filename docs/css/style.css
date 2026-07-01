@@ -339,12 +339,15 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   border-radius: 20px;
   font-size: .82rem;
   font-weight: 600;
+  white-space: nowrap;
   transition: background .15s;
 }
 .btn-call:hover { background: var(--border); }
 @media (max-width: 768px) {
   .facility-card { flex-direction: column; }
-  .facility-card-right { flex-direction: row; align-items: center; }
+  .facility-card-right { flex-direction: row; flex-wrap: wrap; align-items: center; }
+  .facility-card-right .status-badge,
+  .facility-card-right .btn-call { flex-shrink: 0; }
 }
 
 /* ── 탭 필터 ─────────────────────────────────── */
