@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/style.css?v=3">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
@@ -151,7 +151,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:032-223-7000" class="btn-call">📞 032-223-7000</a>
   </div>
-</div><div class="facility-card">
+</div><div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">오름요양병원</div>
     <div class="facility-meta"><span>📍 인천광역시 미추홀구 한나루로 591, B1, 1, 3~6층 (도화동)</span><span>👨‍⚕️ 의사 3명</span></div>
@@ -238,7 +238,11 @@ function filterNursing(f){
     return true;
   });
   document.getElementById('resultCount').textContent=filtered.length;
-  document.getElementById('nursingList').innerHTML=filtered.map(h=>nursingCard(h)).join('');
+  const list=document.getElementById('nursingList');
+  let html=filtered.map(h=>nursingCard(h));
+  if(html.length>9)html.splice(8,0,'<div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins></div>');
+  list.innerHTML=html.join('');
+  list.querySelectorAll('.ad-inline .adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{try{(window.adsbygoogle=window.adsbygoogle||[]).push({});}catch(e){}});
 }
 function nursingCard(h){
   const dialysisTag=h.dialysis?'<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>':'';

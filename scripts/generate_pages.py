@@ -26,6 +26,7 @@ DOCS_DIR = ROOT / "docs"
 
 KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "78e249ab403b2955e4ca71e71f658549")
 SITE_URL      = "https://hosppass.wooahouse.com"
+CSS_VERSION   = "3"
 
 # ── 유틸 ───────────────────────────────────────────────────
 
@@ -67,7 +68,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{root}css/style.css">
+  <link rel="stylesheet" href="{root}css/style.css?v={CSS_VERSION}">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
@@ -204,6 +205,11 @@ def generate_region_pages(hospitals: list, pharmacies: list):
         )
         out = DOCS_DIR / "지역" / sido_nm / f"{sggu_nm}.html"
         save_html(out, page)
+        # 병원/약국/응급실 페이지의 "내 위치로 찾기"가 재사용할 수 있도록 동일 데이터를 JSON으로도 저장
+        json_out = DOCS_DIR / "지역" / sido_nm / f"{sggu_nm}.json"
+        json_out.parent.mkdir(parents=True, exist_ok=True)
+        with open(json_out, "w", encoding="utf-8") as f:
+            json.dump({"sido": sido_nm, "sggu": sggu_nm, "hospitals": h_embed, "pharmacies": p_embed}, f, ensure_ascii=False, separators=(",", ":"))
         count += 1
 
     # 시도 index 생성
@@ -312,6 +318,7 @@ def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonica
 </div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script src="{root}js/facility-render.js"></script>
 <script>
 const PAGE_DATA={{
   sido:{json_embed(sido)},sggu:{json_embed(sggu)},
@@ -331,48 +338,14 @@ function buildPagination(page,total){{
 let allItems=[],filtered=[],curType='all',curDept='all',curPage=1;
 const PAGE_SIZE=10;
 
-document.addEventListener('DOMContentLoaded',()=>{{buildItems();applyFilter();initMap();}});
+document.addEventListener('DOMContentLoaded',()=>{{
+  buildItems();
+  const h=(location.hash||'').replace('#','');
+  if(['hosp','pharm','night'].includes(h)){{curType=h;document.querySelectorAll('#typeFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.dataset.type===h));}}
+  applyFilter();initMap();
+}});
 
-const DAY_KEYS=['일','월','화','수','목','금','토'];
-function hasDept(item,d){{
-  if(item._type!=='hosp')return false;
-  const list=item.departments||[];
-  if(d==='정신건강의학과')return list.some(x=>/정신/.test(x.name||''));
-  return list.some(x=>(x.name||'').includes(d));
-}}
-function isNightCareNow(item){{
-  if(item._type!=='hosp')return false;
-  if(item.er_night)return true;
-  const h=item.hours||{{}};
-  const today=DAY_KEYS[new Date().getDay()];
-  const d=h[today];
-  if(!d||!d.start||!d.end)return false;
-  const now=new Date(),curHM=now.getHours()*100+now.getMinutes();
-  const sN=parseInt(d.start.replace(':',''),10),eN=parseInt(d.end.replace(':',''),10);
-  if(isNaN(sN)||isNaN(eN))return false;
-  // 마감이 늦은 시간대(21시 이후) 또는 자정을 넘기는 경우를 '야간진료'로 간주
-  const isLate=eN>=2100||eN<sN;
-  if(!isLate)return false;
-  return eN<sN?(curHM>=sN||curHM<=eN):(curHM>=sN&&curHM<=eN);
-}}
-function isOpenNow(item){{
-  if(item._type!=='hosp')return null;
-  const h=item.hours||{{}};
-  const today=DAY_KEYS[new Date().getDay()];
-  const d=h[today];
-  if(!d||!d.start||!d.end)return null;
-  const now=new Date(),curHM=now.getHours()*100+now.getMinutes();
-  const sN=parseInt(d.start.replace(':',''),10),eN=parseInt(d.end.replace(':',''),10);
-  if(isNaN(sN)||isNaN(eN))return null;
-  return eN<sN?(curHM>=sN||curHM<=eN):(curHM>=sN&&curHM<=eN);
-}}
-function hoursSummary(item){{
-  const h=item.hours;
-  if(!h||!Object.keys(h).length)return'';
-  const order=['월','화','수','목','금','토','일'];
-  const parts=order.filter(k=>h[k]).map(k=>`${{k}} ${{h[k].start}}~${{h[k].end}}`);
-  return parts.join(' · ');
-}}
+// hasDept/isNightCareNow/isOpenNow/hoursSummary/renderFacilityCard는 js/facility-render.js 공용 파일 사용
 function buildItems(){{
   allItems=[
     ...PAGE_DATA.hospitals.map(h=>{{return{{...h,_type:'hosp'}}}}),
@@ -397,40 +370,10 @@ function renderPage(page){{
   const start=(page-1)*PAGE_SIZE,items=filtered.slice(start,start+PAGE_SIZE);
   const list=document.getElementById('facilityList');
   if(!items.length){{list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-light);">해당하는 의료기관이 없습니다.</div>';document.getElementById('pagination').innerHTML='';return;}}
-  list.innerHTML=items.map(renderCard).join('');
+  list.innerHTML=renderCardsWithAd(items,item=>renderFacilityCard(item,"{root}"));
+  initInlineAds(list);
   const total=Math.ceil(filtered.length/PAGE_SIZE);
   document.getElementById('pagination').innerHTML=buildPagination(curPage,total);
-}}
-function renderCard(item){{
-  let scls='status-closed',stxt='정보없음';
-  if(item._type==='hosp'){{
-    const night=isNightCareNow(item),open=isOpenNow(item);
-    if(night){{scls='status-night';stxt='야간진료중';}}
-    else if(open===true){{scls='status-open';stxt='운영중';}}
-    else if(open===false){{scls='status-closed';stxt='운영종료';}}
-    else {{scls='status-closed';stxt='정보없음';}}
-  }} else {{
-    scls='status-open';stxt='약국';
-  }}
-  const depts=item._type==='pharm'
-    ?'<span class="tag tag-dept">약국</span>'
-    :(item.departments||[]).slice(0,4).map(d=>`<span class="tag tag-dept">${{d.name}}${{d.specialist_cnt?`(전문의${{d.specialist_cnt}})`:''}}</span>`).join('');
-  const erTag=item.er_night?'<span class="tag tag-emrg">🚨 야간응급</span>':(item.er_day?'<span class="tag tag-emrg">🚨 주간응급</span>':'');
-  const nursingTag=(item.nursing||[]).length?`<span class="tag tag-grade">🏅 간호${{item.nursing[0].grade}}등급</span>`:'';
-  const spclTags=(item.specialized_fields||[]).slice(0,2).map(s=>`<span class="tag tag-grade">🏆 ${{s}}전문병원</span>`).join('');
-  const specialTags=(item.special_treatments||[]).slice(0,2).map(s=>`<span class="tag tag-dept">${{s}}</span>`).join('');
-  const addr=item.emd_nm?`${{item.emd_nm}} · ${{(item.addr||'').replace(/^[가-힣]+시\\s*[가-힣]+구\\s*/,'')}}`:item.addr||'';
-  const dr=item.dr_cnt?`<span>👨‍⚕️ 의사 ${{item.dr_cnt}}명</span>`:'';
-  const equip=(item.equipment||[]).length?`<span>🩻 장비 ${{item.equipment.length}}종</span>`:'';
-  const transit=(item.transit&&item.transit[0])?`<span>🚇 ${{item.transit[0].stop||''}} ${{item.transit[0].distance||''}}</span>`:'';
-  const parking=item.parking_available?`<span>🅿️ 주차 ${{item.parking_count||''}}대${{item.parking_fee?'(유료)':'(무료)'}}</span>`:'';
-  const hSum=hoursSummary(item);
-  const hoursRow=hSum
-    ?`<div style="margin-top:7px;font-size:.82rem;color:var(--text-secondary);">🕐 ${{hSum}} <span style="margin-left:6px;color:var(--warning);font-size:.76rem;">· 방문 전 전화 확인 권장</span></div>`
-    :`<div style="margin-top:7px;font-size:.78rem;color:var(--text-light);">🕐 진료시간 미제공 — 전화로 확인해주세요</div>`;
-  const extraRow=(equip||transit||parking)?`<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);display:flex;gap:10px;flex-wrap:wrap;">${{dr}}${{equip}}${{transit}}${{parking}}</div>`:(dr?`<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);">${{dr}}</div>`:'');
-  const urlBtn=item.url?`<a href="${{item.url}}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{item.name}}</div><div class="facility-meta"><span>🏥 ${{item.cl_nm||''}}</span><span>📍 ${{addr}}</span></div><div class="facility-tags">${{depts}}${{erTag}}${{nursingTag}}${{spclTags}}${{specialTags}}</div>${{extraRow}}${{hoursRow}}</div><div class="facility-card-right"><span class="status-badge ${{scls}}">${{stxt}}</span>${{item.tel?`<a href="tel:${{item.tel}}" class="btn-call">📞 ${{item.tel}}</a>`:''}}${{urlBtn}}</div></div>`;
 }}
 function initMap(){{
   if(typeof kakao==='undefined')return;
@@ -505,14 +448,21 @@ def generate_specialty_pages(hospitals: list):
 
     # 정신건강의학과 등 진료과목코드명 표기 편차 대응
     name_alias = {"정신건강의학과": ["정신건강의학과", "정신과", "신경정신과"]}
-    _card_keep = {"name","cl_nm","tel","url","sido_nm","sggu_nm","emd_nm"}
+    _card_keep = {
+        "name","cl_nm","tel","url","x","y","addr","emd_nm","dr_cnt",
+        "departments","hours","er_day","er_night","er_day_tel","er_night_tel",
+        "lunch_weekday","lunch_sat","closed_sun","closed_holiday",
+        "parking_available","parking_count","parking_fee","parking_note","location_note",
+        "equipment","transit","nursing","special_treatments","specialized_fields","meal","beds",
+        "sido_nm","sggu_nm",
+    }
     for dept_nm, _ in SPECIALTIES:
         aliases = name_alias.get(dept_nm, [dept_nm])
         matched = [
             h for h in hospitals
             if any(a in (d.get("name") or "") for d in (h.get("departments") or []) for a in aliases)
         ]
-        filtered = [{k: v for k, v in h.items() if k in _card_keep} for h in matched[:300]]
+        filtered = [{k: v for k, v in h.items() if k in _card_keep and v not in (None, "", [], {})} for h in matched[:300]]
         if not filtered:
             continue
 
@@ -564,6 +514,7 @@ def generate_specialty_pages(hospitals: list):
     </aside>
   </div>
 </div>
+<script src="{root}js/facility-render.js"></script>
 <script>
 function buildPagination(page,total){{
   if(total<=1)return'';
@@ -590,16 +541,8 @@ function renderPage(page){{
   const items=filtered2.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);
   const list=document.getElementById('facilityList');
   if(!items.length){{list.innerHTML='<div style="text-align:center;padding:40px;color:var(--text-light);">해당하는 병원이 없습니다.</div>';document.getElementById('pagination').innerHTML='';return;}}
-  list.innerHTML=items.map(h=>`
-    <div class="facility-card">
-      <div class="facility-card-body">
-        <div class="facility-name">${{h.name}}</div>
-        <div class="facility-meta"><span>🏥 ${{h.cl_nm||''}}</span><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}} ${{h.emd_nm||''}}</span></div>
-      </div>
-      <div class="facility-card-right">
-        ${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}
-      </div>
-    </div>`).join('');
+  list.innerHTML=renderCardsWithAd(items,h=>renderFacilityCard({{...h,_type:'hosp'}},"{root}"));
+  initInlineAds(list);
   const total=Math.ceil(filtered2.length/PAGE_SIZE);
   document.getElementById('pagination').innerHTML=buildPagination(page,total);
 }}
@@ -649,7 +592,11 @@ def _generate_nursing_region_page(sido, sggu, hospitals):
     title     = f"{sggu} 요양병원 — 투석 가능 간호등급 비교 | hosppass"
     desc      = f"{sggu} 요양병원 목록과 상세 정보를 확인하세요. 투석 가능 여부, 간호등급, 병상 수, 평가등급 비교."
 
-    cards = "".join(_nursing_card_html(h) for h in hospitals[:50])
+    _page_hospitals = hospitals[:50]
+    _card_htmls = [_nursing_card_html(h) for h in _page_hospitals]
+    if len(_card_htmls) > 9:
+        _card_htmls.insert(8, ad_banner('ad-inline'))
+    cards = "".join(_card_htmls)
 
     page = f"""{header_html(title, desc, canonical, 2)}
 <section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
@@ -714,7 +661,11 @@ function filterNursing(f){{
     return true;
   }});
   document.getElementById('resultCount').textContent=filtered.length;
-  document.getElementById('nursingList').innerHTML=filtered.map(h=>nursingCard(h)).join('');
+  const list=document.getElementById('nursingList');
+  let html=filtered.map(h=>nursingCard(h));
+  if(html.length>9)html.splice(8,0,'<div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins></div>');
+  list.innerHTML=html.join('');
+  list.querySelectorAll('.ad-inline .adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{{try{{(window.adsbygoogle=window.adsbygoogle||[]).push({{}});}}catch(e){{}}}});
 }}
 function nursingCard(h){{
   const dialysisTag=h.dialysis?'<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>':'';
@@ -757,7 +708,11 @@ def _generate_dialysis_page(hospitals: list):
         f'<button class="tab-btn" onclick="filterSido(\'{esc(s)}\')">{esc(s)}</button>'
         for s in SIDO_NAME_MAP.values()
     )
-    cards = "".join(_nursing_card_html(h) for h in hospitals[:100])
+    _page_hospitals = hospitals[:100]
+    _card_htmls = [_nursing_card_html(h) for h in _page_hospitals]
+    if len(_card_htmls) > 9:
+        _card_htmls.insert(8, ad_banner('ad-inline'))
+    cards = "".join(_card_htmls)
 
     page = f"""{header_html(title, desc, canonical, 1)}
 <section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:40px 16px;text-align:center;">
@@ -797,12 +752,16 @@ function filterSido(sido){{
   document.querySelectorAll('#sidoFilter .tab-btn').forEach(b=>b.classList.toggle('active',b.textContent===(sido||'전체')));
   const f=sido?ALL_D.filter(h=>h.sido_nm===sido):ALL_D;
   document.getElementById('resultCount').textContent=f.length;
-  document.getElementById('dialysisList').innerHTML=f.slice(0,100).map(h=>{{
+  const list=document.getElementById('dialysisList');
+  let html=f.slice(0,100).map(h=>{{
     const grade=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${{h.nursing_grade}}</span>`:'';
     const bed=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${{h.bed_cnt}}병상</span>`:'';
     const mc=h.dialysis_machine_cnt?`<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 인공신장기 ${{h.dialysis_machine_cnt}}대</span>`:'<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>';
     return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}}</span></div><div class="facility-tags">${{mc}}${{grade}}${{bed}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}</div></div>`;
-  }}).join('');
+  }});
+  if(html.length>9)html.splice(8,0,'<div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins></div>');
+  list.innerHTML=html.join('');
+  list.querySelectorAll('.ad-inline .adsbygoogle:not([data-adsbygoogle-status])').forEach(()=>{{try{{(window.adsbygoogle=window.adsbygoogle||[]).push({{}});}}catch(e){{}}}});
 }}
 </script>
 {footer_html(root)}"""
@@ -831,7 +790,11 @@ def _generate_nursing_grade_page(hospitals: list):
         for i, (g, r, l) in enumerate(grade_data)
     )
     grade1 = [h for h in hospitals if h.get("nursing_grade") == "1등급"]
-    grade1_cards = "".join(_nursing_card_html(h) for h in grade1[:50])
+    _grade1_page = grade1[:50]
+    _grade1_htmls = [_nursing_card_html(h) for h in _grade1_page]
+    if len(_grade1_htmls) > 9:
+        _grade1_htmls.insert(8, ad_banner('ad-inline'))
+    grade1_cards = "".join(_grade1_htmls)
 
     page = f"""{header_html(title, desc, canonical, 1)}
 <section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:40px 16px;text-align:center;">

@@ -44,6 +44,7 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
 .ad-top    { width: 100%; margin: 0 auto 24px; max-width: 728px; }
 .ad-mid    { width: 100%; margin: 32px auto; max-width: 728px; }
 .ad-side   { width: 300px; min-height: 600px; flex-shrink: 0; }
+.ad-inline { width: 100%; margin: 16px auto; max-width: 728px; }
 @media (max-width: 768px) {
   .ad-top, .ad-mid { height: 50px; }
   .ad-side { display: none; }
@@ -138,6 +139,13 @@ button { cursor: pointer; border: none; background: none; font: inherit; }
   top: 76px;
 }
 .layout-main { flex: 1; min-width: 0; }
+@media (max-width: 768px) {
+  .layout-with-sidebar { flex-direction: column; }
+  .layout-with-sidebar > aside { width: 100%; }
+  .sidebar-sticky { position: static; top: auto; }
+  /* 모바일에서는 사이드바 광고만 남기고 나머지 정보성 박스는 숨김 */
+  .sidebar-sticky > div:not(.ad-banner) { display: none; }
+}
 
 /* ── 히어로 ──────────────────────────────────── */
 .hero {

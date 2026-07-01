@@ -14,7 +14,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/style.css?v=3">
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
@@ -62,7 +62,11 @@
 <!-- 야간진료 섹션 -->
 <section id="sectionNight" class="section">
   <div class="container">
-    <h2 class="section-title">야간진료 병원 — 지역별 찾기</h2>
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+      <h2 class="section-title" style="margin:0;">야간진료 병원 — 지역별 찾기</h2>
+      <button class="tab-btn" onclick="findNearbyNight()">📍 내 위치로 찾기</button>
+    </div>
+    <div id="nearbyNightStatus" style="margin:10px 0;"></div>
     <p style="color:var(--text-secondary);font-size:.9rem;margin-bottom:20px;">
       아래 지역을 선택하면 해당 지역의 야간진료 병원 목록을 확인할 수 있습니다.<br>
       <span style="font-size:.82rem;color:var(--text-light);">※ 진료시간은 변경될 수 있으니 방문 전 전화로 확인하세요.</span>
@@ -139,8 +143,38 @@
   </div>
 </footer>
 
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=78e249ab403b2955e4ca71e71f658549&libraries=services"></script>
+<script src="js/facility-render.js"></script>
 <script>
 const API_KEY='9490b1d34e92aa9e25b32a4cff1438fc7b9c71e5d332413916a391e867f61e86';
+
+function normalizeSido(name){
+  const map=[['서울','서울'],['부산','부산'],['대구','대구'],['인천','인천'],['광주','광주'],['대전','대전'],['울산','울산'],['세종','세종'],['경기','경기'],['강원','강원'],['충청북','충북'],['충북','충북'],['충청남','충남'],['충남','충남'],['전라북','전북'],['전북','전북'],['전라남','전남'],['전남','전남'],['경상북','경북'],['경북','경북'],['경상남','경남'],['경남','경남'],['제주','제주']];
+  for(const[k,v]of map){if(name&&name.includes(k))return v;}
+  return null;
+}
+function findNearbyNight(){
+  const el=document.getElementById('nearbyNightStatus');
+  if(!navigator.geolocation){el.innerHTML='<p style="color:var(--text-light);font-size:.85rem;">위치 서비스가 지원되지 않습니다.</p>';return;}
+  el.innerHTML='<div class="loading"><div class="spinner"></div> 내 위치 확인 중...</div>';
+  navigator.geolocation.getCurrentPosition(pos=>{
+    if(typeof kakao==='undefined'){el.innerHTML='<p style="color:var(--text-light);font-size:.85rem;">위치 확인 서비스를 불러올 수 없습니다.</p>';return;}
+    const geocoder=new kakao.maps.services.Geocoder();
+    geocoder.coord2RegionCode(pos.coords.longitude,pos.coords.latitude,(result,status)=>{
+      if(status!==kakao.maps.services.Status.OK||!result.length){
+        el.innerHTML='<p style="color:var(--text-light);font-size:.85rem;">현재 위치의 지역을 확인할 수 없습니다.</p>';return;
+      }
+      const r=result.find(x=>x.region_type==='H')||result[0];
+      const sido=normalizeSido(r.region_1depth_name);
+      const sggu=(r.region_2depth_name||'').replace(/\s+/g,'');
+      if(!sido){el.innerHTML='<p style="color:var(--text-light);font-size:.85rem;">지역을 확인할 수 없습니다. 아래에서 직접 선택해주세요.</p>';return;}
+      const target=`지역/${sido}/${sggu}.html`;
+      fetch(target,{method:'HEAD'}).then(res=>{
+        location.href=(res.ok?target:`지역/${sido}/index.html`)+'#night';
+      }).catch(()=>{location.href=`지역/${sido}/index.html#night`;});
+    });
+  },()=>{el.innerHTML='<p style="color:var(--text-light);font-size:.85rem;">위치 접근이 거부되었습니다.</p>';});
+}
 
 // 현재 시간 표시
 (function(){
@@ -181,10 +215,11 @@ async function loadHoliday(sido){
     const xml=new DOMParser().parseFromString(txt,'text/xml');
     const items=[...xml.querySelectorAll('item')];
     if(!items.length){el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">현재 운영 중인 휴일진료 병원 정보가 없습니다.</p>';return;}
-    el.innerHTML=items.map(it=>{
+    el.innerHTML=renderCardsWithAd(items,it=>{
       const g=t=>it.querySelector(t)?.textContent||'';
       return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${g('dutyName')}</div><div class="facility-meta"><span>📍 ${g('dutyAddr')}</span><span>🕐 ${g('dutyTime1s')||''}~${g('dutyTime1c')||''}</span></div><div class="facility-tags"><span class="tag tag-open">휴일진료</span></div></div><div class="facility-card-right">${g('dutyTel1')?`<a href="tel:${g('dutyTel1')}" class="btn-call">📞 ${g('dutyTel1')}</a>`:''}</div></div>`;
-    }).join('');
+    });
+    initInlineAds(el);
   }catch(e){
     el.innerHTML='<p style="text-align:center;padding:24px;color:var(--text-light)">휴일진료 정보를 불러올 수 없습니다.</p>';
   }

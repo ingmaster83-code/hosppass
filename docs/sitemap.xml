@@ -3,6 +3,7 @@
   <url><loc>https://hosppass.wooahouse.com/</loc><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://hosppass.wooahouse.com/emergency.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/hospital.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://hosppass.wooahouse.com/map.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/night.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/pharmacy.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>
   <url><loc>https://hosppass.wooahouse.com/privacy.html</loc><changefreq>weekly</changefreq><priority>0.8</priority></url>

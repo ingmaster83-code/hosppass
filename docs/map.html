@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title id="pvTitle">위치 지도 | hosppass</title>
+  <link rel="stylesheet" href="css/style.css?v=3">
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6464921081676309" crossorigin="anonymous"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9ZGENFSXWC"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-9ZGENFSXWC');</script>
+  <style>
+    .map-topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;background:#fff;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+    .map-topbar .name{font-weight:700;font-size:1rem;color:var(--text-primary);}
+    .map-ad-wrap{max-width:900px;margin:14px auto;padding:0 16px;}
+    .map-frame-wrap{max-width:900px;margin:0 auto 24px;padding:0 16px;}
+    #fullMap{width:100%;height:70vh;border:1px solid var(--border);border-radius:var(--radius);background:#F3F4F6;}
+  </style>
+</head>
+<body>
+
+<div class="map-topbar">
+  <span class="name" id="pvName">위치 확인 중...</span>
+  <a href="#" id="pvDirection" target="_blank" rel="noopener" class="tab-btn">🚗 길찾기</a>
+</div>
+
+<div class="map-ad-wrap">
+  <ins class="adsbygoogle" style="display:block;width:100%;min-height:100px"
+    data-ad-client="ca-pub-6464921081676309"
+    data-ad-slot="7080296704"
+    data-ad-format="auto"
+    data-full-width-responsive="true"></ins>
+  <script>(adsbygoogle=window.adsbygoogle||[]).push({});</script>
+</div>
+
+<div class="map-frame-wrap">
+  <div id="fullMap"></div>
+</div>
+
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=78e249ab403b2955e4ca71e71f658549&libraries=services"></script>
+<script>
+  const params=new URLSearchParams(location.search);
+  const x=parseFloat(params.get('x')),y=parseFloat(params.get('y'));
+  const name=params.get('name')||'선택한 위치';
+  document.getElementById('pvName').textContent=name;
+  document.title=name+' 위치 | hosppass';
+  if(!isNaN(x)&&!isNaN(y)){
+    document.getElementById('pvDirection').href=`https://map.kakao.com/link/to/${encodeURIComponent(name)},${y},${x}`;
+    if(typeof kakao!=='undefined'){
+      const center=new kakao.maps.LatLng(y,x);
+      const map=new kakao.maps.Map(document.getElementById('fullMap'),{center,level:4});
+      new kakao.maps.Marker({map,position:center});
+      const iw=new kakao.maps.InfoWindow({content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${name}</div>`});
+      iw.open(map,new kakao.maps.Marker({map,position:center}));
+    }
+  } else {
+    document.getElementById('fullMap').innerHTML='<p style="text-align:center;padding:40px;color:var(--text-light)">위치 정보가 없습니다.</p>';
+  }
+</script>
+</body>
+</html>
