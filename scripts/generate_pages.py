@@ -27,6 +27,7 @@ DOCS_DIR = ROOT / "docs"
 KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "78e249ab403b2955e4ca71e71f658549")
 SITE_URL      = "https://hosppass.wooahouse.com"
 CSS_VERSION   = "3"
+JS_VERSION    = "2"
 
 # ── 유틸 ───────────────────────────────────────────────────
 
@@ -318,7 +319,7 @@ def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonica
 </div>
 
 <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
-<script src="{root}js/facility-render.js"></script>
+<script src="{root}js/facility-render.js?v={JS_VERSION}"></script>
 <script>
 const PAGE_DATA={{
   sido:{json_embed(sido)},sggu:{json_embed(sggu)},
@@ -514,7 +515,7 @@ def generate_specialty_pages(hospitals: list):
     </aside>
   </div>
 </div>
-<script src="{root}js/facility-render.js"></script>
+<script src="{root}js/facility-render.js?v={JS_VERSION}"></script>
 <script>
 function buildPagination(page,total){{
   if(total<=1)return'';

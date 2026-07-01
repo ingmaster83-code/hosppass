@@ -4,6 +4,12 @@
  */
 const DAY_KEYS = ['일', '월', '화', '수', '목', '금', '토'];
 
+function openMapPopup(url) {
+  const w = 480, h = 640;
+  const left = (window.screen.width - w) / 2, top = (window.screen.height - h) / 2;
+  window.open(url, 'hosppassMap', `width=${w},height=${h},left=${left},top=${top},menubar=no,toolbar=no,location=no,status=no,scrollbars=yes,resizable=yes`);
+}
+
 function haversine(lat1, lon1, lat2, lon2) {
   const R = 6371000, toRad = d => d * Math.PI / 180;
   const dLat = toRad(lat2 - lat1), dLon = toRad(lon2 - lon1);
@@ -92,7 +98,7 @@ function renderFacilityCard(item, mapRoot) {
     : (item._type === 'pharm' ? '' : `<div style="margin-top:7px;font-size:.78rem;color:var(--text-light);">🕐 진료시간 미제공 — 전화로 확인해주세요</div>`);
   const extraRow = (equip || transit || parking || distTag) ? `<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);display:flex;gap:10px;flex-wrap:wrap;">${dr}${distTag}${equip}${transit}${parking}</div>` : (dr ? `<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);">${dr}</div>` : '');
   const urlBtn = item.url ? `<a href="${item.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>` : '';
-  const mapBtn = (item.x && item.y) ? `<a href="${mapRoot}map.html?x=${item.x}&y=${item.y}&name=${encodeURIComponent(item.name)}" target="_blank" rel="noopener" class="btn-call">🗺️ 지도보기</a>` : '';
+  const mapBtn = (item.x && item.y) ? `<a href="${mapRoot}map.html?x=${item.x}&y=${item.y}&name=${encodeURIComponent(item.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>` : '';
   return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${item.name}</div><div class="facility-meta"><span>🏥 ${item.cl_nm || (item._type === 'pharm' ? '약국' : '')}</span><span>📍 ${addr}</span></div><div class="facility-tags">${depts}${erTag}${nursingTag}${spclTags}${specialTags}</div>${extraRow}${hoursRow}</div><div class="facility-card-right"><span class="status-badge ${scls}">${stxt}</span>${item.tel ? `<a href="tel:${item.tel}" class="btn-call">📞 ${item.tel}</a>` : ''}${mapBtn}${urlBtn}</div></div>`;
 }
 
