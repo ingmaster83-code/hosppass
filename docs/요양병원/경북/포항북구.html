@@ -69,49 +69,73 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
         <button class="tab-btn" onclick="filterNursing('grade1')">⭐ 1등급 간호</button>
       </div>
       <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
-        <strong id="resultCount" style="color:var(--primary)">20</strong>개 요양병원
+        <strong id="resultCount" style="color:var(--primary)">21</strong>개 요양병원
       </div>
       <div class="facility-list" id="nursingList"><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">고려대련요양병원</div>
-    <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 새마을로 318-12, (흥해읍)</span><span>👨‍⚕️ 의사 7명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 새마을로 318-12, (흥해읍)</span><span>👨‍⚕️ 의사 8명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 308병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:054-241-1011" class="btn-call">📞 054-241-1011</a>
-    <a href="../../map.html?x=129.3307708&y=36.0460550&name=%EA%B3%A0%EB%A0%A4%EB%8C%80%EB%A0%A8%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="../../map.html?x=129.3307708&y=36.046055&name=%EA%B3%A0%EB%A0%A4%EB%8C%80%EB%A0%A8%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
+  </div>
+</div><div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">포항이요양병원</div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 중흥로 227,  (죽도동)</span><span>👨‍⚕️ 의사 4명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 155병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
+  </div>
+  <div class="facility-card-right">
+    <span class="status-badge status-open">요양병원</span>
+    <a href="tel:054-289-7514" class="btn-call">📞 054-289-7514</a>
+    <a href="../../map.html?x=129.3583131&y=36.0239142&name=%ED%8F%AC%ED%95%AD%EC%9D%B4%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="www.peh.co.kr/" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>
+  </div>
+</div><div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">경상북도포항노인전문요양병원</div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 용흥로 36, (용흥동)</span><span>👨‍⚕️ 의사 2명</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 126병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">신경외과</span></div>
+  </div>
+  <div class="facility-card-right">
+    <span class="status-badge status-open">요양병원</span>
+    <a href="tel:054-247-0551" class="btn-call">📞 054-247-0551</a>
+    <a href="../../map.html?x=129.3549409&y=36.0348814&name=%EA%B2%BD%EC%83%81%EB%B6%81%EB%8F%84%ED%8F%AC%ED%95%AD%EB%85%B8%EC%9D%B8%EC%A0%84%EB%AC%B8%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">더조은요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 장량로 98-0, (장성동)</span><span>👨‍⚕️ 의사 8명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 308병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:054-232-7500" class="btn-call">📞 054-232-7500</a>
-    <a href="../../map.html?x=129.3905780&y=36.0816037&name=%EB%8D%94%EC%A1%B0%EC%9D%80%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="../../map.html?x=129.390578&y=36.0816037&name=%EB%8D%94%EC%A1%B0%EC%9D%80%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">봄요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 법원로129번길 12-0, (장성동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 154병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:054-727-2233" class="btn-call">📞 054-727-2233</a>
-    <a href="../../map.html?x=129.3850800&y=36.0870090&name=%EB%B4%84%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="../../map.html?x=129.38508&y=36.087009&name=%EB%B4%84%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">시티요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 죽도로 21,  (죽도동)</span><span>👨‍⚕️ 의사 5명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">한방내과</span><span class="tag tag-dept">침구과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 202병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">한방내과</span><span class="tag tag-dept">침구과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -123,7 +147,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">오거리사랑요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 중앙로 207,  (죽도동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 153병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -135,19 +159,19 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인 자광의료재단 선우요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 법원로129번길 11-0,  (장성동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">신경외과</span><span class="tag tag-dept">한방내과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 181병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">신경외과</span><span class="tag tag-dept">한방내과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:054-243-9088" class="btn-call">📞 054-243-9088</a>
-    <a href="../../map.html?x=129.3848207&y=36.0866060&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%20%EC%9E%90%EA%B4%91%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%EC%84%A0%EC%9A%B0%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="../../map.html?x=129.3848207&y=36.086606&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%20%EC%9E%90%EA%B4%91%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%EC%84%A0%EC%9A%B0%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     
   </div>
-</div><div class="facility-card">
+</div><div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">의료법인생명샘의료재단 로뎀요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 법원로116번길 55,  (장성동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 152병상</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -157,21 +181,9 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
-    <div class="facility-name">의료법인성효의료재단 성심요양병원</div>
-    <div class="facility-meta"><span>📍 경상북도 포항시 북구 중앙로 297,  (상원동)</span><span>👨‍⚕️ 의사 3명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">한방내과</span></div>
-  </div>
-  <div class="facility-card-right">
-    <span class="status-badge status-open">요양병원</span>
-    <a href="tel:054-247-2888" class="btn-call">📞 054-247-2888</a>
-    <a href="../../map.html?x=129.3658773&y=36.0394305&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%EC%84%B1%ED%9A%A8%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%EC%84%B1%EC%8B%AC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
-    
-  </div>
-</div><div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins><script>(adsbygoogle = window.adsbygoogle || []).push({});</script></div><div class="facility-card">
-  <div class="facility-card-body">
     <div class="facility-name">의료법인운하의료재단 포항요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 칠포로 58, (흥해읍)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">소아청소년과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 236병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">소아청소년과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -182,8 +194,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">의료법인유성의료재단 유성요양병원</div>
-    <div class="facility-meta"><span>📍 경상북도 포항시 북구 새천년대로 1135-78,  (장성동)</span><span>👨‍⚕️ 의사 13명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 새천년대로 1135-78,  (장성동)</span><span>👨‍⚕️ 의사 12명</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 425병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -195,7 +207,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인은성의료재단 좋은선린요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 대신로 27,  (대신동)</span><span>👨‍⚕️ 의사 8명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">비뇨의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 410병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">비뇨의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -207,7 +219,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인청암의료재단 포항송라요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 송라면 동해대로2913번길 127, (송라면)</span><span>👨‍⚕️ 의사 7명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 308병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -219,7 +231,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인포항삼광의료재단 드림요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 동빈로 9,  (중앙동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">마취통증의학과</span><span class="tag tag-dept">소아청소년과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 159병상</span><span class="tag tag-dept">마취통증의학과</span><span class="tag tag-dept">소아청소년과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -231,7 +243,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인한원의료재단 장성요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 법원로111번길 25-10,  (장성동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">정형외과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 155병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">정형외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -243,7 +255,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인화암의료재단 간호나라요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 덕장길 278, (흥해읍)</span><span>👨‍⚕️ 의사 5명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 192병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -255,7 +267,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">정다운요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 중앙로 208, (죽도동)</span><span>👨‍⚕️ 의사 3명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">산부인과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 138병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">산부인과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -267,7 +279,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">중앙성심요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 중앙로 299, 299</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">정형외과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 142병상</span><span class="tag tag-dept">정형외과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -277,21 +289,9 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
-    <div class="facility-name">포항이요양병원</div>
-    <div class="facility-meta"><span>📍 경상북도 포항시 북구 중흥로 227,  (죽도동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">비뇨의학과</span><span class="tag tag-dept">가정의학과</span><span class="tag tag-dept">한방내과</span></div>
-  </div>
-  <div class="facility-card-right">
-    <span class="status-badge status-open">요양병원</span>
-    <a href="tel:054-289-7514" class="btn-call">📞 054-289-7514</a>
-    <a href="../../map.html?x=129.3583131&y=36.0239142&name=%ED%8F%AC%ED%95%AD%EC%9D%B4%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
-    <a href="www.peh.co.kr/" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>
-  </div>
-</div><div class="facility-card">
-  <div class="facility-card-body">
     <div class="facility-name">포항휴요양병원</div>
     <div class="facility-meta"><span>📍 경상북도 포항시 북구 새천년대로 1359,  (장성동)</span><span>👨‍⚕️ 의사 4명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span><span class="tag tag-dept">피부과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 239병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span><span class="tag tag-dept">피부과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -302,13 +302,25 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">흥해경희요양병원</div>
-    <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 동해대로 1515, (흥해읍)</span><span>👨‍⚕️ 의사 9명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 흥해읍 동해대로 1515, (흥해읍)</span><span>👨‍⚕️ 의사 8명</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 304병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">재활의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:054-260-6000" class="btn-call">📞 054-260-6000</a>
-    <a href="../../map.html?x=129.3413034&y=36.1078773&name=%ED%9D%A5%ED%95%B4%EA%B2%BD%ED%9D%AC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="../../map.html?x=129.3413914&y=36.1078489&name=%ED%9D%A5%ED%95%B4%EA%B2%BD%ED%9D%AC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
+  </div>
+</div><div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">의료법인성효의료재단 성심요양병원</div>
+    <div class="facility-meta"><span>📍 경상북도 포항시 북구 중앙로 297,  (상원동)</span><span>👨‍⚕️ 의사 3명</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 2등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 110병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">한방내과</span></div>
+  </div>
+  <div class="facility-card-right">
+    <span class="status-badge status-open">요양병원</span>
+    <a href="tel:054-247-2888" class="btn-call">📞 054-247-2888</a>
+    <a href="../../map.html?x=129.3658773&y=36.0394305&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%EC%84%B1%ED%9A%A8%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%EC%84%B1%EC%8B%AC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     
   </div>
 </div></div>
@@ -338,7 +350,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQzNjE4MzIjNDEjJDEjJDQjJDgz","name":"고려대련요양병원","addr":"경상북도 포항시 북구 흥해읍 새마을로 318-12, (흥해읍)","tel":"054-241-1011","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":7,"sdr_cnt":4,"x":129.3307708,"y":"36.0460550","estb_dd":20190108,"dgsbj_list":["내과","외과","산부인과","소아청소년과","재활의학과","한방내과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"산부인과":0,"소아청소년과":0,"재활의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5OSQzNjE4MzIjNDEjJDEjJDgjJDgz","name":"더조은요양병원","addr":"경상북도 포항시 북구 장량로 98-0, (장성동)","tel":"054-232-7500","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":8,"sdr_cnt":5,"x":"129.3905780","y":36.0816037,"estb_dd":20100608,"dgsbj_list":["내과","외과","산부인과","재활의학과","가정의학과","한방안·이비인후·피부과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"외과":0,"산부인과":0,"재활의학과":0,"가정의학과":0,"한방안·이비인후·피부과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQxMyQzNjE4MzIjODEjJDEjJDYjJDgz","name":"봄요양병원","addr":"경상북도 포항시 북구 법원로129번길 12-0, (장성동)","tel":"054-727-2233","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":"129.3850800","y":"36.0870090","estb_dd":20170207,"dgsbj_list":["내과","외과","정형외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQwMyQ0NjEwMDIjNjEjJDEjJDQjJDgz","name":"시티요양병원","addr":"경상북도 포항시 북구 죽도로 21,  (죽도동)","tel":"054-231-7533","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":5,"sdr_cnt":3,"x":129.3635495,"y":36.0345584,"estb_dd":20100526,"dgsbj_list":["외과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"소아청소년과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~17:00 · 화 09:00~17:00 · 수 09:00~17:00 · 목 09:00~17:00 · 금 09:00~17:00 · 토 09:00~12:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ2MiQ0NjEwMDIjNTEjJDEjJDIjJDgz","name":"오거리사랑요양병원","addr":"경상북도 포항시 북구 중앙로 207,  (죽도동)","tel":"054-614-1009","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3659401,"y":36.0315299,"estb_dd":20130415,"dgsbj_list":["외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQzNjE0ODEjNjEjJDEjJDQjJDgz","name":"의료법인 자광의료재단 선우요양병원","addr":"경상북도 포항시 북구 법원로129번길 11-0,  (장성동)","tel":"054-243-9088","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3848207,"y":"36.0866060","estb_dd":20181204,"dgsbj_list":["외과","신경외과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"신경외과":0,"침구과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQxMyQzNjE4MzIjNDEjJDEjJDQjJDgz","name":"의료법인생명샘의료재단 로뎀요양병원","addr":"경상북도 포항시 북구 법원로116번길 55,  (장성동)","tel":"054-242-8885","url":"http://www.broomtree.kr","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3916441,"y":36.0847161,"estb_dd":20071001,"dgsbj_list":["신경과","외과","산부인과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"산부인과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5OSQ0NjEwMDIjODEjJDEjJDIjJDgz","name":"의료법인성효의료재단 성심요양병원","addr":"경상북도 포항시 북구 중앙로 297,  (상원동)","tel":"054-247-2888","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"상원동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":2,"x":129.3658773,"y":36.0394305,"estb_dd":20081209,"dgsbj_list":["내과","외과","한방내과","침구과","사상체질과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"산부인과":0},"nursing_grade":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQwMyQyNjE4MzIjNTEjJDEjJDIjJDgz","name":"의료법인운하의료재단 포항요양병원","addr":"경상북도 포항시 북구 흥해읍 칠포로 58, (흥해읍)","tel":"054-262-1000","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3538731,"y":36.1283123,"estb_dd":20070903,"dgsbj_list":["외과","소아청소년과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"소아청소년과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3OSQ0NjEwMDIjNDEjJDEjJDQjJDgz","name":"의료법인유성의료재단 유성요양병원","addr":"경상북도 포항시 북구 새천년대로 1135-78,  (장성동)","tel":"054-251-0011","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":13,"sdr_cnt":7,"x":129.3687122,"y":36.0710656,"estb_dd":20150611,"dgsbj_list":["내과","외과","재활의학과","가정의학과","한방내과","한방신경정신과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"외과":0,"재활의학과":0,"가정의학과":0,"한방신경정신과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQzNjEwMDIjNDEjJDEjJDgjJDgz","name":"의료법인은성의료재단 좋은선린요양병원","addr":"경상북도 포항시 북구 대신로 27,  (대신동)","tel":"054-245-6200","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"대신동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":8,"sdr_cnt":5,"x":129.3666646,"y":36.0465438,"estb_dd":20090401,"dgsbj_list":["내과","외과","비뇨의학과","재활의학과","가정의학과","한방내과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"비뇨의학과":0,"재활의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~17:00 · 수 09:00~17:00 · 목 09:00~17:00 · 금 09:00~17:00 · 토 09:00~13:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQyIyQxIyQwMCQzNjE0ODEjNjEjJDEjJDAjJDgz","name":"의료법인청암의료재단 포항송라요양병원","addr":"경상북도 포항시 북구 송라면 동해대로2913번길 127, (송라면)","tel":"054-250-1000","url":"www.phsongrahp.com/","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"송라면","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":7,"sdr_cnt":4,"x":129.3437995,"y":36.2285161,"estb_dd":20090430,"dgsbj_list":["내과","외과","재활의학과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"재활의학과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:30~18:00 · 화 09:30~18:00 · 수 09:30~18:00 · 목 09:30~18:00 · 금 09:30~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQyNjE4MzIjNjEjJDEjJDQjJDgz","name":"의료법인포항삼광의료재단 드림요양병원","addr":"경상북도 포항시 북구 동빈로 9,  (중앙동)","tel":"054-246-2800","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"중앙동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3682773,"y":36.0379828,"estb_dd":20160509,"dgsbj_list":["마취통증의학과","소아청소년과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"마취통증의학과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ2MiQ0NjE0ODEjODEjJDEjJDIjJDgz","name":"의료법인한원의료재단 장성요양병원","addr":"경상북도 포항시 북구 법원로111번길 25-10,  (장성동)","tel":"054-232-5275","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":3,"x":129.3825434,"y":36.0844158,"estb_dd":20060822,"dgsbj_list":["내과","신경과","정형외과","가정의학과","한방내과","한방부인과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"외과":0,"산부인과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00 · 토 09:00~12:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ4OSQyNjE0ODEjNDEjJDEjJDgjJDgz","name":"의료법인화암의료재단 간호나라요양병원","addr":"경상북도 포항시 북구 흥해읍 덕장길 278, (흥해읍)","tel":"054-262-6206","url":"http://www.nnnara.com/","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":5,"sdr_cnt":3,"x":129.3337552,"y":36.1421044,"estb_dd":20070330,"dgsbj_list":["내과","외과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"정형외과":0,"결핵과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 08:30~17:30 · 화 08:30~17:30 · 수 08:30~17:30 · 목 08:30~17:30 · 금 08:30~17:30","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ2MiQyNjE0ODEjODEjJDEjJDYjJDgz","name":"정다운요양병원","addr":"경상북도 포항시 북구 중앙로 208, (죽도동)","tel":"054-276-5115","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":2,"x":129.3665994,"y":36.0316148,"estb_dd":20130220,"dgsbj_list":["내과","산부인과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"산부인과":0,"비뇨의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5MiQyNjE4MzIjODEjJDEjJDYjJDgz","name":"중앙성심요양병원","addr":"경상북도 포항시 북구 중앙로 299, 299","tel":"054-284-2880","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"상원동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3659965,"y":36.0396218,"estb_dd":20091207,"dgsbj_list":["정형외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"정형외과":0,"소아청소년과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5OSQyNjEwMDIjNDEjJDEjJDQjJDgz","name":"포항이요양병원","addr":"경상북도 포항시 북구 중흥로 227,  (죽도동)","tel":"054-289-7514","url":"www.peh.co.kr/","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":129.3583131,"y":36.0239142,"estb_dd":20040707,"dgsbj_list":["비뇨의학과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"비뇨의학과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00 · 토 09:00~12:30","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQyIyQ1IyQwMCQzNjEyMjIjNzEjJDEjJDgjJDgz","name":"포항휴요양병원","addr":"경상북도 포항시 북구 새천년대로 1359,  (장성동)","tel":"054-241-0007","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":3,"x":129.3956906,"y":36.0767213,"estb_dd":20170407,"dgsbj_list":["외과","정형외과","피부과","비뇨의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"정형외과":0,"비뇨의학과":0,"한방내과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ4OSQyNjEyMjIjNzEjJDEjJDgjJDgz","name":"흥해경희요양병원","addr":"경상북도 포항시 북구 흥해읍 동해대로 1515, (흥해읍)","tel":"054-260-6000","url":"","sido_cd":"370000","sido_nm":"경북","sggu_cd":"370702","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":9,"sdr_cnt":5,"x":129.3413034,"y":36.1078773,"estb_dd":20110822,"dgsbj_list":["내과","외과","재활의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"산부인과":0,"소아청소년과":0,"재활의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 08:30~17:30 · 화 08:30~17:30 · 수 08:30~17:30 · 목 08:30~17:30 · 금 08:30~17:30","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQzNjE4MzIjNDEjJDEjJDQjJDgz","name":"고려대련요양병원","addr":"경상북도 포항시 북구 흥해읍 새마을로 318-12, (흥해읍)","tel":"054-241-1011","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":8,"x":129.3307708,"y":36.046055,"estb_dd":"2019-01-08 00:00:00","dgsbj_list":["내과","외과","산부인과","소아청소년과","재활의학과","한방내과","한방재활의학과"],"dialysis":true,"dialysis_machine_cnt":25,"nursing_grade":"1등급","bed_cnt":308},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5OSQyNjEwMDIjNDEjJDEjJDQjJDgz","name":"포항이요양병원","addr":"경상북도 포항시 북구 중흥로 227,  (죽도동)","tel":"054-289-7514","url":"www.peh.co.kr/","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3583131,"y":36.0239142,"estb_dd":"2004-07-07 00:00:00","dgsbj_list":["내과","가정의학과","한방내과"],"dialysis":true,"dialysis_machine_cnt":23,"nursing_grade":"1등급","bed_cnt":155},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ3MiQyNjEwMDIjNDEjJDEjJDgjJDgz","name":"경상북도포항노인전문요양병원","addr":"경상북도 포항시 북구 용흥로 36, (용흥동)","tel":"054-247-0551","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"용흥동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":2,"x":129.3549409,"y":36.0348814,"estb_dd":"2006-05-04 00:00:00","dgsbj_list":["내과","신경과","신경외과","산부인과","소아청소년과","재활의학과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":126},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5OSQzNjE4MzIjNDEjJDEjJDgjJDgz","name":"더조은요양병원","addr":"경상북도 포항시 북구 장량로 98-0, (장성동)","tel":"054-232-7500","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":8,"x":129.390578,"y":36.0816037,"estb_dd":"2010-06-08 00:00:00","dgsbj_list":["내과","외과","산부인과","재활의학과","가정의학과","한방안·이비인후·피부과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":308},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQxMyQzNjE4MzIjODEjJDEjJDYjJDgz","name":"봄요양병원","addr":"경상북도 포항시 북구 법원로129번길 12-0, (장성동)","tel":"054-727-2233","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.38508,"y":36.087009,"estb_dd":"2017-02-07 00:00:00","dgsbj_list":["내과","외과","정형외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":154},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQwMyQ0NjEwMDIjNjEjJDEjJDQjJDgz","name":"시티요양병원","addr":"경상북도 포항시 북구 죽도로 21,  (죽도동)","tel":"054-231-7533","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":5,"x":129.3635495,"y":36.0345584,"estb_dd":"2010-05-26 00:00:00","dgsbj_list":["외과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":202},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ2MiQ0NjEwMDIjNTEjJDEjJDIjJDgz","name":"오거리사랑요양병원","addr":"경상북도 포항시 북구 중앙로 207,  (죽도동)","tel":"054-614-1009","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3659401,"y":36.0315299,"estb_dd":"2013-04-15 00:00:00","dgsbj_list":["외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":153},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQzNjE0ODEjNjEjJDEjJDQjJDgz","name":"의료법인 자광의료재단 선우요양병원","addr":"경상북도 포항시 북구 법원로129번길 11-0,  (장성동)","tel":"054-243-9088","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3848207,"y":36.086606,"estb_dd":"2018-12-04 00:00:00","dgsbj_list":["외과","신경외과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":181},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQxMyQzNjE4MzIjNDEjJDEjJDQjJDgz","name":"의료법인생명샘의료재단 로뎀요양병원","addr":"경상북도 포항시 북구 법원로116번길 55,  (장성동)","tel":"054-242-8885","url":"http://www.broomtree.kr","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3916441,"y":36.0847161,"estb_dd":"2007-10-01 00:00:00","dgsbj_list":["신경과","외과","산부인과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":152},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQwMyQyNjE4MzIjNTEjJDEjJDIjJDgz","name":"의료법인운하의료재단 포항요양병원","addr":"경상북도 포항시 북구 흥해읍 칠포로 58, (흥해읍)","tel":"054-262-1000","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3538731,"y":36.1283123,"estb_dd":"2007-09-03 00:00:00","dgsbj_list":["외과","소아청소년과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":236},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3OSQ0NjEwMDIjNDEjJDEjJDQjJDgz","name":"의료법인유성의료재단 유성요양병원","addr":"경상북도 포항시 북구 새천년대로 1135-78,  (장성동)","tel":"054-251-0011","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":12,"x":129.3687122,"y":36.0710656,"estb_dd":"2015-06-11 00:00:00","dgsbj_list":["내과","외과","재활의학과","가정의학과","한방내과","한방신경정신과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":425},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQzNjEwMDIjNDEjJDEjJDgjJDgz","name":"의료법인은성의료재단 좋은선린요양병원","addr":"경상북도 포항시 북구 대신로 27,  (대신동)","tel":"054-245-6200","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"대신동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":8,"x":129.3666646,"y":36.0465438,"estb_dd":"2009-04-01 00:00:00","dgsbj_list":["내과","외과","비뇨의학과","재활의학과","가정의학과","한방내과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":410},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQyIyQxIyQwMCQzNjE0ODEjNjEjJDEjJDAjJDgz","name":"의료법인청암의료재단 포항송라요양병원","addr":"경상북도 포항시 북구 송라면 동해대로2913번길 127, (송라면)","tel":"054-250-1000","url":"www.phsongrahp.com/","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"송라면","cl_cd":"28","cl_nm":"요양병원","dr_cnt":7,"x":129.3437995,"y":36.2285161,"estb_dd":"2009-04-30 00:00:00","dgsbj_list":["내과","외과","재활의학과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":308},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQyNjE4MzIjNjEjJDEjJDQjJDgz","name":"의료법인포항삼광의료재단 드림요양병원","addr":"경상북도 포항시 북구 동빈로 9,  (중앙동)","tel":"054-246-2800","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"중앙동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3682773,"y":36.0379828,"estb_dd":"2016-05-09 00:00:00","dgsbj_list":["마취통증의학과","소아청소년과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":159},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ2MiQ0NjE0ODEjODEjJDEjJDIjJDgz","name":"의료법인한원의료재단 장성요양병원","addr":"경상북도 포항시 북구 법원로111번길 25-10,  (장성동)","tel":"054-232-5275","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3825434,"y":36.0844158,"estb_dd":"2006-08-22 00:00:00","dgsbj_list":["내과","신경과","정형외과","가정의학과","한방내과","한방부인과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":155},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ4OSQyNjE0ODEjNDEjJDEjJDgjJDgz","name":"의료법인화암의료재단 간호나라요양병원","addr":"경상북도 포항시 북구 흥해읍 덕장길 278, (흥해읍)","tel":"054-262-6206","url":"http://www.nnnara.com/","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":5,"x":129.3337552,"y":36.1421044,"estb_dd":"2007-03-30 00:00:00","dgsbj_list":["내과","외과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":192},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ2MiQyNjE0ODEjODEjJDEjJDYjJDgz","name":"정다운요양병원","addr":"경상북도 포항시 북구 중앙로 208, (죽도동)","tel":"054-276-5115","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"죽도동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":3,"x":129.3665994,"y":36.0316148,"estb_dd":"2013-02-20 00:00:00","dgsbj_list":["내과","산부인과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":138},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5MiQyNjE4MzIjODEjJDEjJDYjJDgz","name":"중앙성심요양병원","addr":"경상북도 포항시 북구 중앙로 299, 299","tel":"054-284-2880","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"상원동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3659965,"y":36.0396218,"estb_dd":"2009-12-07 00:00:00","dgsbj_list":["정형외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":142},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQyIyQ1IyQwMCQzNjEyMjIjNzEjJDEjJDgjJDgz","name":"포항휴요양병원","addr":"경상북도 포항시 북구 새천년대로 1359,  (장성동)","tel":"054-241-0007","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":129.3956906,"y":36.0767213,"estb_dd":"2017-04-07 00:00:00","dgsbj_list":["외과","정형외과","피부과","비뇨의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":239},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ4OSQyNjEyMjIjNzEjJDEjJDgjJDgz","name":"흥해경희요양병원","addr":"경상북도 포항시 북구 흥해읍 동해대로 1515, (흥해읍)","tel":"054-260-6000","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"흥해읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":8,"x":129.3413914,"y":36.1078489,"estb_dd":"2011-08-22 00:00:00","dgsbj_list":["내과","외과","재활의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":304},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ5OSQ0NjEwMDIjODEjJDEjJDIjJDgz","name":"의료법인성효의료재단 성심요양병원","addr":"경상북도 포항시 북구 중앙로 297,  (상원동)","tel":"054-247-2888","url":"","sido_nm":"경북","sggu_nm":"포항북구","emd_nm":"상원동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":3,"x":129.3658773,"y":36.0394305,"estb_dd":"2008-12-09 00:00:00","dgsbj_list":["내과","외과","한방내과","침구과","사상체질과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"2등급","bed_cnt":110}];
 let cur='all';
 function filterNursing(f){
   cur=f;

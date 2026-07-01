@@ -75,7 +75,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">서울스마트요양병원</div>
     <div class="facility-meta"><span>📍 서울특별시 양천구 중앙로 181, 복합메디컬타운 3~8층 (신정동)</span><span>👨‍⚕️ 의사 11명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 415병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -86,8 +86,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">서울제일요양병원</div>
-    <div class="facility-meta"><span>📍 서울특별시 양천구 가로공원로 81, 지하1층~지상5층 (신월동)</span><span>👨‍⚕️ 의사 7명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
+    <div class="facility-meta"><span>📍 서울특별시 양천구 가로공원로 81, 지하1층~지상5층 (신월동)</span><span>👨‍⚕️ 의사 6명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 236병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -122,7 +122,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5MiQyNjEwMDIjNjEjJDEjJDQjJDgz","name":"서울스마트요양병원","addr":"서울특별시 양천구 중앙로 181, 복합메디컬타운 3~8층 (신정동)","tel":"02-2601-7111","url":"http://www.cozyhospital.com","sido_cd":"110000","sido_nm":"서울","sggu_cd":"110020","sggu_nm":"양천구","emd_nm":"신정동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":11,"sdr_cnt":6,"x":126.8556737,"y":37.5128103,"estb_dd":20191213,"dgsbj_list":["내과","신경과","외과","재활의학과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"신경과":0,"심장혈관흉부외과":0,"재활의학과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 08:30~17:30 · 화 08:30~17:30 · 수 08:30~17:30 · 목 08:30~17:30 · 금 08:30~17:30 · 토 08:30~12:30","_detail_done":true},{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3OSQzNjE0ODEjNDEjJDEjJDgjJDgz","name":"서울제일요양병원","addr":"서울특별시 양천구 가로공원로 81, 지하1층~지상5층 (신월동)","tel":"02-2691-9114","url":"","sido_cd":"110000","sido_nm":"서울","sggu_cd":"110020","sggu_nm":"양천구","emd_nm":"신월동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":7,"sdr_cnt":4,"x":126.8248617,"y":37.5355894,"estb_dd":20211227,"dgsbj_list":["내과","신경과","외과","정형외과","신경외과","산부인과","재활의학과","가정의학과","한방내과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"정형외과":0,"재활의학과":0,"한방재활의학과":0},"nursing_grade":"","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5MiQyNjEwMDIjNjEjJDEjJDQjJDgz","name":"서울스마트요양병원","addr":"서울특별시 양천구 중앙로 181, 복합메디컬타운 3~8층 (신정동)","tel":"02-2601-7111","url":"http://www.cozyhospital.com","sido_nm":"서울","sggu_nm":"양천구","emd_nm":"신정동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":11,"x":126.8556737,"y":37.5128103,"estb_dd":"2019-12-13 00:00:00","dgsbj_list":["내과","신경과","외과","재활의학과","가정의학과","한방내과","침구과"],"dialysis":true,"dialysis_machine_cnt":16,"nursing_grade":"1등급","bed_cnt":415},{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3OSQzNjE0ODEjNDEjJDEjJDgjJDgz","name":"서울제일요양병원","addr":"서울특별시 양천구 가로공원로 81, 지하1층~지상5층 (신월동)","tel":"02-2691-9114","url":"","sido_nm":"서울","sggu_nm":"양천구","emd_nm":"신월동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":6,"x":126.8248617,"y":37.5355894,"estb_dd":"2021-12-27 00:00:00","dgsbj_list":["내과","신경과","외과","정형외과","신경외과","산부인과","재활의학과","가정의학과","한방내과","침구과","한방재활의학과"],"dialysis":true,"dialysis_machine_cnt":13,"nursing_grade":"1등급","bed_cnt":236}];
 let cur='all';
 function filterNursing(f){
   cur=f;

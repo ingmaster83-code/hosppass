@@ -74,8 +74,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
       <div class="facility-list" id="nursingList"><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">의료법인에이치엠피의료재단녹십초요양병원</div>
-    <div class="facility-meta"><span>📍 서울특별시 동작구 시흥대로 634, (신대방동)</span><span>👨‍⚕️ 의사 5명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
+    <div class="facility-meta"><span>📍 서울특별시 동작구 시흥대로 634, (신대방동)</span><span>👨‍⚕️ 의사 4명</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 190병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ4OSQzNjEwMDIjNDEjJDEjJDgjJDgz","name":"의료법인에이치엠피의료재단녹십초요양병원","addr":"서울특별시 동작구 시흥대로 634, (신대방동)","tel":"02-848-0100","url":"http://www.noksibchohospital.com/","sido_cd":"110000","sido_nm":"서울","sggu_cd":"110008","sggu_nm":"동작구","emd_nm":"신대방동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":5,"sdr_cnt":3,"x":126.9066346,"y":37.4883951,"estb_dd":20071023,"dgsbj_list":["내과","신경과","외과","재활의학과","가정의학과","한방내과","한방안·이비인후·피부과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"신경과":0,"신경외과":0,"가정의학과":0,"한방안·이비인후·피부과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00 · 토 09:00~13:00","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTg4MSM1MSMkMSMkMCMkOTkkNTgxMzUxIzIxIyQxIyQxIyQ4OSQzNjEwMDIjNDEjJDEjJDgjJDgz","name":"의료법인에이치엠피의료재단녹십초요양병원","addr":"서울특별시 동작구 시흥대로 634, (신대방동)","tel":"02-848-0100","url":"http://www.noksibchohospital.com/","sido_nm":"서울","sggu_nm":"동작구","emd_nm":"신대방동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":4,"x":126.9066346,"y":37.4883951,"estb_dd":"2007-10-23 00:00:00","dgsbj_list":["내과","신경과","외과","재활의학과","가정의학과","한방내과","한방안·이비인후·피부과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":190}];
 let cur='all';
 function filterNursing(f){
   cur=f;

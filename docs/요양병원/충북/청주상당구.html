@@ -74,8 +74,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
       <div class="facility-list" id="nursingList"><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">의료법인 남궁의료재단 남궁요양병원</div>
-    <div class="facility-meta"><span>📍 충청북도 청주시 상당구 상당로 47-0,  (남문로2가)</span><span>👨‍⚕️ 의사 9명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
+    <div class="facility-meta"><span>📍 충청북도 청주시 상당구 상당로 47-0, (남문로2가)</span><span>👨‍⚕️ 의사 6명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 2등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 253병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkOCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ3OSQzNjE4MzIjNjEjJDEjJDgjJDgz","name":"의료법인 남궁의료재단 남궁요양병원","addr":"충청북도 청주시 상당구 상당로 47-0,  (남문로2가)","tel":"043-252-3000","url":"","sido_cd":"330000","sido_nm":"충북","sggu_cd":"330101","sggu_nm":"청주상당구","emd_nm":"남문로2가","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":9,"sdr_cnt":5,"x":127.4903599,"y":36.6326346,"estb_dd":20180427,"dgsbj_list":["내과","외과","산부인과","소아청소년과","피부과","재활의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"산부인과":0,"소아청소년과":0,"재활의학과":0},"nursing_grade":"","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkOCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ3OSQzNjE4MzIjNjEjJDEjJDgjJDgz","name":"의료법인 남궁의료재단 남궁요양병원","addr":"충청북도 청주시 상당구 상당로 47-0, (남문로2가)","tel":"043-252-3000","url":"","sido_nm":"충북","sggu_nm":"청주상당구","emd_nm":"남문로2가","cl_cd":"28","cl_nm":"요양병원","dr_cnt":6,"x":127.4903599,"y":36.6326346,"estb_dd":"2018-04-27 00:00:00","dgsbj_list":["내과","외과","산부인과","소아청소년과","재활의학과","한방내과"],"dialysis":true,"dialysis_machine_cnt":19,"nursing_grade":"2등급","bed_cnt":253}];
 let cur='all';
 function filterNursing(f){
   cur=f;

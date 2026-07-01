@@ -74,8 +74,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
       <div class="facility-list" id="nursingList"><div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">의료법인원광의료재단청주원광효도요양병원</div>
-    <div class="facility-meta"><span>📍 충청북도 청주시 흥덕구 월명로 15-0, 원광효도요양병원</span><span>👨‍⚕️ 의사 7명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
+    <div class="facility-meta"><span>📍 충청북도 청주시 흥덕구 월명로 15-0, 원광효도요양병원</span><span>👨‍⚕️ 의사 8명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 318병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkOCMkOTkkNTgxMzUxIzExIyQxIyQzIyQwMyQzNjEyMjIjNDEjJDEjJDQjJDgz","name":"의료법인원광의료재단청주원광효도요양병원","addr":"충청북도 청주시 흥덕구 월명로 15-0, 원광효도요양병원","tel":"043-267-0301","url":"","sido_cd":"330000","sido_nm":"충북","sggu_cd":"330102","sggu_nm":"청주흥덕구","emd_nm":"복대동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":7,"sdr_cnt":5,"x":127.4529105,"y":36.6363139,"estb_dd":20150120,"dgsbj_list":["내과","신경과","외과","심장혈관흉부외과","재활의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"신경과":0,"외과":0,"재활의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~17:30 · 화 09:00~17:30 · 수 09:00~17:30 · 목 09:00~17:30 · 금 09:00~17:30 · 토 09:00~12:30","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkOCMkOTkkNTgxMzUxIzExIyQxIyQzIyQwMyQzNjEyMjIjNDEjJDEjJDQjJDgz","name":"의료법인원광의료재단청주원광효도요양병원","addr":"충청북도 청주시 흥덕구 월명로 15-0, 원광효도요양병원","tel":"043-267-0301","url":"","sido_nm":"충북","sggu_nm":"청주흥덕구","emd_nm":"복대동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":8,"x":127.4529105,"y":36.6363139,"estb_dd":"2015-01-20 00:00:00","dgsbj_list":["내과","신경과","외과","심장혈관흉부외과","재활의학과","한방내과","침구과"],"dialysis":true,"dialysis_machine_cnt":24,"nursing_grade":"1등급","bed_cnt":318}];
 let cur='all';
 function filterNursing(f){
   cur=f;

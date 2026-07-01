@@ -75,7 +75,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인이정의료재단효사랑병원</div>
     <div class="facility-meta"><span>📍 경기도 연천군 전곡읍 평화로 525, (전곡읍)</span><span>👨‍⚕️ 의사 2명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 2등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 208병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5MiQzNjE0ODEjODEjJDEjJDYjJDgz","name":"의료법인이정의료재단효사랑병원","addr":"경기도 연천군 전곡읍 평화로 525, (전곡읍)","tel":"031-830-8200","url":"","sido_cd":"310000","sido_nm":"경기","sggu_cd":"310011","sggu_nm":"연천군","emd_nm":"전곡읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":2,"sdr_cnt":2,"x":127.0689611,"y":38.0174348,"estb_dd":20050509,"dgsbj_list":["내과","외과","정형외과","산부인과","가정의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"정형외과":0,"산부인과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkMCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5MiQzNjE0ODEjODEjJDEjJDYjJDgz","name":"의료법인이정의료재단효사랑병원","addr":"경기도 연천군 전곡읍 평화로 525, (전곡읍)","tel":"031-830-8200","url":"","sido_nm":"경기","sggu_nm":"연천군","emd_nm":"전곡읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":2,"x":127.0689611,"y":38.0174348,"estb_dd":"2005-05-09 00:00:00","dgsbj_list":["내과","외과","정형외과","산부인과","가정의학과"],"dialysis":true,"dialysis_machine_cnt":21,"nursing_grade":"2등급","bed_cnt":208}];
 let cur='all';
 function filterNursing(f){
   cur=f;

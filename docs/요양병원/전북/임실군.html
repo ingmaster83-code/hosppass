@@ -75,7 +75,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">임실중앙요양병원</div>
     <div class="facility-meta"><span>📍 전북특별자치도 임실군 임실읍 봉황로 71, (임실읍)</span><span>👨‍⚕️ 의사 3명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 102병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM2MSMkMSMkNiMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5OSQyNjEwMDIjODEjJDEjJDYjJDgz","name":"임실중앙요양병원","addr":"전북특별자치도 임실군 임실읍 봉황로 71, (임실읍)","tel":"063-644-1101","url":"","sido_cd":"350000","sido_nm":"전북","sggu_cd":"350010","sggu_nm":"임실군","emd_nm":"임실읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":2,"x":127.2725987,"y":35.6099991,"estb_dd":20130131,"dgsbj_list":["내과","외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"성형외과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM2MSMkMSMkNiMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5OSQyNjEwMDIjODEjJDEjJDYjJDgz","name":"임실중앙요양병원","addr":"전북특별자치도 임실군 임실읍 봉황로 71, (임실읍)","tel":"063-644-1101","url":"","sido_nm":"전북","sggu_nm":"임실군","emd_nm":"임실읍","cl_cd":"28","cl_nm":"요양병원","dr_cnt":3,"x":127.2725987,"y":35.6099991,"estb_dd":"2013-01-31 00:00:00","dgsbj_list":["내과","외과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":102}];
 let cur='all';
 function filterNursing(f){
   cur=f;

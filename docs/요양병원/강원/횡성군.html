@@ -75,7 +75,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">의료법인 청강의료재단 청강요양병원</div>
     <div class="facility-meta"><span>📍 강원특별자치도 횡성군 강림면 주천강로강림3길 26-4,</span><span>👨‍⚕️ 의사 1명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 77병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">가정의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -110,7 +110,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ3MiQyNjE4MzIjNDEjJDEjJDQjJDgz","name":"의료법인 청강의료재단 청강요양병원","addr":"강원특별자치도 횡성군 강림면 주천강로강림3길 26-4,","tel":"033-344-1111","url":"","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320015","sggu_nm":"횡성군","emd_nm":"강림면","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":1,"sdr_cnt":0,"x":128.1374386,"y":37.3579999,"estb_dd":20200702,"dgsbj_list":["내과","외과","가정의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{},"nursing_grade":"","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ3MiQyNjE4MzIjNDEjJDEjJDQjJDgz","name":"의료법인 청강의료재단 청강요양병원","addr":"강원특별자치도 횡성군 강림면 주천강로강림3길 26-4,","tel":"033-344-1111","url":"","sido_nm":"강원","sggu_nm":"횡성군","emd_nm":"강림면","cl_cd":"28","cl_nm":"요양병원","dr_cnt":1,"x":128.1374386,"y":37.3579999,"estb_dd":"2020-07-02 00:00:00","dgsbj_list":["내과","외과","가정의학과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":77}];
 let cur='all';
 function filterNursing(f){
   cur=f;

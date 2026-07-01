@@ -75,7 +75,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">강릉연세요양병원</div>
     <div class="facility-meta"><span>📍 강원특별자치도 강릉시 옥가로 70, (옥천동)</span><span>👨‍⚕️ 의사 3명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span><span class="tag tag-dept">비뇨의학과</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 2등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 107병상</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">산부인과</span><span class="tag tag-dept">비뇨의학과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -87,7 +87,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">강원특별자치도립 강릉요양병원</div>
     <div class="facility-meta"><span>📍 강원특별자치도 강릉시 경강로 2009, (남문동)</span><span>👨‍⚕️ 의사 3명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">신경과</span><span class="tag tag-dept">신경외과</span><span class="tag tag-dept">산부인과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 2등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 131병상</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">신경외과</span><span class="tag tag-dept">산부인과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -122,7 +122,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ2MiQ0NjEwMDIjNDEjJDEjJDgjJDgz","name":"강릉연세요양병원","addr":"강원특별자치도 강릉시 옥가로 70, (옥천동)","tel":"033-645-1400","url":"","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320100","sggu_nm":"강릉시","emd_nm":"옥천동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":3,"x":128.9007545,"y":37.7623731,"estb_dd":20071004,"dgsbj_list":["외과","산부인과","비뇨의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"산부인과":0,"비뇨의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ2MiQyNjEyMjIjNjEjJDEjJDAjJDgz","name":"강원특별자치도립 강릉요양병원","addr":"강원특별자치도 강릉시 경강로 2009, (남문동)","tel":"033-640-8800","url":"http://gnch.or.kr","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320100","sggu_nm":"강릉시","emd_nm":"남문동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":2,"x":128.8894152,"y":37.7496058,"estb_dd":20150223,"dgsbj_list":["신경과","신경외과","산부인과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"신경과":0,"신경외과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:30~16:00 · 화 09:30~16:00 · 수 09:30~16:00 · 목 09:30~16:00 · 금 09:30~16:00","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ2MiQ0NjEwMDIjNDEjJDEjJDgjJDgz","name":"강릉연세요양병원","addr":"강원특별자치도 강릉시 옥가로 70, (옥천동)","tel":"033-645-1400","url":"","sido_nm":"강원","sggu_nm":"강릉시","emd_nm":"옥천동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":3,"x":128.9007545,"y":37.7623731,"estb_dd":"2007-10-04 00:00:00","dgsbj_list":["외과","산부인과","비뇨의학과"],"dialysis":true,"dialysis_machine_cnt":23,"nursing_grade":"2등급","bed_cnt":107},{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ2MiQyNjEyMjIjNjEjJDEjJDAjJDgz","name":"강원특별자치도립 강릉요양병원","addr":"강원특별자치도 강릉시 경강로 2009, (남문동)","tel":"033-640-8800","url":"http://gnch.or.kr","sido_nm":"강원","sggu_nm":"강릉시","emd_nm":"남문동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":3,"x":128.8894152,"y":37.7496058,"estb_dd":"2015-02-23 00:00:00","dgsbj_list":["신경과","신경외과","산부인과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"2등급","bed_cnt":131}];
 let cur='all';
 function filterNursing(f){
   cur=f;

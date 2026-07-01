@@ -73,9 +73,21 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
       </div>
       <div class="facility-list" id="nursingList"><div class="facility-card">
   <div class="facility-card-body">
+    <div class="facility-name">의료법인 정흡의료재단 효림요양병원</div>
+    <div class="facility-meta"><span>📍 울산광역시 동구 방어진순환도로 693-1, (일산동)</span><span>👨‍⚕️ 의사 0명</span></div>
+    <div class="facility-tags"><span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 142병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">정형외과</span></div>
+  </div>
+  <div class="facility-card-right">
+    <span class="status-badge status-open">요양병원</span>
+    <a href="tel:052-252-7500" class="btn-call">📞 052-252-7500</a>
+    <a href="../../map.html?x=129.4291107&y=35.5037002&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%20%EC%A0%95%ED%9D%A1%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%ED%9A%A8%EB%A6%BC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
+  </div>
+</div><div class="facility-card">
+  <div class="facility-card-body">
     <div class="facility-name">방어진마린요양병원</div>
     <div class="facility-meta"><span>📍 울산광역시 동구 중진길 60, (방어동)</span><span>👨‍⚕️ 의사 6명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 216병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
@@ -87,25 +99,13 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-body">
     <div class="facility-name">상록수요양병원</div>
     <div class="facility-meta"><span>📍 울산광역시 동구 진성8길 94, 상록수요양병원 (전하동)</span><span>👨‍⚕️ 의사 6명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
+    <div class="facility-tags"><span class="tag tag-grade">🏅 간호 1등급</span><span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ 249병상</span><span class="tag tag-dept">내과</span><span class="tag tag-dept">외과</span><span class="tag tag-dept">정형외과</span></div>
   </div>
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:052-232-0100" class="btn-call">📞 052-232-0100</a>
     <a href="../../map.html?x=129.4297592&y=35.5093952&name=%EC%83%81%EB%A1%9D%EC%88%98%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
     <a href="www.sangnocsu.com/" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>
-  </div>
-</div><div class="facility-card">
-  <div class="facility-card-body">
-    <div class="facility-name">의료법인 정흡의료재단 효림요양병원</div>
-    <div class="facility-meta"><span>📍 울산광역시 동구 방어진순환도로 693-1, (일산동)</span><span>👨‍⚕️ 의사 0명</span></div>
-    <div class="facility-tags"><span class="tag tag-dept">내과</span><span class="tag tag-dept">신경과</span><span class="tag tag-dept">정형외과</span></div>
-  </div>
-  <div class="facility-card-right">
-    <span class="status-badge status-open">요양병원</span>
-    <a href="tel:052-252-7500" class="btn-call">📞 052-252-7500</a>
-    <a href="../../map.html?x=129.4291107&y=35.5037002&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%20%EC%A0%95%ED%9D%A1%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%ED%9A%A8%EB%A6%BC%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
-    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -134,7 +134,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 </div>
 <script src="../../js/facility-render.js?v=2"></script>
 <script>
-const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQyNjEyMjIjNDEjJDEjJDgjJDgz","name":"방어진마린요양병원","addr":"울산광역시 동구 중진길 60, (방어동)","tel":"052-911-9988","url":"","sido_cd":"260000","sido_nm":"울산","sggu_cd":"260002","sggu_nm":"울산동구","emd_nm":"방어동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":6,"sdr_cnt":4,"x":129.4246157,"y":35.4827252,"estb_dd":20160527,"dgsbj_list":["내과","신경과","외과","정형외과","신경외과","심장혈관흉부외과","산부인과","안과","이비인후과","피부과","비뇨의학과","영상의학과","병리과","재활의학과","가정의학과","한방내과","한방부인과","한방안·이비인후·피부과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"신경외과":0,"소아청소년과":0,"침구과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:30~18:00 · 화 09:30~18:00 · 수 09:30~18:00 · 목 09:30~18:00 · 금 09:30~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ3MiQyNjEyMjIjNDEjJDEjJDQjJDgz","name":"상록수요양병원","addr":"울산광역시 동구 진성8길 94, 상록수요양병원 (전하동)","tel":"052-232-0100","url":"www.sangnocsu.com/","sido_cd":"260000","sido_nm":"울산","sggu_cd":"260002","sggu_nm":"울산동구","emd_nm":"전하동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":6,"sdr_cnt":3,"x":129.4297592,"y":35.5093952,"estb_dd":20100311,"dgsbj_list":["내과","외과","정형외과","신경외과","재활의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"외과":0,"신경외과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~17:30 · 화 09:00~17:30 · 수 09:00~17:30 · 목 09:00~17:30 · 금 09:00~17:30","_detail_done":true},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQ0NjE0ODEjNDEjJDEjJDgjJDgz","name":"의료법인 정흡의료재단 효림요양병원","addr":"울산광역시 동구 방어진순환도로 693-1, (일산동)","tel":"052-252-7500","url":"","sido_cd":"260000","sido_nm":"울산","sggu_cd":"260002","sggu_nm":"울산동구","emd_nm":"일산동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":0,"sdr_cnt":0,"x":129.4291107,"y":35.5037002,"estb_dd":20180625,"dgsbj_list":["내과","신경과","정형외과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{},"bed_cnt":0,"hours":"","_detail_done":true}];
+const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ3MiQ0NjE0ODEjNDEjJDEjJDgjJDgz","name":"의료법인 정흡의료재단 효림요양병원","addr":"울산광역시 동구 방어진순환도로 693-1, (일산동)","tel":"052-252-7500","url":"","sido_nm":"울산","sggu_nm":"울산동구","emd_nm":"일산동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":0,"x":129.4291107,"y":35.5037002,"estb_dd":"2018-06-25 00:00:00","dgsbj_list":["내과","신경과","정형외과","한방내과"],"dialysis":true,"dialysis_machine_cnt":13,"nursing_grade":"1등급","bed_cnt":142},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzIxIyQxIyQ1IyQ5OSQyNjEyMjIjNDEjJDEjJDgjJDgz","name":"방어진마린요양병원","addr":"울산광역시 동구 중진길 60, (방어동)","tel":"052-911-9988","url":"","sido_nm":"울산","sggu_nm":"울산동구","emd_nm":"방어동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":6,"x":129.4246157,"y":35.4827252,"estb_dd":"2016-05-27 00:00:00","dgsbj_list":["내과","신경과","외과","정형외과","신경외과","심장혈관흉부외과","산부인과","안과","이비인후과","피부과","비뇨의학과","영상의학과","병리과","재활의학과","가정의학과","한방내과","한방부인과","한방안·이비인후·피부과","침구과","한방재활의학과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":216},{"ykiho":"JDQ4MTYyMiM4MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ3MiQyNjEyMjIjNDEjJDEjJDQjJDgz","name":"상록수요양병원","addr":"울산광역시 동구 진성8길 94, 상록수요양병원 (전하동)","tel":"052-232-0100","url":"www.sangnocsu.com/","sido_nm":"울산","sggu_nm":"울산동구","emd_nm":"전하동","cl_cd":"28","cl_nm":"요양병원","dr_cnt":6,"x":129.4297592,"y":35.5093952,"estb_dd":"2010-03-11 00:00:00","dgsbj_list":["내과","외과","정형외과","신경외과","재활의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"nursing_grade":"1등급","bed_cnt":249}];
 let cur='all';
 function filterNursing(f){
   cur=f;
