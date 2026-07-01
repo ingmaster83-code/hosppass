@@ -80,6 +80,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:041-751-2111" class="btn-call">📞 041-751-2111</a>
+    <a href="../../map.html?x=127.5055364&y=36.0828062&name=%EA%B8%88%EC%82%B0%ED%9A%A8%EC%82%AC%EB%9E%91%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
@@ -90,6 +92,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:041-754-0060" class="btn-call">📞 041-754-0060</a>
+    <a href="../../map.html?x=127.4962122&y=36.1040463&name=%EC%83%88%EA%B8%88%EC%82%B0%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -116,6 +120,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     </aside>
   </div>
 </div>
+<script src="../../js/facility-render.js?v=2"></script>
 <script>
 const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM2MSMkMSMkMiMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5OSQ0NjE0ODEjNjEjJDEjJDgjJDgz","name":"금산효사랑요양병원","addr":"충청남도 금산군 남일면 무금로 2145, (남일면)","tel":"041-751-2111","url":"","sido_cd":"340000","sido_nm":"충남","sggu_cd":"340002","sggu_nm":"금산군","emd_nm":"남일면","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":127.5055364,"y":36.0828062,"estb_dd":20050909,"dgsbj_list":["내과","외과","정형외과","신경외과","가정의학과","한방내과","한방부인과","한방소아과","한방안·이비인후·피부과","한방신경정신과","침구과","사상체질과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"산부인과":0,"소아청소년과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM2MSMkMSMkMiMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5MiQyNjEyMjIjNTEjJDEjJDYjJDgz","name":"새금산요양병원","addr":"충청남도 금산군 금산읍 비단로 183, (금산읍)","tel":"041-754-0060","url":"","sido_cd":"340000","sido_nm":"충남","sggu_cd":"340002","sggu_nm":"금산군","emd_nm":"금산읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":2,"x":127.4962122,"y":36.1040463,"estb_dd":20071013,"dgsbj_list":["외과","정형외과","신경외과","소아청소년과","안과","피부과","비뇨의학과","한방내과","한방부인과","한방소아과","사상체질과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"외과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00 · 토 09:00~13:00","_detail_done":true}];
 let cur='all';
@@ -139,7 +144,9 @@ function nursingCard(h){
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${h.nursing_grade}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${h.bed_cnt}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="../../map.html?x=${h.x}&y=${h.y}&name=${encodeURIComponent(h.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${h.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}${mapBtn}${urlBtn}</div></div>`;
 }
 </script>
 

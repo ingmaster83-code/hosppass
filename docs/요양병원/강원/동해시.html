@@ -80,6 +80,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:033-520-7000" class="btn-call">📞 033-520-7000</a>
+    <a href="../../map.html?x=129.1066052&y=37.5034504&name=%EB%8F%99%ED%95%B4%EA%B8%88%EA%B0%95%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    <a href="http://www.dkkh.co.kr" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
@@ -90,6 +92,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:033-531-2500" class="btn-call">📞 033-531-2500</a>
+    <a href="../../map.html?x=129.1156782&y=37.5203570&name=%EB%8F%99%ED%95%B4%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
@@ -100,6 +104,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:033-533-7741" class="btn-call">📞 033-533-7741</a>
+    <a href="../../map.html?x=129.0969083&y=37.5179522&name=%EB%8F%99%ED%95%B4%EC%9D%B4%EB%A0%88%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -126,6 +132,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     </aside>
   </div>
 </div>
+<script src="../../js/facility-render.js?v=2"></script>
 <script>
 const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5OSQyNjEwMDIjNDEjJDEjJDgjJDgz","name":"동해금강요양병원","addr":"강원특별자치도 동해시 동해대로 5143, 동해금강요양병원 (효가동)","tel":"033-520-7000","url":"http://www.dkkh.co.kr","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320200","sggu_nm":"동해시","emd_nm":"효가동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":3,"sdr_cnt":2,"x":129.1066052,"y":37.5034504,"estb_dd":20080601,"dgsbj_list":["신경외과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"정형외과":0,"신경외과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true},{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ2MiQzNjEyMjIjNzEjJDEjJDgjJDgz","name":"동해요양병원","addr":"강원특별자치도 동해시 중앙로 218-0, 동해요양병원","tel":"033-531-2500","url":"","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320200","sggu_nm":"동해시","emd_nm":"천곡동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":7,"sdr_cnt":5,"x":129.1156782,"y":"37.5203570","estb_dd":20151224,"dgsbj_list":["내과","신경외과","성형외과","산부인과","재활의학과","치주과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"신경외과":0,"성형외과":0,"산부인과":0,"재활의학과":0,"통합치의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ4OSQyNjEyMjIjNTEjJDEjJDIjJDgz","name":"동해이레요양병원","addr":"강원특별자치도 동해시 덕골길 76-40,  (천곡동)","tel":"033-533-7741","url":"","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320200","sggu_nm":"동해시","emd_nm":"천곡동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":4,"sdr_cnt":3,"x":129.0969083,"y":37.5179522,"estb_dd":20061013,"dgsbj_list":["소아청소년과","가정의학과","한방내과","한방부인과","한방신경정신과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"산부인과":0,"소아청소년과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"","_detail_done":true}];
 let cur='all';
@@ -149,7 +156,9 @@ function nursingCard(h){
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${h.nursing_grade}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${h.bed_cnt}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="../../map.html?x=${h.x}&y=${h.y}&name=${encodeURIComponent(h.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${h.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}${mapBtn}${urlBtn}</div></div>`;
 }
 </script>
 

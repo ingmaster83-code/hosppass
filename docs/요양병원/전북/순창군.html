@@ -80,6 +80,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:063-650-8000" class="btn-call">📞 063-650-8000</a>
+    <a href="../../map.html?x=127.1411650&y=35.3650563&name=%EC%88%9C%EC%B0%BD%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div><div class="facility-card">
   <div class="facility-card-body">
@@ -90,6 +92,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:063-782-3333" class="btn-call">📞 063-782-3333</a>
+    <a href="../../map.html?x=127.1392965&y=35.4061149&name=%EC%9D%98%EB%A3%8C%EB%B2%95%EC%9D%B8%20%EA%B3%84%ED%99%94%EC%9D%98%EB%A3%8C%EC%9E%AC%EB%8B%A8%20%EC%B2%AD%EC%A0%95%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -116,6 +120,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     </aside>
   </div>
 </div>
+<script src="../../js/facility-render.js?v=2"></script>
 <script>
 const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM2MSMkMSMkNiMkOTkkNTgxMzUxIzExIyQxIyQzIyQ5OSQyNjEyMjIjNDEjJDEjJDgjJDgz","name":"순창요양병원","addr":"전북특별자치도 순창군 순창읍 순창로 105, (순창읍)","tel":"063-650-8000","url":"","sido_cd":"350000","sido_nm":"전북","sggu_cd":"350006","sggu_nm":"순창군","emd_nm":"순창읍","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":8,"sdr_cnt":4,"x":"127.1411650","y":35.3650563,"estb_dd":20060126,"dgsbj_list":["내과","산부인과","가정의학과","한방내과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"내과":0,"산부인과":0,"가정의학과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~17:00 · 화 09:00~17:00 · 수 09:00~17:00 · 목 09:00~17:00 · 금 09:00~17:00 · 토 09:00~12:00","_detail_done":true},{"ykiho":"JDQ4MTYyMiM2MSMkMSMkNiMkOTkkNTgxMzUxIzExIyQxIyQ3IyQ5MiQyNjEyMjIjNTEjJDEjJDYjJDgz","name":"의료법인 계화의료재단 청정요양병원","addr":"전북특별자치도 순창군 인계면 인덕로 145-19, (인계면)","tel":"063-782-3333","url":"","sido_cd":"350000","sido_nm":"전북","sggu_cd":"350006","sggu_nm":"순창군","emd_nm":"인계면","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":0,"sdr_cnt":0,"x":127.1392965,"y":35.4061149,"estb_dd":20210210,"dgsbj_list":["내과","외과","정형외과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{},"bed_cnt":0,"hours":"","_detail_done":true}];
 let cur='all';
@@ -139,7 +144,9 @@ function nursingCard(h){
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${h.nursing_grade}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${h.bed_cnt}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="../../map.html?x=${h.x}&y=${h.y}&name=${encodeURIComponent(h.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${h.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}${mapBtn}${urlBtn}</div></div>`;
 }
 </script>
 

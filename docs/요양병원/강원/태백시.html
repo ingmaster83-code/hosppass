@@ -80,6 +80,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:033-580-3700" class="btn-call">📞 033-580-3700</a>
+    <a href="../../map.html?x=129.0043366&y=37.1040964&name=%EA%B7%BC%EB%A1%9C%EB%B3%B5%EC%A7%80%EA%B3%B5%EB%8B%A8%20%ED%83%9C%EB%B0%B1%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -106,6 +108,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     </aside>
   </div>
 </div>
+<script src="../../js/facility-render.js?v=2"></script>
 <script>
 const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkNCMkOTkkNTgxMzUxIzExIyQxIyQzIyQ3MiQ0NjEwMDIjODEjJDEjJDYjJDgz","name":"근로복지공단 태백요양병원","addr":"강원특별자치도 태백시 보드미길 8-0,  4층 (장성동,근로복지공단태백요양병원)","tel":"033-580-3700","url":"","sido_cd":"320000","sido_nm":"강원","sggu_cd":"320600","sggu_nm":"태백시","emd_nm":"장성동","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":2,"sdr_cnt":2,"x":129.0043366,"y":37.1040964,"estb_dd":20240131,"dgsbj_list":["신경외과","산부인과","가정의학과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"신경외과":0,"가정의학과":0},"nursing_grade":"","_detail_done":true}];
 let cur='all';
@@ -129,7 +132,9 @@ function nursingCard(h){
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${h.nursing_grade}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${h.bed_cnt}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="../../map.html?x=${h.x}&y=${h.y}&name=${encodeURIComponent(h.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${h.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}${mapBtn}${urlBtn}</div></div>`;
 }
 </script>
 

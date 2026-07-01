@@ -594,7 +594,7 @@ def _generate_nursing_region_page(sido, sggu, hospitals):
     desc      = f"{sggu} 요양병원 목록과 상세 정보를 확인하세요. 투석 가능 여부, 간호등급, 병상 수, 평가등급 비교."
 
     _page_hospitals = hospitals[:50]
-    _card_htmls = [_nursing_card_html(h) for h in _page_hospitals]
+    _card_htmls = [_nursing_card_html(h, root) for h in _page_hospitals]
     if len(_card_htmls) > 9:
         _card_htmls.insert(8, ad_banner('ad-inline'))
     cards = "".join(_card_htmls)
@@ -650,6 +650,7 @@ def _generate_nursing_region_page(sido, sggu, hospitals):
     </aside>
   </div>
 </div>
+<script src="{root}js/facility-render.js?v={JS_VERSION}"></script>
 <script>
 const ALL_NURSING={json_embed(hospitals[:200])};
 let cur='all';
@@ -673,7 +674,9 @@ function nursingCard(h){{
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${{h.nursing_grade}}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${{h.bed_cnt}}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${{d}}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.addr||''}}</span><span>👨‍⚕️ 의사 ${{h.dr_cnt||0}}명</span></div><div class="facility-tags">${{dialysisTag}}${{gradeTag}}${{bedTag}}${{depts}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="{root}map.html?x=${{h.x}}&y=${{h.y}}&name=${{encodeURIComponent(h.name)}}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${{h.url}}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.addr||''}}</span><span>👨‍⚕️ 의사 ${{h.dr_cnt||0}}명</span></div><div class="facility-tags">${{dialysisTag}}${{gradeTag}}${{bedTag}}${{depts}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}${{mapBtn}}${{urlBtn}}</div></div>`;
 }}
 </script>
 {footer_html(root)}"""
@@ -681,11 +684,17 @@ function nursingCard(h){{
     save_html(DOCS_DIR / "요양병원" / sido / f"{sggu}.html", page)
 
 
-def _nursing_card_html(h: dict) -> str:
+def _nursing_card_html(h: dict, root: str = "") -> str:
     dialysis = '<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>' if h.get("dialysis") else ""
     grade    = f'<span class="tag tag-grade">🏅 간호 {esc(h["nursing_grade"])}</span>' if h.get("nursing_grade") else ""
     bed      = f'<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ {h["bed_cnt"]}병상</span>' if h.get("bed_cnt") else ""
     depts    = "".join(f'<span class="tag tag-dept">{esc(d)}</span>' for d in (h.get("dgsbj_list") or [])[:3])
+    map_btn = (
+        f'<a href="{root}map.html?x={h["x"]}&y={h["y"]}&name={quote(str(h.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if h.get("x") and h.get("y") else ""
+    )
+    url_btn = f'<a href="{esc(h["url"])}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>' if h.get("url") else ""
     return f"""<div class="facility-card">
   <div class="facility-card-body">
     <div class="facility-name">{esc(h.get("name",""))}</div>
@@ -695,6 +704,8 @@ def _nursing_card_html(h: dict) -> str:
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     {f'<a href="tel:{esc(h["tel"])}" class="btn-call">📞 {esc(h["tel"])}</a>' if h.get("tel") else ""}
+    {map_btn}
+    {url_btn}
   </div>
 </div>"""
 
@@ -710,7 +721,7 @@ def _generate_dialysis_page(hospitals: list):
         for s in SIDO_NAME_MAP.values()
     )
     _page_hospitals = hospitals[:100]
-    _card_htmls = [_nursing_card_html(h) for h in _page_hospitals]
+    _card_htmls = [_nursing_card_html(h, root) for h in _page_hospitals]
     if len(_card_htmls) > 9:
         _card_htmls.insert(8, ad_banner('ad-inline'))
     cards = "".join(_card_htmls)
@@ -747,6 +758,7 @@ def _generate_dialysis_page(hospitals: list):
     </aside>
   </div>
 </div>
+<script src="{root}js/facility-render.js?v={JS_VERSION}"></script>
 <script>
 const ALL_D={json_embed(hospitals)};
 function filterSido(sido){{
@@ -758,7 +770,9 @@ function filterSido(sido){{
     const grade=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${{h.nursing_grade}}</span>`:'';
     const bed=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${{h.bed_cnt}}병상</span>`:'';
     const mc=h.dialysis_machine_cnt?`<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 인공신장기 ${{h.dialysis_machine_cnt}}대</span>`:'<span class="tag" style="background:#EDE9FE;color:#6D28D9;">💉 투석가능</span>';
-    return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}}</span></div><div class="facility-tags">${{mc}}${{grade}}${{bed}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}</div></div>`;
+    const mapBtn=(h.x&&h.y)?`<a href="{root}map.html?x=${{h.x}}&y=${{h.y}}&name=${{encodeURIComponent(h.name)}}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+    const urlBtn=h.url?`<a href="${{h.url}}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+    return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${{h.name}}</div><div class="facility-meta"><span>📍 ${{h.sido_nm}} ${{h.sggu_nm}}</span></div><div class="facility-tags">${{mc}}${{grade}}${{bed}}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${{h.tel?`<a href="tel:${{h.tel}}" class="btn-call">📞 ${{h.tel}}</a>`:''}}${{mapBtn}}${{urlBtn}}</div></div>`;
   }});
   if(html.length>9)html.splice(8,0,'<div class="ad-banner ad-inline"><ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6464921081676309" data-ad-slot="7080296704" data-ad-format="auto" data-full-width-responsive="true"></ins></div>');
   list.innerHTML=html.join('');
@@ -792,7 +806,7 @@ def _generate_nursing_grade_page(hospitals: list):
     )
     grade1 = [h for h in hospitals if h.get("nursing_grade") == "1등급"]
     _grade1_page = grade1[:50]
-    _grade1_htmls = [_nursing_card_html(h) for h in _grade1_page]
+    _grade1_htmls = [_nursing_card_html(h, root) for h in _grade1_page]
     if len(_grade1_htmls) > 9:
         _grade1_htmls.insert(8, ad_banner('ad-inline'))
     grade1_cards = "".join(_grade1_htmls)
@@ -838,6 +852,7 @@ def _generate_nursing_grade_page(hospitals: list):
     </aside>
   </div>
 </div>
+<script src="{root}js/facility-render.js?v={JS_VERSION}"></script>
 {footer_html(root)}"""
 
     save_html(DOCS_DIR / "요양병원" / "간호등급.html", page)

@@ -80,6 +80,8 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
   <div class="facility-card-right">
     <span class="status-badge status-open">요양병원</span>
     <a href="tel:031-291-8331" class="btn-call">📞 031-291-8331</a>
+    <a href="../../map.html?x=126.9294110&y=37.2495301&name=%ED%99%94%EC%84%B1%ED%95%B4%EC%9D%B8%EC%9A%94%EC%96%91%EB%B3%91%EC%9B%90" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>
+    
   </div>
 </div></div>
       <div class="pagination" id="pagination"></div>
@@ -106,6 +108,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
     </aside>
   </div>
 </div>
+<script src="../../js/facility-render.js?v=2"></script>
 <script>
 const ALL_NURSING=[{"ykiho":"JDQ4MTYyMiM1MSMkMSMkMCMkOTkkNTgxMzUxIzQxIyQxIyQ3IyQ3OSQzNjE4MzIjNzEjJDEjJDgjJDgz","name":"화성해인요양병원","addr":"경기도 화성시 효행구 매송면 화성로 2407-15, (매송면)","tel":"031-291-8331","url":"","sido_cd":"310000","sido_nm":"경기","sggu_cd":"312502","sggu_nm":"화성효행구","emd_nm":"매송면","cl_cd":"28","cl_nm":"요양병원","dgsbj":"","dr_cnt":6,"sdr_cnt":4,"x":"126.9294110","y":37.2495301,"estb_dd":20160422,"dgsbj_list":["정형외과","신경외과","심장혈관흉부외과","산부인과","가정의학과","한방내과","침구과"],"dialysis":false,"dialysis_machine_cnt":0,"spcl_diag_list":[],"specialist_map":{"정형외과":0,"신경외과":0,"심장혈관흉부외과":0,"산부인과":0},"nursing_grade":"","bed_cnt":0,"hours":"월 09:00~18:00 · 화 09:00~18:00 · 수 09:00~18:00 · 목 09:00~18:00 · 금 09:00~18:00","_detail_done":true}];
 let cur='all';
@@ -129,7 +132,9 @@ function nursingCard(h){
   const gradeTag=h.nursing_grade?`<span class="tag tag-grade">🏅 간호 ${h.nursing_grade}</span>`:'';
   const bedTag=h.bed_cnt?`<span class="tag" style="background:#F0FDFA;color:#0F766E;">🛏️ ${h.bed_cnt}병상</span>`:'';
   const depts=(h.dgsbj_list||[]).slice(0,3).map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}</div></div>`;
+  const mapBtn=(h.x&&h.y)?`<a href="../../map.html?x=${h.x}&y=${h.y}&name=${encodeURIComponent(h.name)}" onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>`:'';
+  const urlBtn=h.url?`<a href="${h.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${h.name}</div><div class="facility-meta"><span>📍 ${h.addr||''}</span><span>👨‍⚕️ 의사 ${h.dr_cnt||0}명</span></div><div class="facility-tags">${dialysisTag}${gradeTag}${bedTag}${depts}</div></div><div class="facility-card-right"><span class="status-badge status-open">요양병원</span>${h.tel?`<a href="tel:${h.tel}" class="btn-call">📞 ${h.tel}</a>`:''}${mapBtn}${urlBtn}</div></div>`;
 }
 </script>
 
