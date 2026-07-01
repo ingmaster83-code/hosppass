@@ -134,7 +134,7 @@ function doSearch(){var q=document.getElementById('hsi').value.trim();if(q)locat
 <script>
 const PAGE_DATA={
   sido:"경기",sggu:"화성시",
-  hospitals:[{"name":"송산보건지소","addr":"경기도 화성시 송산면 사강시장길 26, (송산면)","tel":"031-369-2887","url":"","sido_nm":"경기","sggu_nm":"화성시","emd_nm":"송산면","cl_nm":"보건지소","dr_cnt":0,"sdr_cnt":0,"x":126.7324203,"y":37.2132052},{"name":"안석보건진료소","addr":"경기도 화성시 고향의봄길216번길 101, (안석동)","tel":"031-356-3014","url":"","sido_nm":"경기","sggu_nm":"화성시","emd_nm":"남양읍","cl_nm":"보건진료소","dr_cnt":0,"sdr_cnt":0,"x":126.8189111,"y":37.1770587}],
+  hospitals:[{"name":"송산보건지소","cl_nm":"보건지소","sido_nm":"경기","sggu_nm":"화성시","emd_nm":"송산면","addr":"경기도 화성시 송산면 사강시장길 26, (송산면)","tel":"031-369-2887","dr_cnt":0,"x":126.7324203,"y":37.2132052,"beds":{"general_upper":0,"general":0,"icu_adult":0,"icu_child":0,"icu_newborn":0,"delivery":0,"operating":0,"er":0,"physical_therapy":0,"isolation":0}},{"name":"안석보건진료소","cl_nm":"보건진료소","sido_nm":"경기","sggu_nm":"화성시","emd_nm":"남양읍","addr":"경기도 화성시 고향의봄길216번길 101, (안석동)","tel":"031-356-3014","dr_cnt":0,"x":126.8189111,"y":37.1770587,"beds":{"general_upper":0,"general":0,"icu_adult":0,"icu_child":0,"icu_newborn":0,"delivery":0,"operating":0,"er":0,"physical_therapy":0,"isolation":0}}],
   pharmacies:[]
 };
 function buildPagination(page,total){
@@ -152,15 +152,45 @@ const PAGE_SIZE=10;
 
 document.addEventListener('DOMContentLoaded',()=>{buildItems();applyFilter();initMap();});
 
-const DEPT_KW=['내과','소아과','정형외과','산부인과','치과','한의원','안과','이비인후과','피부과','신경과','비뇨기과','재활의학과','성형외과','흉부외과'];
-function hasDept(name,d){
-  if(d==='정신건강의학과')return/정신과|신경정신과|정신건강/.test(name||'');
-  return(name||'').includes(d);
+const DAY_KEYS=['일','월','화','수','목','금','토'];
+function hasDept(item,d){
+  if(item._type!=='hosp')return false;
+  const list=item.departments||[];
+  if(d==='정신건강의학과')return list.some(x=>/정신/.test(x.name||''));
+  return list.some(x=>(x.name||'').includes(d));
 }
-function getDepts(name){
-  const hits=DEPT_KW.filter(d=>(name||'').includes(d));
-  if(/정신과|신경정신과|정신건강/.test(name||''))hits.push('정신건강의학과');
-  return hits.slice(0,3);
+function isNightCareNow(item){
+  if(item._type!=='hosp')return false;
+  if(item.er_night)return true;
+  const h=item.hours||{};
+  const today=DAY_KEYS[new Date().getDay()];
+  const d=h[today];
+  if(!d||!d.start||!d.end)return false;
+  const now=new Date(),curHM=now.getHours()*100+now.getMinutes();
+  const sN=parseInt(d.start.replace(':',''),10),eN=parseInt(d.end.replace(':',''),10);
+  if(isNaN(sN)||isNaN(eN))return false;
+  // 마감이 늦은 시간대(21시 이후) 또는 자정을 넘기는 경우를 '야간진료'로 간주
+  const isLate=eN>=2100||eN<sN;
+  if(!isLate)return false;
+  return eN<sN?(curHM>=sN||curHM<=eN):(curHM>=sN&&curHM<=eN);
+}
+function isOpenNow(item){
+  if(item._type!=='hosp')return null;
+  const h=item.hours||{};
+  const today=DAY_KEYS[new Date().getDay()];
+  const d=h[today];
+  if(!d||!d.start||!d.end)return null;
+  const now=new Date(),curHM=now.getHours()*100+now.getMinutes();
+  const sN=parseInt(d.start.replace(':',''),10),eN=parseInt(d.end.replace(':',''),10);
+  if(isNaN(sN)||isNaN(eN))return null;
+  return eN<sN?(curHM>=sN||curHM<=eN):(curHM>=sN&&curHM<=eN);
+}
+function hoursSummary(item){
+  const h=item.hours;
+  if(!h||!Object.keys(h).length)return'';
+  const order=['월','화','수','목','금','토','일'];
+  const parts=order.filter(k=>h[k]).map(k=>`${k} ${h[k].start}~${h[k].end}`);
+  return parts.join(' · ');
 }
 function buildItems(){
   allItems=[
@@ -174,9 +204,8 @@ function applyFilter(){
   filtered=allItems.filter(item=>{
     if(curType==='hosp'&&item._type!=='hosp')return false;
     if(curType==='pharm'&&item._type!=='pharm')return false;
-    if(curType==='night'&&item.status!=='night')return false;
-    if(curDept!=='all'&&item._type==='hosp'&&!hasDept(item.name,curDept))return false;
-    if(curDept!=='all'&&item._type==='pharm')return false;
+    if(curType==='night'&&!isNightCareNow(item))return false;
+    if(curDept!=='all'&&!hasDept(item,curDept))return false;
     return true;
   });
   document.getElementById('resultCount').textContent=filtered.length;
@@ -192,18 +221,35 @@ function renderPage(page){
   document.getElementById('pagination').innerHTML=buildPagination(curPage,total);
 }
 function renderCard(item){
-  const smap={open:['status-open','운영중'],night:['status-night','야간진료'],busy:['status-busy','혼잡'],full:['status-full','만석'],closed:['status-closed','운영종료']};
-  const [scls,stxt]=smap[item.status]||smap.closed;
-  const depts=item._type==='pharm'?'<span class="tag tag-dept">약국</span>':getDepts(item.name||'').map(d=>`<span class="tag tag-dept">${d}</span>`).join('');
-  const grade=item.grade?`<span class="tag tag-grade">⭐ ${item.grade}</span>`:'';
-  const is24=item.is24h?'<span class="tag tag-open">24시간</span>':'';
+  let scls='status-closed',stxt='정보없음';
+  if(item._type==='hosp'){
+    const night=isNightCareNow(item),open=isOpenNow(item);
+    if(night){scls='status-night';stxt='야간진료중';}
+    else if(open===true){scls='status-open';stxt='운영중';}
+    else if(open===false){scls='status-closed';stxt='운영종료';}
+    else {scls='status-closed';stxt='정보없음';}
+  } else {
+    scls='status-open';stxt='약국';
+  }
+  const depts=item._type==='pharm'
+    ?'<span class="tag tag-dept">약국</span>'
+    :(item.departments||[]).slice(0,4).map(d=>`<span class="tag tag-dept">${d.name}${d.specialist_cnt?`(전문의${d.specialist_cnt})`:''}</span>`).join('');
+  const erTag=item.er_night?'<span class="tag tag-emrg">🚨 야간응급</span>':(item.er_day?'<span class="tag tag-emrg">🚨 주간응급</span>':'');
+  const nursingTag=(item.nursing||[]).length?`<span class="tag tag-grade">🏅 간호${item.nursing[0].grade}등급</span>`:'';
+  const spclTags=(item.specialized_fields||[]).slice(0,2).map(s=>`<span class="tag tag-grade">🏆 ${s}전문병원</span>`).join('');
+  const specialTags=(item.special_treatments||[]).slice(0,2).map(s=>`<span class="tag tag-dept">${s}</span>`).join('');
   const addr=item.emd_nm?`${item.emd_nm} · ${(item.addr||'').replace(/^[가-힣]+시\s*[가-힣]+구\s*/,'')}`:item.addr||'';
-  const dr=item.dr_cnt?`<span>👨‍⚕️ 의사 ${item.dr_cnt}명${item.sdr_cnt?` (전문의 ${item.sdr_cnt}명)`:''}</span>`:'';
-  const hoursRow=item.hours
-    ?`<div style="margin-top:7px;font-size:.82rem;color:var(--text-secondary);">🕐 ${item.hours} <span style="margin-left:6px;color:var(--warning);font-size:.76rem;">· 방문 전 전화 확인 권장</span></div>`
+  const dr=item.dr_cnt?`<span>👨‍⚕️ 의사 ${item.dr_cnt}명</span>`:'';
+  const equip=(item.equipment||[]).length?`<span>🩻 장비 ${item.equipment.length}종</span>`:'';
+  const transit=(item.transit&&item.transit[0])?`<span>🚇 ${item.transit[0].stop||''} ${item.transit[0].distance||''}</span>`:'';
+  const parking=item.parking_available?`<span>🅿️ 주차 ${item.parking_count||''}대${item.parking_fee?'(유료)':'(무료)'}</span>`:'';
+  const hSum=hoursSummary(item);
+  const hoursRow=hSum
+    ?`<div style="margin-top:7px;font-size:.82rem;color:var(--text-secondary);">🕐 ${hSum} <span style="margin-left:6px;color:var(--warning);font-size:.76rem;">· 방문 전 전화 확인 권장</span></div>`
     :`<div style="margin-top:7px;font-size:.78rem;color:var(--text-light);">🕐 진료시간 미제공 — 전화로 확인해주세요</div>`;
+  const extraRow=(equip||transit||parking)?`<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);display:flex;gap:10px;flex-wrap:wrap;">${dr}${equip}${transit}${parking}</div>`:(dr?`<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);">${dr}</div>`:'');
   const urlBtn=item.url?`<a href="${item.url}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>`:'';
-  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${item.name}</div><div class="facility-meta"><span>🏥 ${item.cl_nm||''}</span><span>📍 ${addr}</span>${dr}</div><div class="facility-tags">${depts}${is24}${grade}</div>${hoursRow}</div><div class="facility-card-right"><span class="status-badge ${scls}">${stxt}</span>${item.tel?`<a href="tel:${item.tel}" class="btn-call">📞 ${item.tel}</a>`:''}</div></div>`;
+  return `<div class="facility-card"><div class="facility-card-body"><div class="facility-name">${item.name}</div><div class="facility-meta"><span>🏥 ${item.cl_nm||''}</span><span>📍 ${addr}</span></div><div class="facility-tags">${depts}${erTag}${nursingTag}${spclTags}${specialTags}</div>${extraRow}${hoursRow}</div><div class="facility-card-right"><span class="status-badge ${scls}">${stxt}</span>${item.tel?`<a href="tel:${item.tel}" class="btn-call">📞 ${item.tel}</a>`:''}${urlBtn}</div></div>`;
 }
 function initMap(){
   if(typeof kakao==='undefined')return;

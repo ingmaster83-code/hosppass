@@ -6,3 +6,7 @@ __pycache__/
 Thumbs.db
 scripts/venv/
 scripts/__pycache__/
+
+# 원본 소스 데이터는 로컬/생성 전용 — 실제 배포는 docs/만 사용.
+# hospitals.json이 HIRA 12개 파일 병합 후 100MB를 넘어 GitHub 파일 크기 제한 초과.
+data/

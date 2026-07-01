@@ -1,0 +1,106 @@
+{
+  "ykiho": "JDQ4MTYyMiM4MSMkMiMkMCMkMDAkNDgxOTYxIzIxIyQxIyQ1IyQxMyQyNjE0ODEjNDEjJDEjJDQjJDgz",
+  "name": "(VOM)봄안과의원",
+  "cl_cd": "31",
+  "cl_nm": "의원",
+  "sido_cd": "230000",
+  "sido_nm": "대구",
+  "sggu_cd": "230002",
+  "sggu_nm": "대구동구",
+  "emd_nm": "율하동",
+  "zipcode": "41151",
+  "addr": "대구광역시 동구 안심로 58, 3층 (율하동, 율하메디빌)",
+  "tel": "053-963-9991",
+  "url": "",
+  "estb_dd": "2014-01-02 00:00:00",
+  "dr_cnt": 3,
+  "x": 128.6918945,
+  "y": 35.8698515,
+  "beds": {
+    "general_upper": 0,
+    "general": 0,
+    "icu_adult": 0,
+    "icu_child": 0,
+    "icu_newborn": 0,
+    "delivery": 0,
+    "operating": 1,
+    "er": 0,
+    "physical_therapy": 0,
+    "isolation": 0
+  },
+  "departments": [
+    {
+      "code": "01",
+      "name": "내과",
+      "specialist_cnt": 0
+    },
+    {
+      "code": "12",
+      "name": "안과",
+      "specialist_cnt": 3
+    }
+  ],
+  "transit": [
+    {
+      "type": "지하철",
+      "line": "1호선",
+      "stop": "율하역",
+      "direction": "양방향",
+      "distance": "2번출구 입구앞",
+      "note": ""
+    }
+  ],
+  "equipment": [
+    {
+      "code": "B302",
+      "name": "초음파영상진단기",
+      "count": 1
+    }
+  ],
+  "meal": [],
+  "nursing": [],
+  "special_treatments": [],
+  "specialized_fields": [],
+  "other_staff": [],
+  "hours": {
+    "월": {
+      "start": "09:00",
+      "end": "20:00"
+    },
+    "화": {
+      "start": "09:00",
+      "end": "19:00"
+    },
+    "수": {
+      "start": "09:00",
+      "end": "19:00"
+    },
+    "목": {
+      "start": "09:00",
+      "end": "20:00"
+    },
+    "금": {
+      "start": "09:00",
+      "end": "19:00"
+    },
+    "토": {
+      "start": "09:00",
+      "end": "16:00"
+    }
+  },
+  "lunch_weekday": "13:00 -14:00",
+  "lunch_sat": "",
+  "reception_weekday": "09시00분 - 19시00분",
+  "reception_sat": "09시00분 16시00분",
+  "closed_sun": "전부 휴진",
+  "closed_holiday": "오전 10시 진료 시작, 오후 2시 이후 휴진",
+  "er_day": false,
+  "er_day_tel": [],
+  "er_night": false,
+  "er_night_tel": [],
+  "location_note": "율하역 2번 출구 율하메디빌 3층",
+  "parking_available": true,
+  "parking_count": 30,
+  "parking_fee": false,
+  "parking_note": "병원 건물 뒤편 위치"
+}
