@@ -95,6 +95,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
     </nav>
   </div>
 </header>
+<script src="{root}js/wooa-sites-bar.js"></script>
 <script>
 document.getElementById('hsi').addEventListener('keydown',function(e){{
   if(e.key==='Enter'){{var q=e.target.value.trim();if(q)location.href='{root}hospital.html?q='+encodeURIComponent(q);}}
