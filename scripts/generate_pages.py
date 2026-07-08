@@ -419,6 +419,12 @@ def _generate_sido_index(sido_nm: str, hosp_by_region, pharm_by_region):
     canonical = f"지역/{sido_nm}/index.html"
     root     = "../../"
 
+    sido_intro = (
+        f"{sido_nm}의 병원, 약국, 야간진료, 응급실, 요양병원 정보를 {len(sggus)}개 시·군·구별로 안내합니다. "
+        f"내과, 소아과, 정형외과, 이비인후과, 피부과 등 진료과목별로 가까운 의료기관을 찾을 수 있습니다. "
+        f"야간에 진료하는 병원이나 응급실 위치도 한눈에 확인하세요. "
+        f"모든 의료기관 정보는 건강보험심사평가원 공공데이터를 기반으로 제공됩니다."
+    )
     page = f"""{header_html(title, desc, canonical, 2, keywords)}
 <section style="background:linear-gradient(135deg,var(--primary) 0%,#0891B2 100%);color:#fff;padding:32px 16px;">
   <div class="container">
@@ -427,7 +433,20 @@ def _generate_sido_index(sido_nm: str, hosp_by_region, pharm_by_region):
   </div>
 </section>
 <div class="container section">
+  <p style="color:#374151;line-height:1.75;margin-bottom:16px;font-size:.95rem;">{sido_intro}</p>
+  <h2 style="font-size:1rem;font-weight:700;margin-bottom:12px;">{esc(sido_nm)} 시·군·구 ({len(sggus)}개)</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div style="margin-top:28px;background:#F9FAFB;border-radius:12px;padding:20px 24px;">
+    <h2 style="font-size:1rem;font-weight:700;margin-bottom:12px;">자주 묻는 질문</h2>
+    <details style="margin-bottom:10px;">
+      <summary style="cursor:pointer;font-weight:600;padding:6px 0;">{esc(sido_nm)} 야간진료 병원은 어떻게 찾나요?</summary>
+      <p style="padding:6px 0 4px;color:#374151;line-height:1.7;">위 시·군·구를 선택한 후 '야간진료' 탭을 클릭하면 해당 지역의 야간 및 주말 진료 병원 목록을 확인할 수 있습니다. 응급 상황에는 응급실 탭도 활용하세요.</p>
+    </details>
+    <details>
+      <summary style="cursor:pointer;font-weight:600;padding:6px 0;">의료기관 정보가 실제와 다를 수 있나요?</summary>
+      <p style="padding:6px 0 4px;color:#374151;line-height:1.7;">건강보험심사평가원 데이터를 기반으로 하지만, 진료 시간이나 운영 여부가 변경될 수 있습니다. 방문 전에 반드시 해당 의료기관에 전화로 확인하시기 바랍니다.</p>
+    </details>
+  </div>
 </div>
 {footer_html(root)}"""
 
