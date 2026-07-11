@@ -221,6 +221,78 @@ def generate_region_pages(hospitals: list, pharmacies: list):
     print(f"  → {count}개 시군구 페이지 생성")
 
 
+def _facility_card_html(item: dict, is_pharm: bool, root: str = "") -> str:
+    """병원/약국 카드 HTML (초기 SSR 렌더링용).
+    운영중/야간진료중 같은 실시간 상태는 페이지 로드 후 JS가 다시 그리며 갱신하므로,
+    여기서는 시점에 따라 달라지지 않는 정적 정보만 렌더링한다."""
+    name  = esc(item.get("name", ""))
+    cl_nm = esc(item.get("cl_nm", "") or ("약국" if is_pharm else ""))
+    emd   = item.get("emd_nm", "")
+    addr  = f'{esc(emd)} · {esc(item.get("addr", ""))}' if emd else esc(item.get("addr", ""))
+
+    if is_pharm:
+        depts = '<span class="tag tag-dept">약국</span>'
+    else:
+        dept_parts = []
+        for d in (item.get("departments") or [])[:4]:
+            spc = d.get("specialist_cnt")
+            suffix = f"(전문의{spc})" if spc else ""
+            dept_parts.append(f'<span class="tag tag-dept">{esc(d.get("name",""))}{suffix}</span>')
+        depts = "".join(dept_parts)
+
+    er_tag = (
+        '<span class="tag tag-emrg">🚨 야간응급</span>' if item.get("er_night")
+        else ('<span class="tag tag-emrg">🚨 주간응급</span>' if item.get("er_day") else "")
+    )
+    nursing_list = item.get("nursing") or []
+    nursing_tag  = f'<span class="tag tag-grade">🏅 간호{esc(nursing_list[0].get("grade",""))}등급</span>' if nursing_list else ""
+    spcl_tags    = "".join(f'<span class="tag tag-grade">🏆 {esc(s)}전문병원</span>' for s in (item.get("specialized_fields") or [])[:2])
+    special_tags = "".join(f'<span class="tag tag-dept">{esc(s)}</span>' for s in (item.get("special_treatments") or [])[:2])
+
+    dr    = f'<span>👨‍⚕️ 의사 {item["dr_cnt"]}명</span>' if item.get("dr_cnt") else ""
+    equip = f'<span>🩻 장비 {len(item["equipment"])}종</span>' if item.get("equipment") else ""
+    transit_list = item.get("transit") or []
+    transit = f'<span>🚇 {esc(transit_list[0].get("stop",""))} {esc(transit_list[0].get("distance",""))}</span>' if transit_list else ""
+    parking = ""
+    if item.get("parking_available"):
+        fee = "(유료)" if item.get("parking_fee") else "(무료)"
+        parking = f'<span>🅿️ 주차 {esc(item.get("parking_count",""))}대{fee}</span>'
+    extra_row = (
+        f'<div style="margin-top:5px;font-size:.8rem;color:var(--text-light);display:flex;gap:10px;flex-wrap:wrap;">{dr}{equip}{transit}{parking}</div>'
+        if (dr or equip or transit or parking) else ""
+    )
+
+    hours = item.get("hours") or {}
+    order = ["월", "화", "수", "목", "금", "토", "일"]
+    h_sum = " · ".join(f'{d} {hours[d]["start"]}~{hours[d]["end"]}' for d in order if hours.get(d) and hours[d].get("start"))
+    if h_sum:
+        hours_row = f'<div style="margin-top:7px;font-size:.82rem;color:var(--text-secondary);">🕐 {esc(h_sum)} <span style="margin-left:6px;color:var(--warning);font-size:.76rem;">· 방문 전 전화 확인 권장</span></div>'
+    elif not is_pharm:
+        hours_row = '<div style="margin-top:7px;font-size:.78rem;color:var(--text-light);">🕐 진료시간 미제공 — 전화로 확인해주세요</div>'
+    else:
+        hours_row = ""
+
+    tel_btn = f'<a href="tel:{esc(item["tel"])}" class="btn-call">📞 {esc(item["tel"])}</a>' if item.get("tel") else ""
+    url_btn = f'<a href="{esc(item["url"])}" target="_blank" rel="noopener" class="btn-call">🌐 홈페이지</a>' if item.get("url") else ""
+    map_btn = (
+        f'<a href="{root}map.html?x={item["x"]}&y={item["y"]}&name={quote(str(item.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if item.get("x") and item.get("y") else ""
+    )
+    status_label = "약국" if is_pharm else (cl_nm or "병원")
+
+    return (
+        f'<div class="facility-card"><div class="facility-card-body">'
+        f'<div class="facility-name">{name}</div>'
+        f'<div class="facility-meta"><span>🏥 {cl_nm}</span><span>📍 {addr}</span></div>'
+        f'<div class="facility-tags">{depts}{er_tag}{nursing_tag}{spcl_tags}{special_tags}</div>'
+        f'{extra_row}{hours_row}</div>'
+        f'<div class="facility-card-right">'
+        f'<span class="status-badge status-open">{status_label}</span>'
+        f'{tel_btn}{map_btn}{url_btn}</div></div>'
+    )
+
+
 def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonical, keywords=""):
     depth = 2
     root  = "../../"
@@ -234,6 +306,12 @@ def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonica
         f'onmouseover="this.style.background=\'var(--primary-light)\'" onmouseout="this.style.background=\'\'">{esc(s)}</a>'
         for s in nearby_sggus
     )
+
+    # 초기 SSR 카드 (검색엔진·JS 로드 전 사용자에게 실제 콘텐츠 노출용, JS가 로드되면 renderPage(1)이 즉시 대체함)
+    _initial_items = (
+        [(h, False) for h in hospitals] + [(p, True) for p in pharmacies]
+    )[:10]
+    _initial_cards = "".join(_facility_card_html(it, is_p, root) for it, is_p in _initial_items)
 
     return f"""{header_html(title, desc, canonical, depth, keywords)}
 
@@ -272,7 +350,7 @@ def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonica
         </span>
         <span style="font-size:.78rem;color:var(--text-light);">매일 새벽 2시 자동 갱신</span>
       </div>
-      <div class="facility-list" id="facilityList"><div class="loading"><div class="spinner"></div> 불러오는 중...</div></div>
+      <div class="facility-list" id="facilityList">{_initial_cards}</div>
       <div class="pagination" id="pagination"></div>
       {ad_banner('ad-mid')}
       <div style="margin-top:32px;">
@@ -506,6 +584,9 @@ def generate_specialty_pages(hospitals: list):
             for d, _ in SPECIALTIES
         )
 
+        # 초기 SSR 카드 (검색엔진·JS 로드 전 사용자에게 실제 콘텐츠 노출용, JS가 로드되면 즉시 대체함)
+        _initial_cards = "".join(_facility_card_html(h, False, root) for h in filtered[:15])
+
         page = f"""{header_html(title, desc, canonical, 1, keywords)}
 <section style="background:linear-gradient(135deg,var(--primary) 0%,#0891B2 100%);color:#fff;padding:32px 16px;">
   <div class="container">
@@ -524,7 +605,7 @@ def generate_specialty_pages(hospitals: list):
       <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
         <strong id="resultCount" style="color:var(--primary)">0</strong>개 병원
       </div>
-      <div class="facility-list" id="facilityList"><div class="loading"><div class="spinner"></div> 불러오는 중...</div></div>
+      <div class="facility-list" id="facilityList">{_initial_cards}</div>
       <div class="pagination" id="pagination"></div>
       {ad_banner('ad-mid')}
     </div>
