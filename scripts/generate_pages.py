@@ -998,12 +998,15 @@ def main():
     else:
         print("[3/4] 요양병원 데이터 없음 — 건너뜀")
 
-    # sitemap용 URL 목록 수집
+    # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
     for f in DOCS_DIR.rglob("*.html"):
         rel = f.relative_to(DOCS_DIR).as_posix()
-        if rel not in ("index.html", "404.html"):
-            pages.append(rel)
+        if rel in ("index.html", "404.html"):
+            continue
+        if "noindex" in f.read_text(encoding="utf-8"):
+            continue
+        pages.append(rel)
     generate_sitemap(pages)
 
     print("\n[완료] 페이지 생성 완료")
