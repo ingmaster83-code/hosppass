@@ -392,6 +392,10 @@ def _render_region_page(sido, sggu, hospitals, pharmacies, title, desc, canonica
             <a href="index.html" style="font-size:.85rem;color:var(--primary);font-weight:600;padding:6px 8px;margin-top:4px;">{esc(sido)} 전체 보기 →</a>
           </div>
         </div>
+        <div id="recentRegionBox" style="background:var(--card-bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px;margin-top:20px;display:none;">
+          <h3 style="font-size:.9rem;font-weight:700;margin-bottom:12px;">🕑 최근 본 지역</h3>
+          <div id="recentRegionList" style="display:flex;flex-direction:column;gap:4px;"></div>
+        </div>
       </div>
     </aside>
   </div>
@@ -465,6 +469,28 @@ function initMap(){{
     kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
   }});
 }}
+</script>
+
+<script>
+// 최근 본 지역 (localStorage)
+(() => {{
+  const KEY = 'hosppass_recent';
+  const current = {{ sido: {json_embed(sido)}, sggu: {json_embed(sggu)},
+    href: `/지역/${{encodeURIComponent({json_embed(sido)})}}/${{encodeURIComponent({json_embed(sggu)})}}.html` }};
+  let list = [];
+  try {{ list = JSON.parse(localStorage.getItem(KEY) || '[]'); }} catch (e) {{}}
+
+  const others = list.filter(r => !(r.sido === current.sido && r.sggu === current.sggu));
+  if (others.length > 0) {{
+    document.getElementById('recentRegionList').innerHTML = others.slice(0, 6).map(r => `
+      <a href="${{r.href}}" style="font-size:.85rem;color:var(--text-secondary);padding:6px 8px;border-radius:var(--radius-sm);display:block;"
+         onmouseover="this.style.background='var(--primary-light)'" onmouseout="this.style.background=''">${{r.sido}} ${{r.sggu}}</a>`).join('');
+    document.getElementById('recentRegionBox').style.display = 'block';
+  }}
+
+  const updated = [current, ...others].slice(0, 8);
+  try {{ localStorage.setItem(KEY, JSON.stringify(updated)); }} catch (e) {{}}
+}})();
 </script>
 {footer_html(root)}"""
 
