@@ -1,6 +1,9 @@
 User-agent: *
 Allow: /
 
+User-agent: Daum
+Allow: /
+
 Sitemap: https://hosppass.wooahouse.com/sitemap.xml
 
 #DaumWebMasterTool:8e49f443d81d84e31026876ec17466dbfd243fb91e5b80cfd473296b49a2fe02:5OHFs/qHHlfCvAas17iLzw==
