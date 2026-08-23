@@ -161,21 +161,26 @@ function doSearch(){
 async function loadRealtime(){
   // 정적 JSON 먼저 즉시 로드
   await loadStatic();
-  // 백그라운드에서 실시간 병상 업데이트 시도
+  // 백그라운드에서 실시간 병상 업데이트 시도 (전국 약 444개 기관, 100개씩 페이지네이션)
   try{
-    const params=new URLSearchParams({serviceKey:API_KEY,pageNo:1,numOfRows:100,Q0:''});
-    const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEmrgcBasicInfoInqire?${params}`,{signal:AbortSignal.timeout(5000)});
-    const txt=await res.text();
-    const xml=new DOMParser().parseFromString(txt,'text/xml');
-    const items=[...xml.querySelectorAll('item')];
-    if(items.length){
-      // 실시간 병상 수만 기존 데이터에 덮어쓰기
-      const bedMap={};
+    const bedMap={};
+    for(let page=1;page<=5;page++){
+      const params=new URLSearchParams({serviceKey:API_KEY,pageNo:page,numOfRows:100,dataType:'xml'});
+      const res=await fetch(`https://apis.data.go.kr/B552657/ErmctInfoInqireService/getEmrrmRltmUsefulSckbdInfoInqire?${params}`,{signal:AbortSignal.timeout(5000)});
+      const txt=await res.text();
+      const xml=new DOMParser().parseFromString(txt,'text/xml');
+      const items=[...xml.querySelectorAll('item')];
+      if(!items.length)break;
       items.forEach(it=>{
         const g=t=>it.querySelector(t)?.textContent||'';
         const name=g('dutyName');
-        if(name) bedMap[name]={hvec:parseInt(g('hvec')||'-1'),hvoc:parseInt(g('hvoc')||'-1')};
+        if(name) bedMap[name]={hvec:parseInt(g('hvec')||'-1'),hvoc:parseInt(g('hvoc')||'-1'),hvidate:g('hvidate')};
       });
+      const totalCount=parseInt(xml.querySelector('totalCount')?.textContent||'0');
+      if(page*100>=totalCount)break;
+    }
+    if(Object.keys(bedMap).length){
+      // 실시간 병상 수만 기존 데이터에 덮어쓰기
       allData=allData.map(h=>{
         const bed=bedMap[h.name];
         return bed?{...h,...bed}:h;
@@ -186,7 +191,9 @@ async function loadRealtime(){
 }
 
 function bedBadge(h){
-  return h.hvec!=null?`<span class="tag" style="background:${h.hvec>5?'#ECFDF5':h.hvec>0?'#FEF3C7':'#FEF2F2'};color:${h.hvec>5?'#065F46':h.hvec>0?'#92400E':'#991B1B'};">🛏️ 실시간 일반 ${h.hvec??'-'}병상</span>`:'';
+  if(h.hvec==null)return'';
+  const t=h.hvidate?`${h.hvidate.slice(4,6)}/${h.hvidate.slice(6,8)} ${h.hvidate.slice(8,10)}:${h.hvidate.slice(10,12)} 기준`:'';
+  return `<span class="tag" title="${t}" style="background:${h.hvec>5?'#ECFDF5':h.hvec>0?'#FEF3C7':'#FEF2F2'};color:${h.hvec>5?'#065F46':h.hvec>0?'#92400E':'#991B1B'};">🛏️ 실시간 응급실 가용병상 ${h.hvec}${h.hvec<0?'(초과)':''}</span>`;
 }
 function renderEmergencyCard(item){
   let html=renderFacilityCard({...item,_type:'hosp'},'');
