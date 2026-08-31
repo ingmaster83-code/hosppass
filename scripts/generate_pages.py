@@ -96,6 +96,8 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
       <a href="{root}postpartum.html">산후조리원</a>
       <a href="{root}otc-medicine.html">안전상비의약품</a>
       <a href="{root}transport.html">교통약자이동지원</a>
+      <a href="{root}wheelchair-charger.html">전동휠체어충전기</a>
+      <a href="{root}free-meal.html">무료급식소</a>
     </nav>
   </div>
 </header>
@@ -1641,6 +1643,342 @@ def _generate_transport_sido_index(sido_nm, sggus, by_region):
     save_html(DOCS_DIR / TRANSPORT_FOLDER / sido_nm / "index.html", page)
 
 
+# ── 3.9 전동휠체어급속충전기 지역별 페이지 ──────────────────
+
+WHEELCHAIR_FOLDER = "전동휠체어급속충전기"
+
+
+def generate_wheelchair_pages(chargers: list):
+    print("[3.9/4] 전동휠체어급속충전기 페이지 생성")
+
+    by_region = defaultdict(list)
+    for c in chargers:
+        key = (c.get("sido_nm", ""), c.get("sggu_nm", ""))
+        by_region[key].append(c)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        if not sido_nm or not sggu_nm:
+            continue
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_wheelchair_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_wheelchair_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 전동휠체어급속충전기 지역 페이지 생성")
+
+
+def _wheelchair_card_html(c: dict, root: str = "") -> str:
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(c["x"])}&y={esc(c["y"])}&name={quote(str(c.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if c.get("x") and c.get("y") else ""
+    )
+    tel_btn = (
+        f'<a href="tel:{esc(c["institutionTel"])}" class="btn-call" style="background:var(--primary);color:#fff;">'
+        f'📞 {esc(c["institutionTel"])}</a>'
+        if c.get("institutionTel") else ""
+    )
+    detail_rows = []
+    if c.get("installLoc"):
+        detail_rows.append(f'<div class="facility-meta"><span>📌 설치장소: {esc(c["installLoc"])}</span></div>')
+    if c.get("weekdayOpen"):
+        detail_rows.append(
+            f'<div class="facility-meta"><span>🕐 평일 {_fmt_time_range(c.get("weekdayOpen",""), c.get("weekdayClose",""))}</span></div>'
+        )
+    features = []
+    if c.get("simultUseCount") and c["simultUseCount"] not in ("0", ""):
+        features.append(f'동시사용 {esc(c["simultUseCount"])}대')
+    if c.get("airInjector"):
+        features.append("공기주입 가능")
+    if c.get("mobileCharge"):
+        features.append("휴대폰 충전 가능")
+    if features:
+        detail_rows.append(f'<div class="facility-meta"><span>⚡ {" · ".join(features)}</span></div>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(c.get("name",""))}</div>
+    <div class="facility-meta"><span>📍 {esc(c.get("addr",""))}</span></div>
+    {"".join(detail_rows)}
+    <div class="facility-tags"><span class="tag tag-dept">전동휠체어 급속충전기</span></div>
+  </div>
+  <div class="facility-card-right">
+    {tel_btn}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_wheelchair_region_page(sido, sggu, items):
+    root      = "../../"
+    canonical = f"{WHEELCHAIR_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 전동휠체어 급속충전기 위치 — 설치장소·운영시간 | hosppass"
+    desc      = f"{sggu} 전동휠체어·전동스쿠터 급속충전기 {len(items)}곳의 설치장소, 운영시간을 확인하세요."
+    keywords  = f"{sggu} 전동휠체어 충전기, {sggu} 전동스쿠터 충전, {sido} {sggu} 휠체어 급속충전기 위치"
+
+    cards = "".join(_wheelchair_card_html(c, root) for c in items)
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}wheelchair-charger.html" style="color:rgba(255,255,255,.8)">전동휠체어급속충전기</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 전동휠체어 급속충전기</h1>
+    <p style="opacity:.88;font-size:.95rem;">전동휠체어·전동스쿠터 급속충전기 설치 위치와 이용 안내를 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(items)}</strong>곳의 전동휠체어 급속충전기
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 전동휠체어 급속충전기 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">전동휠체어 급속충전기란?</h2>
+        <p>전동휠체어·전동스쿠터 이용자가 외출 중 배터리가 부족할 때 무료로 충전할 수 있도록 지자체가 행정복지센터·복지관 등에 설치한 급속충전 설비입니다. 시설별로 동시사용 가능 대수, 공기주입·휴대폰 충전 지원 여부가 다를 수 있습니다.</p>
+        <p style="margin-top:8px;">※ 운영시간·설치 여부는 변경될 수 있으니 방문 전 관리기관에 확인하시기 바랍니다.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed([{"name":c.get("name",""),"x":c.get("x",""),"y":c.get("y","")} for c in items if c.get("x") and c.get("y")])};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / WHEELCHAIR_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_wheelchair_sido_index(sido_nm, sggus, by_region):
+    root      = "../"
+    canonical = f"{WHEELCHAIR_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 전동휠체어 급속충전기 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 전동휠체어·전동스쿠터 급속충전기를 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 전동휠체어 급속충전기</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / WHEELCHAIR_FOLDER / sido_nm / "index.html", page)
+
+
+# ── 3.10 무료급식소 지역별 페이지 ──────────────────
+
+FREEMEAL_FOLDER = "무료급식소"
+
+
+def generate_freemeal_pages(meals: list):
+    print("[3.10/4] 무료급식소 페이지 생성")
+
+    by_region = defaultdict(list)
+    for c in meals:
+        key = (c.get("sido_nm", ""), c.get("sggu_nm", ""))
+        by_region[key].append(c)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        if not sido_nm or not sggu_nm:
+            continue
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_freemeal_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_freemeal_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 무료급식소 지역 페이지 생성")
+
+
+def _freemeal_card_html(c: dict, root: str = "") -> str:
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(c["x"])}&y={esc(c["y"])}&name={quote(str(c.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if c.get("x") and c.get("y") else ""
+    )
+    tel_btn = (
+        f'<a href="tel:{esc(c["tel"])}" class="btn-call" style="background:var(--primary);color:#fff;">'
+        f'📞 {esc(c["tel"])}</a>'
+        if c.get("tel") else ""
+    )
+    detail_rows = []
+    if c.get("target"):
+        detail_rows.append(f'<div class="facility-meta"><span>👤 이용대상: {esc(c["target"])}</span></div>')
+    if c.get("mealDate") or c.get("mealTime"):
+        when = " ".join(x for x in [c.get("mealDate",""), c.get("mealTime","")] if x)
+        detail_rows.append(f'<div class="facility-meta"><span>🕐 배식: {esc(when)}</span></div>')
+    if c.get("institution"):
+        detail_rows.append(f'<div class="facility-meta"><span>🏛️ 운영기관: {esc(c["institution"])}</span></div>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(c.get("name",""))}</div>
+    <div class="facility-meta"><span>📍 {esc(c.get("addr",""))}</span></div>
+    {"".join(detail_rows)}
+    <div class="facility-tags"><span class="tag tag-dept">무료급식소</span></div>
+  </div>
+  <div class="facility-card-right">
+    {tel_btn}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_freemeal_region_page(sido, sggu, items):
+    root      = "../../"
+    canonical = f"{FREEMEAL_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 무료급식소 — 배식시간·이용대상 | hosppass"
+    desc      = f"{sggu} 무료급식소 {len(items)}곳의 배식 요일·시간, 이용대상, 연락처를 확인하세요."
+    keywords  = f"{sggu} 무료급식소, {sggu} 경로식당, {sido} {sggu} 무료급식, {sggu} 결식우려노인 급식"
+
+    cards = "".join(_freemeal_card_html(c, root) for c in items)
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}free-meal.html" style="color:rgba(255,255,255,.8)">무료급식소</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 무료급식소</h1>
+    <p style="opacity:.88;font-size:.95rem;">결식 우려가 있는 어르신 등을 위한 무료급식소 위치와 배식 시간을 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(items)}</strong>곳의 무료급식소
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 무료급식소 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">무료급식소란?</h2>
+        <p>결식 우려가 있는 노인·저소득층 등을 대상으로 지자체·복지관·종교시설 등이 무료 또는 저렴한 비용으로 식사를 제공하는 곳입니다. 배식 요일·시간, 이용대상이 시설마다 다르므로 방문 전 확인이 필요합니다.</p>
+        <p style="margin-top:8px;">※ 운영 여부·배식시간은 변경될 수 있으니 방문 전 반드시 전화로 확인하시기 바랍니다.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed([{"name":c.get("name",""),"x":c.get("x",""),"y":c.get("y","")} for c in items if c.get("x") and c.get("y")])};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / FREEMEAL_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_freemeal_sido_index(sido_nm, sggus, by_region):
+    root      = "../"
+    canonical = f"{FREEMEAL_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 무료급식소 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 무료급식소를 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 무료급식소</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / FREEMEAL_FOLDER / sido_nm / "index.html", page)
+
+
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
 def _encode_url(path: str) -> str:
@@ -1674,8 +2012,10 @@ def main():
     postpartum = (load_json(DATA_DIR / "postpartum_centers.json") or {}).get("items", [])
     otc_medicine = (load_json(DATA_DIR / "otc_medicine_stores.json") or {}).get("items", [])
     transport  = (load_json(DATA_DIR / "transport_centers.json") or {}).get("items", [])
+    wheelchair = (load_json(DATA_DIR / "wheelchair_chargers.json") or {}).get("items", [])
+    freemeal   = (load_json(DATA_DIR / "free_meals.json") or {}).get("items", [])
 
-    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 로드")
+    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 로드")
 
     generate_region_pages(hospitals, pharmacies)
     generate_specialty_pages(hospitals)
@@ -1699,6 +2039,14 @@ def main():
         generate_transport_pages(transport)
     else:
         print("[3.8/4] 교통약자 이동지원센터 데이터 없음 — 건너뜀")
+    if wheelchair:
+        generate_wheelchair_pages(wheelchair)
+    else:
+        print("[3.9/4] 전동휠체어급속충전기 데이터 없음 — 건너뜀")
+    if freemeal:
+        generate_freemeal_pages(freemeal)
+    else:
+        print("[3.10/4] 무료급식소 데이터 없음 — 건너뜀")
 
     # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
