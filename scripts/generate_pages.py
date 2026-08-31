@@ -95,6 +95,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
       <a href="{root}dementia.html">치매안심센터</a>
       <a href="{root}postpartum.html">산후조리원</a>
       <a href="{root}otc-medicine.html">안전상비의약품</a>
+      <a href="{root}transport.html">교통약자이동지원</a>
     </nav>
   </div>
 </header>
@@ -1451,6 +1452,195 @@ def _generate_otc_sido_index(sido_nm, sggus, by_region):
     save_html(DOCS_DIR / OTC_FOLDER / sido_nm / "index.html", page)
 
 
+# ── 3.8 교통약자 이동지원센터 지역별 페이지 ──────────────────
+
+TRANSPORT_FOLDER = "교통약자이동지원센터"
+
+
+def _fmt_time_range(open_t: str, close_t: str) -> str:
+    if not open_t or not close_t:
+        return "정보 없음"
+    return f"{open_t} ~ {close_t}"
+
+
+def generate_transport_pages(centers: list):
+    print("[3.8/4] 교통약자 이동지원센터 페이지 생성")
+
+    by_region = defaultdict(list)
+    for c in centers:
+        key = (c.get("sido_nm", ""), c.get("sggu_nm", ""))
+        by_region[key].append(c)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        if not sido_nm or not sggu_nm:
+            continue
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_transport_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_transport_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 교통약자 이동지원센터 지역 페이지 생성")
+
+
+def _transport_card_html(c: dict, root: str = "") -> str:
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(c["x"])}&y={esc(c["y"])}&name={quote(str(c.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if c.get("x") and c.get("y") else ""
+    )
+    reserve_btn = (
+        f'<a href="tel:{esc(c["reserveTel"])}" class="btn-call" style="background:var(--primary);color:#fff;">'
+        f'📞 예약전화 {esc(c["reserveTel"])}</a>'
+        if c.get("reserveTel") else ""
+    )
+    vehicle_bits = []
+    if c.get("carHoldCo"):
+        vehicle_bits.append(f'차량 {esc(c["carHoldCo"])}대')
+    if c.get("slopeCo") and c["slopeCo"] != "0":
+        vehicle_bits.append(f'슬로프형 {esc(c["slopeCo"])}대')
+    if c.get("liftCo") and c["liftCo"] != "0":
+        vehicle_bits.append(f'리프트형 {esc(c["liftCo"])}대')
+    vehicle_line = " · ".join(vehicle_bits)
+
+    detail_rows = []
+    if c.get("useTarget"):
+        detail_rows.append(f'<div class="facility-meta"><span>👤 이용대상: {esc(c["useTarget"])}</span></div>')
+    if c.get("useCharge"):
+        detail_rows.append(f'<div class="facility-meta"><span>💰 요금: {esc(c["useCharge"])}</span></div>')
+    if c.get("weekdayReserveOpen"):
+        detail_rows.append(
+            f'<div class="facility-meta"><span>🕐 평일 예약접수 {_fmt_time_range(c.get("weekdayReserveOpen",""), c.get("weekdayReserveClose",""))}'
+            f'{" · 주말 " + _fmt_time_range(c.get("weekendReserveOpen",""), c.get("weekendReserveClose","")) if c.get("weekendReserveOpen") else ""}</span></div>'
+        )
+    if c.get("insideArea") or c.get("outsideArea"):
+        area = " / ".join(x for x in [c.get("insideArea",""), c.get("outsideArea","")] if x)
+        detail_rows.append(f'<div class="facility-meta"><span>🗺️ 운행지역: {esc(area)}</span></div>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(c.get("name",""))}</div>
+    <div class="facility-meta"><span>📍 {esc(c.get("addr",""))}</span></div>
+    {f'<div class="facility-meta"><span>🚐 {esc(vehicle_line)}</span></div>' if vehicle_line else ""}
+    {"".join(detail_rows)}
+    <div class="facility-tags"><span class="tag tag-dept">교통약자 이동지원</span></div>
+  </div>
+  <div class="facility-card-right">
+    {reserve_btn}
+    {f'<a href="tel:{esc(c["tel"])}" class="btn-call">📞 대표 {esc(c["tel"])}</a>' if c.get("tel") and c.get("tel") != c.get("reserveTel") else ""}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_transport_region_page(sido, sggu, centers):
+    root      = "../../"
+    canonical = f"{TRANSPORT_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 교통약자 이동지원센터 — 장애인콜택시 예약전화 | hosppass"
+    desc      = f"{sggu} 교통약자(장애인·노약자) 이동지원센터 {len(centers)}곳의 예약전화, 이용대상, 요금, 운행시간을 확인하세요."
+    keywords  = (
+        f"{sggu} 장애인콜택시, {sggu} 교통약자이동지원센터, {sggu} 장애인 이동지원, "
+        f"{sido} {sggu} 특별교통수단, {sggu} 휠체어 콜택시 예약"
+    )
+
+    cards = "".join(_transport_card_html(c, root) for c in centers)
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}transport.html" style="color:rgba(255,255,255,.8)">교통약자 이동지원센터</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 교통약자 이동지원센터</h1>
+    <p style="opacity:.88;font-size:.95rem;">휠체어 탑승 가능한 특별교통차량 예약전화와 이용 안내를 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(centers)}</strong>곳의 교통약자 이동지원센터
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 교통약자 이동지원센터 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">교통약자 이동지원센터란?</h2>
+        <p>「교통약자의 이동편의 증진법」에 따라 휠체어 탑승설비가 장착된 특별교통차량(장애인콜택시 등)을 운영해, 대중교통 이용이 어려운 교통약자에게 이동 서비스를 제공하는 곳입니다. 대부분 사전 예약제로 운영되며, 관내·관외 운행지역과 이용대상이 지역마다 다를 수 있습니다.</p>
+        <p style="margin-top:8px;">※ 이용대상·요금·운행시간은 변경될 수 있으니 예약 전 반드시 전화로 확인하시기 바랍니다.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed([{"name":c.get("name",""),"x":c.get("x",""),"y":c.get("y","")} for c in centers if c.get("x") and c.get("y")])};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / TRANSPORT_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_transport_sido_index(sido_nm, sggus, by_region):
+    root      = "../"
+    canonical = f"{TRANSPORT_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 교통약자 이동지원센터 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 교통약자 이동지원센터(장애인콜택시)를 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 교통약자 이동지원센터</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / TRANSPORT_FOLDER / sido_nm / "index.html", page)
+
+
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
 def _encode_url(path: str) -> str:
@@ -1483,8 +1673,9 @@ def main():
     dementia   = (load_json(DATA_DIR / "dementia_centers.json") or {}).get("items", [])
     postpartum = (load_json(DATA_DIR / "postpartum_centers.json") or {}).get("items", [])
     otc_medicine = (load_json(DATA_DIR / "otc_medicine_stores.json") or {}).get("items", [])
+    transport  = (load_json(DATA_DIR / "transport_centers.json") or {}).get("items", [])
 
-    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 로드")
+    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 로드")
 
     generate_region_pages(hospitals, pharmacies)
     generate_specialty_pages(hospitals)
@@ -1504,6 +1695,10 @@ def main():
         generate_otc_pages(otc_medicine)
     else:
         print("[3.7/4] 안전상비의약품 판매업소 데이터 없음 — 건너뜀")
+    if transport:
+        generate_transport_pages(transport)
+    else:
+        print("[3.8/4] 교통약자 이동지원센터 데이터 없음 — 건너뜀")
 
     # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
