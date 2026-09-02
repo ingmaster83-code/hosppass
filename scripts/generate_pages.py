@@ -98,6 +98,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
       <a href="{root}transport.html">교통약자이동지원</a>
       <a href="{root}wheelchair-charger.html">전동휠체어충전기</a>
       <a href="{root}free-meal.html">무료급식소</a>
+      <a href="{root}medicine-disposal.html">폐의약품수거함</a>
     </nav>
   </div>
 </header>
@@ -1979,6 +1980,167 @@ def _generate_freemeal_sido_index(sido_nm, sggus, by_region):
     save_html(DOCS_DIR / FREEMEAL_FOLDER / sido_nm / "index.html", page)
 
 
+# ── 3.11 폐의약품수거함 지역별 페이지 ──────────────────
+
+MEDDISPOSAL_FOLDER = "폐의약품수거함"
+
+
+def generate_meddisposal_pages(boxes: list):
+    print("[3.11/4] 폐의약품수거함 페이지 생성")
+
+    by_region = defaultdict(list)
+    for c in boxes:
+        key = (c.get("sido_nm", ""), c.get("sggu_nm", ""))
+        by_region[key].append(c)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        if not sido_nm or not sggu_nm:
+            continue
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_meddisposal_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_meddisposal_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 폐의약품수거함 지역 페이지 생성")
+
+
+def _meddisposal_card_html(c: dict, root: str = "") -> str:
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(c["x"])}&y={esc(c["y"])}&name={quote(str(c.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if c.get("x") and c.get("y") else ""
+    )
+    tel_btn = (
+        f'<a href="tel:{esc(c["institutionTel"])}" class="btn-call" style="background:var(--primary);color:#fff;">'
+        f'📞 {esc(c["institutionTel"])}</a>'
+        if c.get("institutionTel") else ""
+    )
+    detail_rows = []
+    if c.get("actualPosition"):
+        detail_rows.append(f'<div class="facility-meta"><span>📌 설치위치: {esc(c["actualPosition"])}</span></div>')
+    if c.get("institution"):
+        detail_rows.append(f'<div class="facility-meta"><span>🏛️ 관리기관: {esc(c["institution"])}</span></div>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(c.get("name",""))}</div>
+    <div class="facility-meta"><span>📍 {esc(c.get("addr",""))}</span></div>
+    {"".join(detail_rows)}
+    <div class="facility-tags"><span class="tag tag-dept">폐의약품 수거함</span></div>
+  </div>
+  <div class="facility-card-right">
+    {tel_btn}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_meddisposal_region_page(sido, sggu, items):
+    root      = "../../"
+    canonical = f"{MEDDISPOSAL_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 폐의약품수거함 위치 — 설치장소 | hosppass"
+    desc      = f"{sggu} 폐의약품(유효기간 지난 약) 수거함 {len(items)}곳의 설치 위치와 관리기관을 확인하세요."
+    keywords  = f"{sggu} 폐의약품 수거함, {sggu} 유효기간 지난 약 버리는곳, {sido} {sggu} 폐의약품 분리배출"
+
+    cards = "".join(_meddisposal_card_html(c, root) for c in items)
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}medicine-disposal.html" style="color:rgba(255,255,255,.8)">폐의약품수거함</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 폐의약품수거함</h1>
+    <p style="opacity:.88;font-size:.95rem;">유효기간이 지났거나 복용하지 않는 약을 버릴 수 있는 수거함 위치를 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(items)}</strong>곳의 폐의약품 수거함
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 폐의약품수거함 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">폐의약품수거함이란?</h2>
+        <p>유효기간이 지났거나 복용하지 않는 의약품을 일반쓰레기와 함께 버리면 토양·수질 오염의 원인이 될 수 있습니다. 지방자치단체가 보건소·행정복지센터·약국 등에 설치한 수거함에 배출하면 안전하게 폐기 처리됩니다.</p>
+        <p style="margin-top:8px;">※ 설치 여부·위치는 변경될 수 있으니 방문 전 관리기관에 확인하시기 바랍니다.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed([{"name":c.get("name",""),"x":c.get("x",""),"y":c.get("y","")} for c in items if c.get("x") and c.get("y")])};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / MEDDISPOSAL_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_meddisposal_sido_index(sido_nm, sggus, by_region):
+    root      = "../"
+    canonical = f"{MEDDISPOSAL_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 폐의약품수거함 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 폐의약품수거함을 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 폐의약품수거함</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / MEDDISPOSAL_FOLDER / sido_nm / "index.html", page)
+
+
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
 def _encode_url(path: str) -> str:
@@ -2014,8 +2176,9 @@ def main():
     transport  = (load_json(DATA_DIR / "transport_centers.json") or {}).get("items", [])
     wheelchair = (load_json(DATA_DIR / "wheelchair_chargers.json") or {}).get("items", [])
     freemeal   = (load_json(DATA_DIR / "free_meals.json") or {}).get("items", [])
+    meddisposal = (load_json(DATA_DIR / "medicine_disposal.json") or {}).get("items", [])
 
-    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 로드")
+    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 / 폐의약품수거함 {len(meddisposal)}개 로드")
 
     generate_region_pages(hospitals, pharmacies)
     generate_specialty_pages(hospitals)
@@ -2047,6 +2210,10 @@ def main():
         generate_freemeal_pages(freemeal)
     else:
         print("[3.10/4] 무료급식소 데이터 없음 — 건너뜀")
+    if meddisposal:
+        generate_meddisposal_pages(meddisposal)
+    else:
+        print("[3.11/4] 폐의약품수거함 데이터 없음 — 건너뜀")
 
     # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
