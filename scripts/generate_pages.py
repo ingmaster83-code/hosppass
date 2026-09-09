@@ -101,6 +101,7 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
       <a href="{root}free-meal.html">무료급식소</a>
       <a href="{root}medicine-disposal.html">폐의약품수거함</a>
       <a href="{root}care-facility.html">장기요양기관</a>
+      <a href="{root}health-center.html">건강생활지원센터</a>
     </nav>
   </div>
 </header>
@@ -2563,6 +2564,175 @@ def _generate_ltc_sido_index(sido_nm: str, sggus: list, by_region: dict):
     save_html(DOCS_DIR / LTC_FOLDER / sido_nm / "index.html", page)
 
 
+# ── 3.14 건강생활지원센터 지역별 페이지 ──────────────────
+# 보건복지부 표준데이터(publicDataPk 15100059), 132곳 — 단일기관 제공이라 완전성 양호.
+# 위경도·운영시간·인력/장비 현황까지 포함된 고품질 소규모 데이터셋(2026-09-09 추가).
+
+HEALTHCTR_FOLDER = "건강생활지원센터"
+
+
+def generate_health_center_pages(centers: list):
+    print("[3.14/4] 건강생활지원센터 페이지 생성")
+
+    by_region = defaultdict(list)
+    for c in centers:
+        key = (c.get("sido_nm", ""), c.get("sggu_nm", ""))
+        by_region[key].append(c)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        if not sido_nm or not sggu_nm:
+            continue
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_health_center_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_health_center_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 건강생활지원센터 지역 페이지 생성 (전체 {len(centers):,}곳)")
+
+
+def _health_center_card_html(c: dict, root: str = "") -> str:
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(c["x"])}&y={esc(c["y"])}&name={quote(str(c.get("name","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if c.get("x") and c.get("y") else ""
+    )
+    tel_btn = (
+        f'<a href="tel:{esc(c["tel"])}" class="btn-call" style="background:var(--primary);color:#fff;">'
+        f'📞 {esc(c["tel"])}</a>'
+        if c.get("tel") else ""
+    )
+    detail_rows = []
+    if c.get("openTime"):
+        detail_rows.append(
+            f'<div class="facility-meta"><span>🕐 {_fmt_time_range(c.get("openTime",""), c.get("closeTime",""))}</span></div>'
+        )
+    if c.get("closedInfo"):
+        detail_rows.append(f'<div class="facility-meta"><span>🚫 휴무: {esc(c["closedInfo"])}</span></div>')
+    if c.get("programs"):
+        detail_rows.append(f'<div class="facility-meta"><span>💪 {esc(c["programs"])}</span></div>')
+    if c.get("staff"):
+        detail_rows.append(f'<div class="facility-meta"><span>👥 {esc(" · ".join(c["staff"]))}</span></div>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(c.get("name",""))}</div>
+    <div class="facility-meta"><span>📍 {esc(c.get("addr",""))}</span></div>
+    {"".join(detail_rows)}
+    <div class="facility-tags"><span class="tag tag-dept">건강생활지원센터</span>{f'<span class="tag">{esc(c["type"])}</span>' if c.get("type") else ""}</div>
+  </div>
+  <div class="facility-card-right">
+    {tel_btn}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_health_center_region_page(sido, sggu, items):
+    root      = "../../"
+    canonical = f"{HEALTHCTR_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 건강생활지원센터 — 운영시간·건강증진 프로그램 | hosppass"
+    desc      = f"{sggu} 건강생활지원센터 {len(items)}곳의 위치, 운영시간, 건강증진 프로그램을 확인하세요."
+    keywords  = f"{sggu} 건강생활지원센터, {sido} {sggu} 건강증진센터, {sggu} 보건소 부속기관"
+
+    cards = "".join(_health_center_card_html(c, root) for c in items)
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}health-center.html" style="color:rgba(255,255,255,.8)">건강생활지원센터</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 건강생활지원센터</h1>
+    <p style="opacity:.88;font-size:.95rem;">지역주민 건강증진 프로그램과 운동·검진 장비를 갖춘 건강생활지원센터를 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(items)}</strong>곳의 건강생활지원센터
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 건강생활지원센터 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">건강생활지원센터란?</h2>
+        <p>지역보건법에 따라 보건복지부와 지방자치단체가 설치·운영하는 기관으로, 보건소보다 접근성이 높은 곳에서 체력측정·운동처방·금연·영양·절주 등 건강증진 프로그램을 무료로 제공합니다.</p>
+        <p style="margin-top:8px;">※ 운영시간·프로그램은 변경될 수 있으니 방문 전 전화로 확인하시기 바랍니다.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed([{"name":c.get("name",""),"x":c.get("x",""),"y":c.get("y","")} for c in items if c.get("x") and c.get("y")])};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / HEALTHCTR_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_health_center_sido_index(sido_nm, sggus, by_region):
+    root      = "../"
+    canonical = f"{HEALTHCTR_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 건강생활지원센터 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 건강생활지원센터를 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 건강생활지원센터</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / HEALTHCTR_FOLDER / sido_nm / "index.html", page)
+
+
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
 def _encode_url(path: str) -> str:
@@ -2602,8 +2772,9 @@ def main():
     ltc_list   = (load_json(DATA_DIR / "ltc_list.json") or {}).get("items", [])
     ltc_detail = load_json(DATA_DIR / "ltc_detail.json") or {}
     ltc_grades = (load_json(DATA_DIR / "ltc_grades.json") or {}).get("items", {})
+    health_centers = (load_json(DATA_DIR / "health_centers.json") or {}).get("items", [])
 
-    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 / 폐의약품수거함 {len(meddisposal)}개 / 장기요양기관 {len(ltc_list)}개 로드")
+    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 / 폐의약품수거함 {len(meddisposal)}개 / 장기요양기관 {len(ltc_list)}개 / 건강생활지원센터 {len(health_centers)}개 로드")
 
     generate_region_pages(hospitals, pharmacies)
     generate_specialty_pages(hospitals)
@@ -2648,6 +2819,10 @@ def main():
         generate_ltc_pages(ltc_list, ltc_detail, ltc_grades)
     else:
         print("[3.13/4] 장기요양기관 데이터 없음 — 건너뜀")
+    if health_centers:
+        generate_health_center_pages(health_centers)
+    else:
+        print("[3.14/4] 건강생활지원센터 데이터 없음 — 건너뜀")
 
     # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
