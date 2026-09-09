@@ -94,11 +94,13 @@ def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords:
       <a href="{root}yoyang.html">요양병원</a>
       <a href="{root}dementia.html">치매안심센터</a>
       <a href="{root}postpartum.html">산후조리원</a>
+      <a href="{root}nonpayment.html">비급여진료비</a>
       <a href="{root}otc-medicine.html">안전상비의약품</a>
       <a href="{root}transport.html">교통약자이동지원</a>
       <a href="{root}wheelchair-charger.html">전동휠체어충전기</a>
       <a href="{root}free-meal.html">무료급식소</a>
       <a href="{root}medicine-disposal.html">폐의약품수거함</a>
+      <a href="{root}care-facility.html">장기요양기관</a>
     </nav>
   </div>
 </header>
@@ -2141,6 +2143,426 @@ def _generate_meddisposal_sido_index(sido_nm, sggus, by_region):
     save_html(DOCS_DIR / MEDDISPOSAL_FOLDER / sido_nm / "index.html", page)
 
 
+# ── 3.9 비급여진료비 (병원급 이상) ───────────────────────────
+# 건강보험심사평가원 비급여진료비정보조회서비스는 병원급 이상(종합병원/병원/요양병원/
+# 정신병원/한방병원/치과병원/상급종합)만 대상이며, 의원급은 API에 데이터가 없음(실측 확인).
+# 두 종류 페이지를 만든다: ①병원별 비급여 가격표 상세 ②시술항목별 병원 가격비교(핵심 기능)
+
+import hashlib
+
+NONPAY_DIR = "비급여진료비"
+
+
+def _nonpay_slug(ykiho: str) -> str:
+    return hashlib.md5(ykiho.encode("utf-8")).hexdigest()[:10]
+
+
+def _nonpay_amt_fmt(v) -> str:
+    try:
+        return f"{int(float(v)):,}원"
+    except (ValueError, TypeError):
+        return esc(v)
+
+
+def generate_nonpayment_pages(hospitals: list, nonpay_map: dict):
+    print("[3.12/4] 비급여진료비 페이지 생성")
+    hosp_by_ykiho = {h["ykiho"]: h for h in hospitals if h.get("ykiho")}
+
+    # ① 병원별 상세 페이지 + 시도별 색인
+    by_sido_hosp = defaultdict(list)
+    hosp_count = 0
+    for ykiho, items in nonpay_map.items():
+        if not items:
+            continue
+        h = hosp_by_ykiho.get(ykiho)
+        if not h or not h.get("sido_nm"):
+            continue
+        slug = _nonpay_slug(ykiho)
+        _generate_nonpay_hospital_page(h, items, slug)
+        by_sido_hosp[h["sido_nm"]].append((h, slug, len(items)))
+        hosp_count += 1
+
+    for sido_nm, lst in by_sido_hosp.items():
+        _generate_nonpay_hospital_sido_index(sido_nm, lst)
+
+    # ② 시술 항목별 전국 가격비교 페이지 (핵심 기능 — "OO 가격비교" 검색 대응)
+    by_code = defaultdict(list)
+    for ykiho, items in nonpay_map.items():
+        h = hosp_by_ykiho.get(ykiho)
+        if not h or not h.get("sido_nm"):
+            continue
+        slug = _nonpay_slug(ykiho)
+        for it in items:
+            code = it.get("npayCd")
+            if not code:
+                continue
+            by_code[code].append({
+                "npayKorNm": it.get("npayKorNm", ""),
+                "yadmNpayCdNm": it.get("yadmNpayCdNm", ""),
+                "curAmt": it.get("curAmt", ""),
+                "yadmNm": h.get("name", ""),
+                "sido": h["sido_nm"],
+                "sggu": h.get("sggu_nm", ""),
+                "tel": h.get("tel", ""),
+                "hospSlug": slug,
+            })
+
+    proc_list = []
+    for code, rows in by_code.items():
+        name = rows[0]["npayKorNm"] or code
+        _generate_nonpay_procedure_page(code, name, rows)
+        proc_list.append((code, name, len(rows)))
+
+    _generate_nonpay_procedure_index(sorted(proc_list, key=lambda x: -x[2]))
+
+    print(f"  → 병원 {hosp_count}개, 시술항목 {len(proc_list)}종 페이지 생성")
+
+
+def _generate_nonpay_hospital_page(h: dict, items: list, slug: str):
+    root = "../../../"
+    sido = h["sido_nm"]
+    canonical = f"{NONPAY_DIR}/병원/{sido}/{slug}.html"
+    name = h.get("name", "")
+    title = f"{name} 비급여 진료비 — 항목별 가격표 | hosppass"
+    desc = f"{name}({h.get('addr','')})의 비급여 진료비 {len(items)}개 항목 가격을 확인하세요."
+    keywords = f"{name} 비급여, {name} 진료비, {name} 가격, {sido} {h.get('sggu_nm','')} 비급여진료비"
+
+    rows = "".join(
+        f'<div class="facility-card"><div class="facility-card-body">'
+        f'<div class="facility-name">{esc(it.get("yadmNpayCdNm") or it.get("npayKorNm",""))}</div>'
+        f'</div><div class="facility-card-right"><span class="status-badge status-open">{_nonpay_amt_fmt(it.get("curAmt"))}</span></div></div>'
+        for it in sorted(items, key=lambda x: x.get("npayKorNm", ""))
+    )
+
+    page = f"""{header_html(title, desc, canonical, 3, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}nonpayment.html" style="color:rgba(255,255,255,.8)">비급여진료비</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(name)}</span>
+    </nav>
+    <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:6px;">{esc(name)} 비급여 진료비</h1>
+    <p style="opacity:.88;font-size:.9rem;">{esc(h.get("addr",""))} · 총 {len(items)}개 항목</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div class="facility-list">{rows}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:24px;padding:20px;background:var(--primary-light);border-radius:var(--radius);font-size:.85rem;line-height:1.7;color:var(--text-secondary);">
+        💡 본 정보는 건강보험심사평가원에 등록된 비급여 진료비 자료 기준이며, 실제 진료비는 변경될 수 있습니다. 방문 전 반드시 병원에 전화로 확인하세요.
+      </div>
+    </div>
+    <aside><div class="sidebar-sticky">{ad_banner('ad-side')}</div></aside>
+  </div>
+</div>
+{footer_html(root)}"""
+    save_html(DOCS_DIR / NONPAY_DIR / "병원" / sido / f"{slug}.html", page)
+
+
+def _generate_nonpay_hospital_sido_index(sido_nm, lst):
+    root = "../../../"
+    canonical = f"{NONPAY_DIR}/병원/{sido_nm}/index.html"
+    title = f"{sido_nm} 병원 비급여 진료비 목록 | hosppass"
+    desc = f"{sido_nm} 병원급 이상 의료기관의 비급여 진료비 정보를 확인하세요."
+    cards = "".join(
+        f'<a href="{slug}.html" class="tab-btn" style="text-align:left;display:block;">{esc(h.get("name",""))} '
+        f'<span style="opacity:.6;font-size:.78rem;">({cnt}개 항목)</span></a>'
+        for h, slug, cnt in sorted(lst, key=lambda x: x[0].get("name", ""))
+    )
+    page = f"""{header_html(title, desc, canonical, 3)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 병원 비급여 진료비</h1>
+    <p style="opacity:.88;margin-top:6px;">{len(lst)}개 병원</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:flex;flex-direction:column;gap:8px;">{cards}</div>
+</div>
+{footer_html(root)}"""
+    save_html(DOCS_DIR / NONPAY_DIR / "병원" / sido_nm / "index.html", page)
+
+
+def _generate_nonpay_procedure_page(code: str, name: str, rows: list):
+    root = "../../"
+    canonical = f"{NONPAY_DIR}/항목/{code}.html"
+    title = f"{name} 가격비교 — 병원별 비급여 진료비 | hosppass"
+    desc = f"{name} 비급여 진료비를 병원별로 비교하세요. 전국 {len(rows)}개 병원 가격 정보."
+    keywords = f"{name} 가격, {name} 비용, {name} 가격비교, {name} 병원"
+
+    def _amt(r):
+        try:
+            return float(r.get("curAmt") or 0)
+        except ValueError:
+            return 0
+
+    sorted_rows = sorted(rows, key=_amt)
+    cards = "".join(
+        f'<div class="facility-card"><div class="facility-card-body">'
+        f'<div class="facility-name"><a href="../병원/{esc(r["sido"])}/{r["hospSlug"]}.html">{esc(r["yadmNm"])}</a></div>'
+        f'<div class="facility-meta"><span>📍 {esc(r["sido"])} {esc(r["sggu"])}</span></div>'
+        f'</div><div class="facility-card-right"><span class="status-badge status-open">{_nonpay_amt_fmt(r.get("curAmt"))}</span>'
+        f'{f"""<a href="tel:{esc(r["tel"])}" class="btn-call">📞 {esc(r["tel"])}</a>""" if r.get("tel") else ""}</div></div>'
+        for r in sorted_rows
+    )
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}nonpayment.html" style="color:rgba(255,255,255,.8)">비급여진료비</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(name)}</span>
+    </nav>
+    <h1 style="font-size:1.5rem;font-weight:800;margin-bottom:6px;">{esc(name)} 가격비교</h1>
+    <p style="opacity:.88;font-size:.9rem;">전국 {len(rows)}개 병원 비급여 진료비 (낮은 가격순)</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:24px;padding:20px;background:var(--primary-light);border-radius:var(--radius);font-size:.85rem;line-height:1.7;color:var(--text-secondary);">
+        💡 병원급 이상 의료기관만 비급여 진료비 등록 대상입니다(의원급 제외). 가격은 건강보험심사평가원 등록 기준이며 변경될 수 있으니 방문 전 확인하세요.
+      </div>
+    </div>
+    <aside><div class="sidebar-sticky">{ad_banner('ad-side')}</div></aside>
+  </div>
+</div>
+{footer_html(root)}"""
+    save_html(DOCS_DIR / NONPAY_DIR / "항목" / f"{code}.html", page)
+
+
+def _generate_nonpay_procedure_index(proc_list):
+    root = "../"
+    canonical = f"{NONPAY_DIR}/항목/index.html"
+    title = "비급여 진료비 항목별 가격비교 — 전체 목록 | hosppass"
+    desc = "도수치료, 제증명수수료 등 비급여 진료비 항목별 병원 가격을 비교하세요."
+    links = "".join(
+        f'<a href="{esc(code)}.html" class="tab-btn" style="text-align:left;display:block;">{esc(name)} '
+        f'<span style="opacity:.6;font-size:.78rem;">({cnt}개 병원)</span></a>'
+        for code, name, cnt in proc_list
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">비급여 진료비 항목 전체</h1>
+    <p style="opacity:.88;margin-top:6px;">항목을 선택하면 병원별 가격비교를 볼 수 있어요 (총 {len(proc_list)}개 항목)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:flex;flex-direction:column;gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+    save_html(DOCS_DIR / NONPAY_DIR / "항목" / "index.html", page)
+
+
+# ── 3.13 장기요양기관(요양원) 지역별 페이지 ──────────────────
+# 데이터 3종 결합: ltc_list.json(국민건강보험공단 목록 API, 시도/시군구·기관유형·지정일),
+# ltc_detail.json(카카오 로컬 키워드 검색으로 보강한 주소·전화·좌표 — NHIS API는 구조화된
+# 코드만 주고 텍스트 주소를 안 줘서 대체), ltc_grades.json(평가결과 CSV, A~E 등급).
+# 상세 배경은 hosppass CLAUDE.md 세션 메모(2026-09-09) 참고.
+
+LTC_FOLDER = "장기요양기관"
+
+LTC_GRADE_COLORS = {
+    "A": ("#DCFCE7", "#15803D"),
+    "B": ("#DBEAFE", "#1D4ED8"),
+    "C": ("#FEF9C3", "#A16207"),
+    "D": ("#FFEDD5", "#C2410C"),
+    "E": ("#FEE2E2", "#B91C1C"),
+}
+
+
+def generate_ltc_pages(facilities: list, detail_map: dict, grade_map: dict):
+    print("[3.13/4] 장기요양기관(요양원) 페이지 생성")
+
+    by_region = defaultdict(list)
+    for it in facilities:
+        sido_nm, sggu_nm = it.get("sido_nm", ""), it.get("sggu_nm", "")
+        if not sido_nm or not sggu_nm:
+            continue
+        sym = str(it["longTermAdminSym"])
+        merged = dict(it)
+        merged["detail"] = detail_map.get(sym) or {}
+        merged["gradeInfo"] = grade_map.get(sym) or {}
+        by_region[(sido_nm, sggu_nm)].append(merged)
+
+    sido_map = defaultdict(list)
+    count = 0
+    for (sido_nm, sggu_nm), items in sorted(by_region.items()):
+        sido_map[sido_nm].append(sggu_nm)
+        _generate_ltc_region_page(sido_nm, sggu_nm, items)
+        count += 1
+
+    for sido_nm, sggus in sido_map.items():
+        _generate_ltc_sido_index(sido_nm, sorted(sggus), by_region)
+
+    print(f"  → {count}개 장기요양기관 지역 페이지 생성 (전체 {len(facilities):,}개 기관)")
+
+
+def _ltc_card_html(it: dict, root: str = "") -> str:
+    detail = it.get("detail", {})
+    grade = it.get("gradeInfo", {})
+    matched = detail.get("matched")
+
+    addr = detail.get("road_address") or detail.get("address") or ""
+    phone = detail.get("phone", "")
+    x, y = detail.get("x", ""), detail.get("y", "")
+
+    map_btn = (
+        f'<a href="{root}map.html?x={esc(x)}&y={esc(y)}&name={quote(str(it.get("adminNm","")))}" '
+        f'onclick="openMapPopup(this.href);return false;" rel="noopener" class="btn-call">🗺️ 지도보기</a>'
+        if matched and x and y else ""
+    )
+    tel_btn = (
+        f'<a href="tel:{esc(phone)}" class="btn-call" style="background:var(--primary);color:#fff;">📞 {esc(phone)}</a>'
+        if phone else ""
+    )
+
+    detail_rows = []
+    if addr:
+        detail_rows.append(f'<div class="facility-meta"><span>📍 {esc(addr)}</span></div>')
+
+    tags = [f'<span class="tag tag-dept">장기요양기관</span>']
+    grade_val = (grade.get("grade") or "").strip()
+    if grade_val in LTC_GRADE_COLORS:
+        bg, fg = LTC_GRADE_COLORS[grade_val]
+        tags.append(f'<span class="tag" style="background:{bg};color:{fg};">평가등급 {esc(grade_val)}</span>')
+    if grade.get("benefitType"):
+        tags.append(f'<span class="tag tag-open">{esc(grade["benefitType"])}</span>')
+
+    return f"""<div class="facility-card">
+  <div class="facility-card-body">
+    <div class="facility-name">{esc(it.get("adminNm",""))}</div>
+    {"".join(detail_rows)}
+    <div class="facility-tags">{"".join(tags)}</div>
+  </div>
+  <div class="facility-card-right">
+    {tel_btn}
+    {map_btn}
+  </div>
+</div>"""
+
+
+def _generate_ltc_region_page(sido: str, sggu: str, items: list):
+    root      = "../../"
+    canonical = f"{LTC_FOLDER}/{sido}/{sggu}.html"
+    title     = f"{sggu} 장기요양기관(요양원) 목록 — 주소·전화번호·평가등급 | hosppass"
+    desc      = f"{sggu} 장기요양기관(노인요양원·재가복지센터 등) {len(items)}곳의 주소, 전화번호, 국민건강보험공단 평가등급을 확인하세요."
+    keywords  = f"{sggu} 요양원, {sggu} 장기요양기관, {sggu} 재가복지센터, {sido} {sggu} 노인요양시설"
+
+    cards = "".join(_ltc_card_html(it, root) for it in items)
+    coords = [
+        {"name": it.get("adminNm", ""), "x": it["detail"]["x"], "y": it["detail"]["y"]}
+        for it in items
+        if it.get("detail", {}).get("matched") and it["detail"].get("x") and it["detail"].get("y")
+    ]
+    matched_cnt = sum(1 for it in items if it.get("detail", {}).get("matched"))
+
+    page = f"""{header_html(title, desc, canonical, 2, keywords)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <nav class="breadcrumb" style="color:rgba(255,255,255,.7);margin-bottom:12px;">
+      <a href="{root}index.html" style="color:rgba(255,255,255,.8)">홈</a>
+      <span class="sep">›</span>
+      <a href="{root}care-facility.html" style="color:rgba(255,255,255,.8)">장기요양기관</a>
+      <span class="sep">›</span>
+      <span style="color:#fff">{esc(sggu)}</span>
+    </nav>
+    <h1 style="font-size:1.7rem;font-weight:800;margin-bottom:6px;">{esc(sggu)} 장기요양기관(요양원)</h1>
+    <p style="opacity:.88;font-size:.95rem;">노인요양시설·재가복지센터 등 장기요양기관의 주소, 전화번호, 평가등급을 확인하세요</p>
+  </div>
+</section>
+<div class="container" style="padding-top:20px">{ad_banner('ad-top')}</div>
+<div class="container section">
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="margin-bottom:12px;font-size:.88rem;color:var(--text-secondary);">
+        <strong>{len(items)}</strong>곳의 장기요양기관 (주소 확인 {matched_cnt}곳)
+      </div>
+      <div class="facility-list">{cards}</div>
+      {ad_banner('ad-mid')}
+      <div style="margin-top:32px;">
+        <h2 class="section-title">{esc(sggu)} 장기요양기관 지도</h2>
+        <div class="map-wrap"><div id="map"></div></div>
+      </div>
+      <div style="margin-top:32px;padding:24px;background:var(--primary-light);border-radius:var(--radius);font-size:.9rem;line-height:1.8;color:var(--text-secondary);">
+        <h2 style="font-size:1rem;font-weight:700;color:var(--text-primary);margin-bottom:8px;">장기요양기관이란?</h2>
+        <p>노인장기요양보험법에 따라 국민건강보험공단으로부터 지정받아 요양보호가 필요한 어르신께 시설급여(요양원)나 재가급여(방문요양·방문목욕 등)를 제공하는 기관입니다. 평가등급은 국민건강보험공단이 3년 주기로 실시하는 정기평가 결과(A~E)이며, 급여종류에 따라 평가 시기가 다를 수 있습니다.</p>
+        <p style="margin-top:8px;">※ 이용을 위해서는 국민건강보험공단의 장기요양등급 판정이 필요합니다. 정확한 이용 절차와 본인부담금은 각 기관이나 국민건강보험공단(1577-1000)에 문의하세요.</p>
+      </div>
+      <div style="margin:16px 0 8px;">
+        <a href="https://wooatown.wooahouse.com/지역/{esc(sido)}.html" target="_blank" rel="noopener"
+           style="display:block;text-align:center;padding:12px 16px;border:1px dashed var(--border);border-radius:var(--radius);color:var(--text-secondary);font-size:.85rem;font-weight:600;text-decoration:none;">
+          🏠 {esc(sido)} 다른 생활정보 보기 (우아동네) →
+        </a>
+      </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
+</div>
+<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey={KAKAO_MAP_KEY}&libraries=services"></script>
+<script>
+const CENTERS={json_embed(coords)};
+function initMap(){{
+  if(typeof kakao==='undefined')return;
+  if(!CENTERS.length){{document.getElementById('map').innerHTML='<p style="padding:20px;text-align:center;color:var(--text-light);">지도에 표시할 위치 정보가 없습니다.</p>';return;}}
+  const first=CENTERS[0];
+  const map=new kakao.maps.Map(document.getElementById('map'),{{center:new kakao.maps.LatLng(first.y,first.x),level:6}});
+  CENTERS.forEach(c=>{{
+    const marker=new kakao.maps.Marker({{map,position:new kakao.maps.LatLng(parseFloat(c.y),parseFloat(c.x)),title:c.name}});
+    const iw=new kakao.maps.InfoWindow({{content:`<div style="padding:8px 10px;font-size:13px;font-weight:600;">${{c.name}}</div>`}});
+    kakao.maps.event.addListener(marker,'click',()=>iw.open(map,marker));
+  }});
+}}
+document.addEventListener('DOMContentLoaded',initMap);
+</script>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / LTC_FOLDER / sido / f"{sggu}.html", page)
+
+
+def _generate_ltc_sido_index(sido_nm: str, sggus: list, by_region: dict):
+    root      = "../"
+    canonical = f"{LTC_FOLDER}/{sido_nm}/index.html"
+    title     = f"{sido_nm} 장기요양기관(요양원) 찾기 — 시군구별 목록 | hosppass"
+    desc      = f"{sido_nm} 장기요양기관(노인요양원·재가복지센터)을 시군구별로 확인하세요."
+    total     = sum(len(by_region[(sido_nm, sg)]) for sg in sggus)
+
+    links = "".join(
+        f'<a href="{esc(s)}.html" class="tab-btn" style="text-align:center;">{esc(s)}</a>'
+        for s in sggus
+    )
+    page = f"""{header_html(title, desc, canonical, 2)}
+<section style="background:linear-gradient(135deg,#7C3AED 0%,#0D9488 100%);color:#fff;padding:32px 16px;">
+  <div class="container">
+    <h1 style="font-size:1.7rem;font-weight:800;">{esc(sido_nm)} 장기요양기관(요양원)</h1>
+    <p style="opacity:.88;margin-top:6px;">시군구를 선택하세요 ({total:,}곳)</p>
+  </div>
+</section>
+<div class="container section">
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+</div>
+{footer_html(root)}"""
+
+    save_html(DOCS_DIR / LTC_FOLDER / sido_nm / "index.html", page)
+
+
 # ── 4. sitemap.xml ─────────────────────────────────────────
 
 def _encode_url(path: str) -> str:
@@ -2177,8 +2599,11 @@ def main():
     wheelchair = (load_json(DATA_DIR / "wheelchair_chargers.json") or {}).get("items", [])
     freemeal   = (load_json(DATA_DIR / "free_meals.json") or {}).get("items", [])
     meddisposal = (load_json(DATA_DIR / "medicine_disposal.json") or {}).get("items", [])
+    ltc_list   = (load_json(DATA_DIR / "ltc_list.json") or {}).get("items", [])
+    ltc_detail = load_json(DATA_DIR / "ltc_detail.json") or {}
+    ltc_grades = (load_json(DATA_DIR / "ltc_grades.json") or {}).get("items", {})
 
-    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 / 폐의약품수거함 {len(meddisposal)}개 로드")
+    print(f"  병원 {len(hospitals)}개 / 약국 {len(pharmacies)}개 / 요양병원 {len(nursing)}개 / 치매안심센터 {len(dementia)}개 / 산후조리원 {len(postpartum)}개 / 안전상비의약품 판매업소 {len(otc_medicine)}개 / 교통약자 이동지원센터 {len(transport)}개 / 전동휠체어급속충전기 {len(wheelchair)}개 / 무료급식소 {len(freemeal)}개 / 폐의약품수거함 {len(meddisposal)}개 / 장기요양기관 {len(ltc_list)}개 로드")
 
     generate_region_pages(hospitals, pharmacies)
     generate_specialty_pages(hospitals)
@@ -2214,6 +2639,15 @@ def main():
         generate_meddisposal_pages(meddisposal)
     else:
         print("[3.11/4] 폐의약품수거함 데이터 없음 — 건너뜀")
+    nonpayment = load_json(DATA_DIR / "nonpayment.json") or {}
+    if nonpayment:
+        generate_nonpayment_pages(hospitals, nonpayment)
+    else:
+        print("[3.12/4] 비급여진료비 데이터 없음 — 건너뜀")
+    if ltc_list:
+        generate_ltc_pages(ltc_list, ltc_detail, ltc_grades)
+    else:
+        print("[3.13/4] 장기요양기관 데이터 없음 — 건너뜀")
 
     # sitemap용 URL 목록 수집 (noindex 페이지는 제외 — 검색엔진에 소프트 404로 잡히는 것 방지)
     pages = []
