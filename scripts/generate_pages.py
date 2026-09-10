@@ -50,6 +50,16 @@ def json_embed(obj) -> str:
 
 # ── 공통 HTML 부품 ─────────────────────────────────────────
 
+# 쿠팡 파트너스 (고객 관심 기반 추천) — 콘텐츠·애드센스 아래, 페이지 최하단. 고지 문구는 푸터에 표기.
+COUPANG_HTML = '''
+<div class="coupang-partners" style="margin:36px auto 0;max-width:720px;padding:0 16px 8px;text-align:center;overflow-x:auto;">
+  <script src="https://ads-partners.coupang.com/g.js"></script>
+  <script>
+    new PartnersCoupang.G({"id":980427,"trackingCode":"AF5600192","subId":"hosppass","template":"carousel","width":"680","height":"140"});
+  </script>
+</div>
+'''
+
 def header_html(title: str, desc: str, canonical: str, depth: int = 1, keywords: str = "") -> str:
     root = "../" * depth
     kw_tag = f'\n  <meta name="keywords" content="{esc(keywords)}">' if keywords else ""
@@ -115,7 +125,7 @@ function doSearch(){{var q=document.getElementById('hsi').value.trim();if(q)loca
 </script>"""
 
 def footer_html(root: str = "../") -> str:
-    return f"""
+    return COUPANG_HTML + f"""
 <footer class="site-footer">
   <div class="footer-inner">
     <div class="footer-logo">hosppass</div>
@@ -128,6 +138,7 @@ def footer_html(root: str = "../") -> str:
       의료기관 정보는 실제와 다를 수 있으므로 방문 전 반드시 전화로 확인하세요.<br>
       &copy; {datetime.now().year} hosppass.wooahouse.com
     </p>
+    <p style="margin:6px 0 0;font-size:.7rem;opacity:.55;">이 페이지는 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다.</p>
   </div>
 </footer>
 </body></html>"""
