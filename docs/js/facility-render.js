@@ -30,7 +30,7 @@ function hasDept(item, d) {
 }
 
 function isNightCareNow(item) {
-  if (item._type && item._type !== 'hosp') return false;
+  if (item._type === 'pharm') return false; // 약국은 '야간진료중' 배지를 쓰지 않고 운영중/운영종료만 표시
   if (item.er_night) return true;
   const h = item.hours || {};
   const today = DAY_KEYS[new Date().getDay()];
@@ -45,7 +45,7 @@ function isNightCareNow(item) {
 }
 
 function isOpenNow(item) {
-  if (item._type && item._type !== 'hosp') return null;
+  if (item._type && item._type !== 'hosp' && item._type !== 'pharm') return null;
   const h = item.hours || {};
   const today = DAY_KEYS[new Date().getDay()];
   const d = h[today];
@@ -60,7 +60,10 @@ function hoursSummary(item) {
   const h = item.hours;
   if (!h || !Object.keys(h).length) return '';
   const order = ['월', '화', '수', '목', '금', '토', '일'];
-  return order.filter(k => h[k]).map(k => `${k} ${h[k].start}~${h[k].end}`).join(' · ');
+  return order.filter(k => h[k]).map(k => {
+    const { start, end } = h[k];
+    return start === end ? `${k} 휴무` : `${k} ${start}~${end}`;
+  }).join(' · ');
 }
 
 /**
@@ -70,7 +73,7 @@ function hoursSummary(item) {
 function renderFacilityCard(item, mapRoot) {
   mapRoot = mapRoot || '';
   let scls = 'status-closed', stxt = '정보없음';
-  if (!item._type || item._type === 'hosp') {
+  if (!item._type || item._type === 'hosp' || item._type === 'pharm') {
     const night = isNightCareNow(item), open = isOpenNow(item);
     if (night) { scls = 'status-night'; stxt = '야간진료중'; }
     else if (open === true) { scls = 'status-open'; stxt = '운영중'; }

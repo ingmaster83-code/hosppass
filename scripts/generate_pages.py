@@ -27,7 +27,7 @@ DOCS_DIR = ROOT / "docs"
 KAKAO_MAP_KEY = os.getenv("KAKAO_MAP_KEY", "78e249ab403b2955e4ca71e71f658549")
 SITE_URL      = "https://hosppass.wooahouse.com"
 CSS_VERSION   = "4"
-JS_VERSION    = "2"
+JS_VERSION    = "3"
 
 # ── 유틸 ───────────────────────────────────────────────────
 
@@ -206,7 +206,7 @@ def generate_region_pages(hospitals: list, pharmacies: list):
             "equipment","transit","nursing","special_treatments","specialized_fields","meal","beds",
             "sido_nm","sggu_nm",
         }
-        _keep_p = {"name","cl_nm","tel","url","x","y","addr","emd_nm","sido_nm","sggu_nm"}
+        _keep_p = {"name","cl_nm","tel","url","x","y","addr","emd_nm","sido_nm","sggu_nm","hours"}
         h_embed = [{k:v for k,v in h.items() if k in _keep_h and v not in (None, "", [], {})} for h in h_list]
         p_embed = [{k:v for k,v in p.items() if k in _keep_p} for p in p_list]
 
@@ -287,7 +287,10 @@ def _facility_card_html(item: dict, is_pharm: bool, root: str = "") -> str:
 
     hours = item.get("hours") or {}
     order = ["월", "화", "수", "목", "금", "토", "일"]
-    h_sum = " · ".join(f'{d} {hours[d]["start"]}~{hours[d]["end"]}' for d in order if hours.get(d) and hours[d].get("start"))
+    h_sum = " · ".join(
+        (f'{d} 휴무' if hours[d]["start"] == hours[d]["end"] else f'{d} {hours[d]["start"]}~{hours[d]["end"]}')
+        for d in order if hours.get(d) and hours[d].get("start")
+    )
     if h_sum:
         hours_row = f'<div style="margin-top:7px;font-size:.82rem;color:var(--text-secondary);">🕐 {esc(h_sum)} <span style="margin-left:6px;color:var(--warning);font-size:.76rem;">· 방문 전 전화 확인 권장</span></div>'
     elif not is_pharm:
@@ -2940,6 +2943,15 @@ def main():
 
     hospitals = (load_json(DATA_DIR / "hospitals.json") or {}).get("items", [])
     pharmacies = (load_json(DATA_DIR / "pharmacies.json") or {}).get("items", [])
+    pharmacy_hours = load_json(DATA_DIR / "pharmacy_hours.json") or {}
+    if pharmacy_hours:
+        matched = 0
+        for p in pharmacies:
+            h = pharmacy_hours.get(p.get("ykiho"))
+            if h:
+                p["hours"] = h
+                matched += 1
+        print(f"  약국 진료시간 매칭: {matched}/{len(pharmacies)}개")
     nursing    = (load_json(DATA_DIR / "nursing_hospitals.json") or {}).get("items", [])
     dementia   = (load_json(DATA_DIR / "dementia_centers.json") or {}).get("items", [])
     postpartum = (load_json(DATA_DIR / "postpartum_centers.json") or {}).get("items", [])
