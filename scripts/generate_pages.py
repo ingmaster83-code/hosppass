@@ -569,7 +569,9 @@ def _generate_sido_index(sido_nm: str, hosp_by_region, pharm_by_region):
   </div>
 </section>
 <div class="container section">
-  <p style="color:#374151;line-height:1.75;margin-bottom:16px;font-size:.95rem;">{sido_intro}</p>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <p style="color:#374151;line-height:1.75;margin-bottom:16px;font-size:.95rem;">{sido_intro}</p>
   <h2 style="font-size:1rem;font-weight:700;margin-bottom:12px;">{esc(sido_nm)} 시·군·구 ({len(sggus)}개)</h2>
   <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
   <div style="margin-top:28px;background:#F9FAFB;border-radius:12px;padding:20px 24px;">
@@ -582,6 +584,13 @@ def _generate_sido_index(sido_nm: str, hosp_by_region, pharm_by_region):
       <summary style="cursor:pointer;font-weight:600;padding:6px 0;">의료기관 정보가 실제와 다를 수 있나요?</summary>
       <p style="padding:6px 0 4px;color:#374151;line-height:1.7;">건강보험심사평가원 데이터를 기반으로 하지만, 진료 시간이나 운영 여부가 변경될 수 있습니다. 방문 전에 반드시 해당 의료기관에 전화로 확인하시기 바랍니다.</p>
     </details>
+  </div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
   </div>
 </div>
 {footer_html(root)}"""
@@ -1171,7 +1180,16 @@ def _generate_dementia_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -1313,7 +1331,16 @@ def _generate_postpartum_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -1466,7 +1493,16 @@ def _generate_otc_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -1655,7 +1691,16 @@ def _generate_transport_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -1827,7 +1872,16 @@ def _generate_wheelchair_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -1991,7 +2045,16 @@ def _generate_freemeal_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -2152,7 +2215,16 @@ def _generate_meddisposal_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -2299,7 +2371,16 @@ def _generate_nonpay_hospital_sido_index(sido_nm, lst):
   </div>
 </section>
 <div class="container section">
-  <div style="display:flex;flex-direction:column;gap:8px;">{cards}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:flex;flex-direction:column;gap:8px;">{cards}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
     save_html(DOCS_DIR / NONPAY_DIR / "병원" / sido_nm / "index.html", page)
@@ -2377,7 +2458,16 @@ def _generate_nonpay_procedure_index(proc_list):
   </div>
 </section>
 <div class="container section">
-  <div style="display:flex;flex-direction:column;gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:flex;flex-direction:column;gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
     save_html(DOCS_DIR / NONPAY_DIR / "항목" / "index.html", page)
@@ -2572,7 +2662,16 @@ def _generate_ltc_sido_index(sido_nm: str, sggus: list, by_region: dict):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -2741,7 +2840,16 @@ def _generate_health_center_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
@@ -2908,7 +3016,16 @@ def _generate_sped_center_sido_index(sido_nm, sggus, by_region):
   </div>
 </section>
 <div class="container section">
-  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+  <div class="layout-with-sidebar">
+    <div class="layout-main">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;">{links}</div>
+    </div>
+    <aside>
+      <div class="sidebar-sticky">
+        {ad_banner('ad-side')}
+      </div>
+    </aside>
+  </div>
 </div>
 {footer_html(root)}"""
 
