@@ -11,13 +11,18 @@ fetch_nonpayment_data.py - 건강보험심사평가원 비급여진료비정보(
 import json, os, sys, time, argparse
 import requests
 
+def _need_key():
+    import os, sys
+    return os.environ.get("DATA_GO_KR_API_KEY") or sys.exit("환경변수 DATA_GO_KR_API_KEY 가 필요합니다(키를 코드에 넣지 마세요).")
+
+
 sys.stdout.reconfigure(encoding="utf-8")
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HOSPITALS_PATH = os.path.join(ROOT, "data", "hospitals.json")
 OUT_PATH = os.path.join(ROOT, "data", "nonpayment.json")
 
-SERVICE_KEY = os.environ.get("DATA_GO_KR_API_KEY") or "9490b1d34e92aa9e25b32a4cff1438fc7b9c71e5d332413916a391e867f61e86"
+SERVICE_KEY = os.environ.get("DATA_GO_KR_API_KEY") or _need_key()
 BASE = "https://apis.data.go.kr/B551182/nonPaymentDamtInfoService/getNonPaymentItemHospDtlList"
 
 # 병원급 이상만 비급여 정보를 등록함 (실측: 의원급은 totalCount 0)
